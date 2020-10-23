@@ -17,7 +17,11 @@ input[type=text], input[type=password] { /* Full-width inputs */
     display: inline-block;
     border: 1px solid #ccc;
   }
-  
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
   
 button { /* Set a style for all buttons */
     padding: 14px 20px;
@@ -26,6 +30,11 @@ button { /* Set a style for all buttons */
     color: white;
     border: none;
     cursor: pointer;
+  }
+
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
   }
 
 /**** ID ****/
@@ -55,7 +64,6 @@ button { /* Set a style for all buttons */
     float: right;
 
     font-size: xx-large;
-    color: #fa8469;
 }
 
 #main_page_login_form { /* Login form */
@@ -74,9 +82,6 @@ button { /* Set a style for all buttons */
         
     float: right;
     padding: 0px 20px;  
-    
-    color: white;
-    background-color: #568f59;
 }
 
 #main_page_background { /* Main page background */
@@ -87,11 +92,7 @@ button { /* Set a style for all buttons */
     background-attachment: fixed;
     background-size: 100% 100%;
 
-    color: white;
-    text-shadow: white 1px 1px 3px;
     font-family: 'Courier New', Courier, monospace;
-    text-align: center;
-    font-size: xx-large;
     
     position: relative;    /* Can adjust top,left,right,bottom  - mayb fixed? */
 }
@@ -102,6 +103,27 @@ button { /* Set a style for all buttons */
     text-shadow: none;
     border: 2px solid white;    
 }
+
+#registration_form {
+    height: 100%;
+    width: 50%;
+
+    margin-left: 25%;
+    padding: 20px;
+
+    background-color: white;
+}
+
+#registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+  }
 
 /*** Hover ***/
 #main_page_visitor:hover { /* On hover - Continue as a visitor */
@@ -119,6 +141,40 @@ button { /* Set a style for all buttons */
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+.text_white {
+    color: white;
+  }
+
+.text_orange {
+    color: #fa8469;
+  }
+
+.text_shadow_white {
+    text-shadow: white 1px 1px 3px;
+}
+
+.text_size_xxl {
+    font-size: xx-large;
+}
+
+.text_center {
+    text-align: center;
+}
+
+.text_underline {
+    text-decoration: underline;
+}
+
+.input_box {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+  }
+
 
  /* Responsive - adjusting with smaller screens */
  /* max-width 800px */
@@ -139,6 +195,17 @@ button { /* Set a style for all buttons */
         display: block;
     }
     #main_page_logo {
+        display: none;
+    }
+    #registration_form {
+        margin: 0;
+        width: 100%;
+        background-image: url('pictures/main_page_background.jpg');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        color: white;
+    }
+    hr{
         display: none;
     }
   }

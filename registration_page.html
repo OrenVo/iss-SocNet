@@ -1,0 +1,48 @@
+<doctype! html>
+<html>
+
+<head>
+    <meta charset = "utf-8" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="icon" href="pictures/favicon.png">
+    <title>Free chat</title>
+</head>
+<body>
+    <div id="main_page_header">
+        <form action="/action_page.php" method="post" id="main_page_login_form">
+            <div class="container">
+                <input type="text" placeholder="Username" name="uname" required>
+            
+                <input type="password" placeholder="Password" name="psw" required>
+
+                <button type="submit">Login</button>
+            </div>    
+        </form>       
+        <div id="main_page_logo" class="text_orange"><a href="main_page.html"><img src="pictures/logo.png" alt="Logo Free Chat" id="main_page_logo_picture"><div id="main_page_logo_name">Free chat</div></a></div> 
+    </div>
+    <div id="main_page_background">
+        <form action="action_page.php" id="registration_form">
+            <h1 class="text_orange text_center">Register</h1>
+            <hr>
+
+            <label for="login"><b>Login</b></label>
+            <input type="text" placeholder="Enter Login" name="login" id="login" class="input_box" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" id="psw" class="input_box" required>
+        
+            <label for="psw-repeat"><b>Repeat Password</b></label>
+            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" class="input_box" required>
+            <hr>
+
+            <p>By creating an account you agree to our <a href="#" class="text_underline">Terms & Privacy</a>.</p>
+            <button type="submit" id="registerbtn">Register</button>
+          
+          
+        </form> 
+    </div>
+
+</body>
+
+</html>
+</doctype>
