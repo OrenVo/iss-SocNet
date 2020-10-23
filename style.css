@@ -42,12 +42,11 @@ button { /* Set a style for all buttons */
         
     float: left;
     padding: 0px 50px;  
-    
-    
 }
 
 #main_page_logo_picture {
-    width: 100px;
+    margin-top: 5px;
+    width: 90px;
 }
 
 #main_page_logo_name {
@@ -62,17 +61,22 @@ button { /* Set a style for all buttons */
 #main_page_login_form { /* Login form */
     line-height: 100px;
 
-    float: right;    
+    float: right; 
+    margin-right: 30px;   
 }
 
 #main_page_signup { /* Sign up */
-    height: 100%;    
-    line-height: 100px; /* Centers vertically */
+    height: 45px;   
+    line-height: 45px; 
+    
+    margin-top: 28px;
+    margin-right: 50px;
         
     float: right;
-    padding: 0px 50px;  
+    padding: 0px 20px;  
     
-    color: #fa8469;
+    color: white;
+    background-color: #568f59;
 }
 
 #main_page_background { /* Main page background */
