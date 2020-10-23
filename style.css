@@ -38,12 +38,10 @@ hr {
   }
 
 /**** ID ****/
-
+/* ------- Main page & registration page ------- */
 #main_page_header { /* Header */
     height: 100px;
     width: 100%;
-
-    background-color: #1f1e1c;
 }
 
 #main_page_logo {
@@ -125,6 +123,27 @@ hr {
     opacity: 0.9;
   }
 
+/* ------- Home page ------- */
+
+#left_panel {
+    height: 100px;
+    width: 30%;
+
+    float: left;
+}
+
+#home_page_profile_container {
+
+}
+
+#right_panel {
+    height: 100px;
+    width: 70%;
+
+    float: left;
+    background-color: tomato;
+}
+
 /*** Hover ***/
 #main_page_visitor:hover { /* On hover - Continue as a visitor */
     color: rgba(0, 0, 0, 1);  
@@ -133,6 +152,10 @@ hr {
 }
 
 /**** Classes ****/
+
+.scroll_box {
+    overflow: auto;
+}
 
 .center {
     margin: 0;
@@ -166,6 +189,10 @@ hr {
     text-decoration: underline;
 }
 
+.background_color_dark {
+    background-color: #1f1e1c;
+}
+
 .input_box {
     width: 100%;
     padding: 15px;
@@ -182,7 +209,7 @@ hr {
     #main_page_header {
         height: 200px;
     }
-    #main_page_login_form, #main_page_signup, button, input[type=text], input[type=password] {
+    #main_page_login_form, #main_page_signup, .main_page_resize {
         float: left;
         height: 50px;
         line-height: 50px;
