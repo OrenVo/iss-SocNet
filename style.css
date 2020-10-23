@@ -5,6 +5,29 @@
     box-sizing: border-box;
 }
 
+/* Built-in tags */
+
+a { /* Hyperlinks will have inherited color and no decoration */
+    color: inherit; 
+    text-decoration: none;
+} 
+
+input[type=text], input[type=password] { /* Full-width inputs */
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+  }
+  
+  
+button { /* Set a style for all buttons */
+    padding: 14px 20px;
+
+    background-color: #fa8469;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
 /* ID */
 
 #main_page_header { /* Header */
@@ -34,7 +57,7 @@
     height: 100%;
     width: 100%;    
     
-    background-image: url('main_page_background.jpg');
+    background-image: url('pictures/main_page_background.jpg');
     background-attachment: fixed;
     background-size: 100% 100%;
 
@@ -69,32 +92,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-
-.href_no_arrangements {
-    text-decoration:none;
-}
-
-a { /* Hyperlinks will have inherited color and no decoration */
-    color: inherit; 
-    text-decoration: none;
-} 
-
-    /* */
-input[type=text], input[type=password] { /* Full-width inputs */
-    padding: 12px 20px;
-    display: inline-block;
-    border: 1px solid #ccc;
-  }
-  
-  
-button { /* Set a style for all buttons */
-    padding: 14px 20px;
-
-    background-color: #fa8469;
-    color: white;
-    border: none;
-    cursor: pointer;
   }
 
  /* Responsive - adjusting with smaller screens */
