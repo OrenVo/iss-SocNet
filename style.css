@@ -1,0 +1,122 @@
+/* For all */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ID */
+
+#main_page_header { /* Header */
+    height: 100px;
+    width: 100%;
+
+    background-color: white;
+}
+
+#main_page_login_form { /* Login form */
+    line-height: 100px;
+
+    float: right;    
+}
+
+#main_page_signup { /* Sign up */
+    height: 100%;    
+    line-height: 100px; /* Centers vertically */
+        
+    float: right;
+    padding: 0px 50px;  
+    
+    color: #fa8469;
+}
+
+#main_page_background { /* Main page background */
+    height: 100%;
+    width: 100%;    
+    
+    background-image: url('main_page_background.jpg');
+    background-attachment: fixed;
+    background-size: 100% 100%;
+
+    color: white;
+    text-shadow: white 1px 1px 3px;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-size: xx-large;
+    
+    position: relative;    /* Can adjust top,left,right,bottom  - mayb fixed? */
+}
+
+#main_page_visitor {
+    padding: 5px;
+
+    text-shadow: none;
+    border: 2px solid white;    
+}
+
+/* Hover */
+#main_page_visitor:hover { /* On hover - Continue as a visitor */
+    color: rgba(0, 0, 0, 1);  
+    border: 2px solid transparent;
+    background-color: white;      
+}
+
+/* Classes */
+
+.center {
+    margin: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+.href_no_arrangements {
+    text-decoration:none;
+}
+
+a { /* Hyperlinks will have inherited color and no decoration */
+    color: inherit; 
+    text-decoration: none;
+} 
+
+    /* */
+input[type=text], input[type=password] { /* Full-width inputs */
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+  }
+  
+  
+button { /* Set a style for all buttons */
+    padding: 14px 20px;
+
+    background-color: #fa8469;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+ /* Responsive - adjusting with smaller screens */
+ /* max-width 800px */
+@media screen and (max-width: 800px) {
+    #main_page_header {
+        height: 200px;
+    }
+    #main_page_login_form, #main_page_signup, button, input[type=text], input[type=password] {
+        height: 50px;
+        line-height: 50px;
+        width: 100%;       
+        
+        text-align: center; 
+        box-shadow:  /* Border */
+        1px 0 0 0 #888, 
+        0 1px 0 0 #888, 
+        1px 1px 0 0 #888,   /* Just to fix the corner */
+        1px 0 0 0 #888 inset, 
+        0 1px 0 0 #888 inset;    
+
+        margin:-1px 0 0 -1px;   /* No border collapse */
+        padding: 0px;
+    }
+  }
