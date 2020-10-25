@@ -6,7 +6,6 @@
 }
 
 /**** Build-in tags ****/
-
 a { /* Hyperlinks will have inherited color and no decoration */
     color: inherit; 
     text-decoration: none;
@@ -105,7 +104,7 @@ hr {
     border: 2px solid white;    
 }
 
-/* Registration *//
+/* Registration */
 #registration_form {
     height: 100%;
     width: 50%;
@@ -128,25 +127,20 @@ hr {
 /***********************/
 
 /* ------- Home page ------- */
-/* Left panel */
-#left_panel {
-    height: 100px;
-    width: 30%;
 
-    float: left;
-    background-color: indigo;
-}
-/***********************/
-
-/* Profile box */
-#home_page_profile_container {
+header {
     height: 100px;
     width: 100%;
+
+    float: left;
+    padding: 0;
+    margin: 0;
 }
 
+/* Profile */
 #profile_container_image {
     height: 100%;
-    width: 30%;
+    width: 10%;
 
     float: left;
 }
@@ -160,34 +154,25 @@ hr {
 
 #profile_container_description {
     height: 100%;
-    width: 70%;
+    width: 20%;
 
     float: left;
     padding: 25px 0px;
 }
 /***********************/
 
-/* Right panel */
-#right_panel {
-    height: 100px;
-    width: 70%;
-
-    float: left;
-}
-/***********************/
-
 /* Search */
-#home_page_search {
+#search_bar_box {
     height: 100%;
-    width: 50%;
+    width: 40%;
 
     float: left;
     padding-top: 30px;
+    padding-left: 10%;
 }
 
 #search_bar_form {
     float: left;
-    margin-left: 34%;
 }
 
 #search_bar_input {
@@ -205,9 +190,9 @@ hr {
 /* Logo */
 #home_page_logo {
     height: 100%;
-    width: 50%;    
+    width: 30%;    
         
-    float: left;
+    float: right;
     padding: 0px 50px;  
 }
 
@@ -306,12 +291,36 @@ hr {
     transform: translate(-50%, -50%);
   }
 
+.box_shadow{
+      height: 100px;
+      box-shadow: 0px 3px 2px black;
+  }
+
 /* Responsive - adjusting with smaller screens */
 /* Max-width 1100px */
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1150px) {
     /* Home page */
-    #search_bar_form {
-        margin-left: 10%;
+    #search_bar_icon {
+        width: 0%;
+        visibility: hidden;
+    }
+    #home_page_logo_name {
+        width: 0%;
+        visibility: hidden;
+    }
+    #search_bar_box {
+        padding-left: 5%;
+    }
+    #profile_picture_center {
+        margin-left: 10px;
+    }
+    #home_page_logo {
+        padding-left: 0 20px;
+    }
+    #profile_container_description {
+    }
+    h2 {
+        font-size: large;
     }
 }
 
@@ -352,42 +361,26 @@ hr {
     }
 
     /* Home page */
-    #left_panel {
-        width: 20%;
-    }
-    #right_panel {
-        width: 80%;
-    }
-    #home_page_logo_name {
-        width: 0%;
-        visibility: hidden;
-    }    
     #profile_container_description {
         width: 0%;
         visibility: hidden;
     }
     #profile_container_image {
-        width: 100%;
+        width: 20%;
     }
     #profile_picture_center {
+        margin: 5px;
+    }
+    #search_bar_box {
+        width: 60%;
+        padding-left: 0;
+    }
+    #search_bar_input {
         width: 90%;
-
         margin-left: 5%;
     }
-    #home_page_logo_picture {
-        margin: 0%;
-    }
-    #home_page_search {
-        width: 80%;
-    }
-    #search_bar_form {
-        margin: 0;
-    }
-    #search_bar_icon {
-        visibility: hidden;
-    }
-    #home_page_logo {
+    #home_page_logo{
         width: 20%;
-        padding: 0;
+        padding: 0px 10px;
     }
   }

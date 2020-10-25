@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!doctype html>
+<html>
 <head>
     <meta charset = "utf-8" />
     <link rel="stylesheet" href="style.css" type="text/css"/>
@@ -6,19 +7,15 @@
     <title>Free chat</title>
 </head>
 <body>
-    <div id="left_panel" class="">
-        <div id="home_page_profile_container" class="text_white background_color_grey text_orange">
-            <div id="profile_container_image">
-                <img src="pictures/profile_picture.jpeg" alt="Profile picture" id="profile_picture_center"/>                
-            </div>
-            <div id="profile_container_description">
-                <h2 class="">Alojz Hlina</h2>
-                <p>Admin</p>
-            </div>
+    <header class="background_color_grey">
+        <div id="profile_container_image">
+            <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
         </div>
-    </div>
-    <div id="right_panel" class="background_color_grey">
-        <div id="home_page_search">
+        <div id="profile_container_description" class="text_orange">
+            <h2 class="">Alojz Hlina</h2>
+            <p>Admin</p>
+        </div>
+        <div id="search_bar_box">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
@@ -29,8 +26,10 @@
             <a href="home_page.html">
                 <div id="home_page_logo_name" class="text_orange" >Free chat</div><img src="pictures/logo.png" alt="Logo Free Chat" id="home_page_logo_picture" />
             </a>
-        </div>
+        </div>       
+    </header>
 
-    </div>
+    
 </body>
 </html>
+</doctype>
