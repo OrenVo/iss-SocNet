@@ -6,8 +6,10 @@
     <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
     <title>Free chat</title>
 </head>
-<body>
+<body> 
+    <!-- HEADER - profile + search + logo -->
     <header class="background_color_grey">
+        <!-- PROFILE -->
         <div id="profile_container_image">
             <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
         </div>
@@ -15,6 +17,7 @@
             <h2 class="">Alojz Hlina</h2>
             <p>Admin</p>
         </div>
+        <!-- SEARCH -->
         <div id="search_bar_box">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
@@ -22,6 +25,7 @@
                 <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
+        <!-- LOGO -->
         <div id="home_page_logo" class="">
             <a href="home_page.html">
                 <div id="home_page_logo_name" class="text_orange" >Free chat</div><img src="pictures/logo.png" alt="Logo Free Chat" id="home_page_logo_picture" />
@@ -29,25 +33,70 @@
         </div>       
     </header>
 
+    <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
     <article>
+        <!-- LEFT PANEL -->
         <div id="left_panel">
+            <!-- CREATE NEW GROUP-->
             <div id="create_new_group" class="background_color_dark_grey text_white">
                 <p id="new_group_title">Create new group</p>
                 <img src="pictures/pic.png" alt="Add icon" id="add_icon_group">
             </div>
+            <!-- GROUPS -->
             <div id="group_container" class="background_color_dark_grey text_white">
-                <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
-                <div class="left_panel_group_text">
-                    <h3 class="left_panel_group_title">Group name</h3>
-                    <p class="left_panel_group_desrciption">Description</p>
+                <div class="left_panel_group">
+                    <div class="left_panel_group_picture_container">
+                        <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
+                    </div>
+                    <div class="left_panel_group_text">
+                        <h3 class="left_panel_group_title">Group name</h3>
+                        <p class="left_panel_group_desrciption">Description</p>
+                    </div>
                 </div>
                 <div class="left_panel_arrow_container">
                     <img src="pictures/arrow_down.png" alt="arrow" class="left_panel_menu_arrow">
                 </div>
             </div>
         </div>
-        <div id="right_panel">
-        
+        <!-- RIGHT PANEL-->
+        <div class="right_panel">
+            <!-- CREATING NEW GROUP-->
+            <div class="creating_new_group">
+                <form action="action_page_php">
+                    <h1>Create new group</h1>
+                    <hr>
+
+                    <label for="group_name"><b>Group name</b></label>
+                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
+
+                    <label for="description"><b>Description</b></label>
+                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
+
+                    <label for="group_picture"><b>Group picture</b></label>
+                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture>
+                </form>
+            </div>
+            <!-- CREATING NEW THREAD-->
+            <div class="creating_new_thread">
+                <form action="action_page_php">
+                    <h1>Create new thread</h1>
+                    <hr>
+
+                    <label for="thread_subject"><b>Subject</b></label>
+                    <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
+                </form>
+            </div>
+            <!-- GROUP THREADS -->
+            <div class="group_threads background_color_dark_grey">
+                <div class="create_new_thread" class="background_color_dark_grey">
+                    <p class="new_thread_title text_white">Create new thread</p>
+                    <img src="pictures/pic.png" alt="Add icon" class="add_icon_thread">
+                </div>
+                <div class="thread text_white">
+                    <h3>Thread subject</h3>
+                    <p>Author: Alojz Hlina</p>
+                </div>
+            </div>        
         </div>
     </article>
 

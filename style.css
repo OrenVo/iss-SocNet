@@ -230,6 +230,7 @@ article {
     float: left;
 }
 
+/* Create new group */
 #create_new_group {
     height: 50px;
     width: 100%;
@@ -258,7 +259,9 @@ article {
 
     float: right;
 }
+/***********************/
 
+/* Group */
 #group_container {
     height: 100px;
     width: 100%;
@@ -267,15 +270,18 @@ article {
     margin-top: 10px;
 }
 
-.left_panel_group_picture {
+.left_panel_group_picture_container {
     height: 100%;
     width: 20%;
 
-    margin-top: 0%;
     float: left;
+    padding: 5px;
+}
+.left_panel_group_picture {
+    height: 100%;
+    width: 100%;
 
-    display: inline-block;
-    border-radius: 5%;
+    float: left;
 }
 
 .left_panel_group_text {
@@ -286,7 +292,14 @@ article {
     padding: 5px;
 }
 
-.left_panel_group_text:hover {
+.left_panel_group {
+    height: 100%;
+    width: 90%;
+
+    float: left;
+}
+
+.left_panel_group:hover {
     background-color: grey;
 }
 
@@ -333,14 +346,90 @@ article {
 /***********************/
 
 /* Right panel */
-#right_panel {
+.right_panel {
     height: auto;
-    width: 70%;
+    width: 69%;
 
     float: left;
-    margin-top: 10px;
+    margin-left: 1%;
+}
+
+/* Creating new group */
+.creating_new_group {
+    height: auto;
+    width: 100%;
+
+    float: right;
+    padding: 5px;
+
+    background-color: red;
 }
 /***********************/
+
+/* Creatin new thread */
+.creating_new_thread {
+    height: auto;
+    width: 100%;
+
+    float: right;
+    padding: 5px;
+
+    background-color: brown;
+}
+/***********************/
+
+/* Group threads */
+.group_threads {
+    height: auto;
+    width: 100%;
+
+    float: right;
+}
+
+/* Create new thread */
+.create_new_thread {
+    height: 50px;
+    width: 100%;
+
+    float: left;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.create_new_thread:hover {
+    background-color: grey;
+}
+
+.new_thread_title {
+    width: 90%;
+
+    float:left;
+    margin-top: 10px;
+
+    font-size: large;
+    text-align: center;
+}
+
+.add_icon_thread {
+    width: 50px;
+
+    float: right;
+}
+/***********************/
+
+/* Thread */
+.thread {
+    height: 100px;
+    width: 100%;
+
+    float: left;
+    text-align: center;
+}
+
+.thread:hover {
+    background-color: grey;
+}
+
 
 
 /*** ---Hover--- ***/
@@ -435,12 +524,10 @@ article {
 @media screen and (max-width: 1150px) {
     /* Home page */
     #search_bar_icon {
-        width: 0%;
-        visibility: hidden;
+        display: none;
     }
     #home_page_logo_name {
-        width: 0%;
-        visibility: hidden;
+        display: none;
     }
     #search_bar_box {
         padding-left: 5%;
@@ -496,8 +583,7 @@ article {
 
     /* Home page */
     #profile_container_description {
-        width: 0%;
-        visibility: hidden;
+        display: none;
     }
     #profile_container_image {
         width: 20%;
