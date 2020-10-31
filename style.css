@@ -175,6 +175,7 @@ article {
 
     float: left;
     padding: 25px 0px;
+    background-color: red;
 }
 /***********************/
 
@@ -472,6 +473,14 @@ article {
 
     float: left;
     background-color: black;
+}
+
+.profile_picture {
+    height: 70%;
+    width: 80%;
+
+    margin-top: 15%;
+    margin-left: 10%;
 }
 /*************************/
 
