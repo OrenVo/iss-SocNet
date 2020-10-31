@@ -6,6 +6,16 @@
 }
 
 /**** Build-in tags ****/
+
+header {
+    height: 100px;
+    width: 100%;
+
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
 a { /* Hyperlinks will have inherited color and no decoration */
     color: inherit; 
     text-decoration: none;
@@ -104,6 +114,12 @@ hr {
     border: 2px solid white;    
 }
 
+#main_page_visitor:hover { /* On hover - Continue as a visitor */
+    color: rgba(0, 0, 0, 1);  
+    border: 2px solid transparent;
+    background-color: white;      
+}
+
 /* Registration */
 #registration_form {
     height: 100%;
@@ -127,15 +143,6 @@ hr {
 /***********************/
 
 /* ------- Home page ------- */
-
-header {
-    height: 100px;
-    width: 100%;
-
-    float: left;
-    padding: 0;
-    margin: 0;
-}
 
 article {
     height: auto;
@@ -430,15 +437,53 @@ article {
     background-color: grey;
 }
 
+/* ---PROFILE PAGE--- */
 
-
-/*** ---Hover--- ***/
-#main_page_visitor:hover { /* On hover - Continue as a visitor */
-    color: rgba(0, 0, 0, 1);  
-    border: 2px solid transparent;
-    background-color: white;      
+/* HEADER */
+#profile_page_logo {
+    height: 100%; 
+    width: 30%;   
+        
+    float: left;
+    padding: 0px 50px;  
 }
+
+#profile_page_logo_name {
+    height: 100px;
+    line-height: 100px;
+    float: left;
+
+    font-size: xx-large;
+}
+
+#profile_page_logo_picture {
+    margin-top: 5px;
+    width: 90px;
+
+    float: left;
+}
+
 /***********************/
+
+/* Profile picture container */
+.picture_container {
+    height: 500px;
+    width: 30%;
+
+    float: left;
+    background-color: black;
+}
+/*************************/
+
+/* Profile info container */
+.info_container {
+    height: 500px;
+    width: 70%;
+
+    float: left;
+    background-color: orange;
+}
+/*************************/
 
 /**** ---Classes--- ****/
 /* Text */
@@ -569,6 +614,7 @@ article {
     #main_page_logo {
         display: none;
     }
+    
     #registration_form {
         margin: 0;
         width: 100%;
@@ -602,5 +648,8 @@ article {
     #home_page_logo{
         width: 20%;
         padding: 0px 10px;
+    }
+    #profile_page_logo_name{
+        display: none;
     }
   }

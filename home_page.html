@@ -8,7 +8,7 @@
 </head>
 <body> 
     <!-- HEADER - profile + search + logo -->
-    <header class="background_color_grey">
+    <header class="background_color_dark_grey">
         <!-- PROFILE -->
         <div id="profile_container_image">
             <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
@@ -60,7 +60,7 @@
         </div>
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- CREATING NEW GROUP-->
+            <!-- CREATING NEW GROUP -->
             <div class="creating_new_group">
                 <form action="action_page_php">
                     <h1>Create new group</h1>
@@ -74,9 +74,12 @@
 
                     <label for="group_picture"><b>Group picture</b></label>
                     <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture>
+                    
+                    <hr>
+                    <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
                 </form>
             </div>
-            <!-- CREATING NEW THREAD-->
+            <!-- CREATING NEW THREAD -->
             <div class="creating_new_thread">
                 <form action="action_page_php">
                     <h1>Create new thread</h1>
@@ -84,6 +87,9 @@
 
                     <label for="thread_subject"><b>Subject</b></label>
                     <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
+
+                    <hr>
+                    <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
                 </form>
             </div>
             <!-- GROUP THREADS -->
