@@ -40,10 +40,8 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            <div id="create_new_group" class="background_color_dark_grey text_white">
-                <p id="new_group_title">Create new group</p>
-                <img src="pictures/pic.png" alt="Add icon" id="add_icon_group">
-            </div>
+            <input type="button" value="Create New Group" id="create_new_group" class="background_color_dark_grey text_white" onclick="create_new_group_show()">
+            
             <!-- GROUPS -->
             <div id="group_container" class="background_color_dark_grey text_white">
                 <div class="left_panel_group">
@@ -63,7 +61,7 @@
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
-            <div class="creating_new_group">
+            <div id="creating_new_group">
                 <form action="action_page_php">
                     <h1>Create new group</h1>
                     <hr>
@@ -79,10 +77,11 @@
                     
                     <hr>
                     <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
+                    <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
                 </form>
             </div>
             <!-- CREATING NEW THREAD -->
-            <div class="creating_new_thread">
+            <div id="creating_new_thread">
                 <form action="action_page_php">
                     <h1>Create new thread</h1>
                     <hr>
@@ -92,24 +91,40 @@
 
                     <hr>
                     <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
+                    <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
                 </form>
             </div>
             <!-- GROUP THREADS -->
-            <div class="group_threads background_color_dark_grey">
-                <div class="create_new_thread" class="background_color_dark_grey">
-                    <p class="new_thread_title text_white">Create new thread</p>
-                    <img src="pictures/pic.png" alt="Add icon" class="add_icon_thread">
-                </div>
-                <div class="thread text_white">
+            <div class="group_threads">
+                <!-- Create new thread -->
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread background_color_dark_grey">
+
+                <div class="thread text_white background_color_dark_grey">
                     <h3>Thread subject</h3>
                     <p>Author: Alojz Hlina</p>
                 </div>
             </div>        
         </div>
     </article>
-
-
-
 </body>
+
+<!-- JavaScript -->
+<script>
+    function create_new_group_show(){
+        document.getElementById("creating_new_group").style.display= 'block';
+    }
+    function create_new_group_hide(){
+        document.getElementById("creating_new_group").style.display= 'none';
+    }
+
+    function create_new_thread_show(){
+        document.getElementById("create_new_thread_button").style.display = 'none';
+        document.getElementById("creating_new_thread").style.display = 'block';
+    }
+    function create_new_thread_hide(){
+        document.getElementById("create_new_thread_button").style.display = 'block';
+        document.getElementById("creating_new_thread").style.display = 'none';
+    }
+</script>
 </html>
 </doctype>

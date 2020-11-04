@@ -362,26 +362,26 @@ article {
 }
 
 /* Creating new group */
-.creating_new_group {
+#creating_new_group {
     height: auto;
     width: 100%;
 
     float: right;
     padding: 5px;
 
-    background-color: red;
+    display: none;
 }
 /***********************/
 
 /* Creatin new thread */
-.creating_new_thread {
+#creating_new_thread {
     height: auto;
     width: 100%;
 
     float: right;
     padding: 5px;
 
-    background-color: brown;
+    display: none;
 }
 /***********************/
 
@@ -408,19 +408,12 @@ article {
 }
 
 .new_thread_title {
-    width: 90%;
+    width: 100%;
 
-    float:left;
     margin-top: 10px;
 
     font-size: large;
     text-align: center;
-}
-
-.add_icon_thread {
-    width: 50px;
-
-    float: right;
 }
 /***********************/
 
@@ -430,6 +423,7 @@ article {
     width: 100%;
 
     float: left;
+    margin-top: 10px;
     text-align: center;
 }
 
