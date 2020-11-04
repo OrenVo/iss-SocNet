@@ -7,7 +7,7 @@
     <title>Free chat</title>
 </head>
 
-<body>
+<body class="background_color_light_grey">
     <!-- HEADER - search + logo -->
     <header class="background_color_dark_grey">
         <!-- LOGO -->
@@ -34,21 +34,21 @@
 
     <!-- PROFILE INFO CONTAINER -->
     <div id="info_container">
-        <h1>Alojz HlinaMAGA</h1>
-        <hr>
+        <h1 class="text_orange">Alojz HlinaMAGA</h1>
+        <hr class="border_1px_solid_white">
         <h2>Date of birth:</h2>
         <p>04.05.1995</p>
         <h2>Groups:</h2>
         <p>Make America Great Again, DeusVult</p>       
 
-        <button type="button" onclick="show_settings()">Click Me!</button>     
+        <button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
         <form action="php_action.php">
-            <h1 class="">Settings</h1>
-            <hr>
+            <h1 class="text_orange">Settings</h1>
+            <hr class="border_1px_solid_white">
 
             <label for="login"><b>Change Login</b></label>
             <input type="text" placeholder="Enter Login" name="login" id="login" class="input_box background_color_light">
@@ -63,7 +63,7 @@
             <input type="text" placeholder="Enter current password" name="password" id="password" class="input_box background_color_light" required>
 
             <button type="submit" class="background_color_green">Save changes</button> 
-            <hr>
+            <hr class="border_1px_solid_white">
             <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
         </form>    
     </div>

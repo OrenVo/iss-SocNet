@@ -175,7 +175,6 @@ article {
 
     float: left;
     padding: 25px 0px;
-    background-color: red;
 }
 /***********************/
 
@@ -472,7 +471,6 @@ article {
     width: 30%;
 
     float: left;
-    background-color: black;
 }
 
 .profile_picture {
@@ -490,8 +488,7 @@ article {
     width: 70%;
 
     float: right;
-    padding: 50px;
-    background-color: orange;
+    padding: 70px 0;
 }
 /*************************/
 
@@ -501,10 +498,9 @@ article {
     width: 70%;
 
     float: right;
-    padding: 50px;
+    padding: 70px 0;
 
     display: none;
-    background-color: red;
 }
 /**********************/
 
@@ -554,7 +550,7 @@ article {
     background-color: #363333;
 }
 .background_color_light_grey {
-    background-color: #f6e9e9;
+    background-color: #f1f1f1;
 }
 /***********************/
 
@@ -585,6 +581,10 @@ article {
 
 .border_1px_solid_black {
     border: 1px solid black;
+}
+
+.border_1px_solid_white {
+    border: 1px solid white;
 }
 
 /* Responsive - adjusting with smaller screens */
