@@ -477,7 +477,7 @@ article {
 
 .profile_picture {
     height: 70%;
-    width: 80%;
+    max-width: 80%;
 
     margin-top: 15%;
     margin-left: 10%;
@@ -485,14 +485,28 @@ article {
 /*************************/
 
 /* Profile info container */
-.info_container {
-    height: 500px;
+#info_container {
+    height: auto;
     width: 70%;
 
-    float: left;
+    float: right;
+    padding: 50px;
     background-color: orange;
 }
 /*************************/
+
+/* Settings container */
+#settings_container {
+    height: auto;
+    width: 70%;
+
+    float: right;
+    padding: 50px;
+
+    display: none;
+    background-color: red;
+}
+/**********************/
 
 /**** ---Classes--- ****/
 /* Text */
