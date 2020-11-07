@@ -7,6 +7,20 @@
 
 /**** Build-in tags ****/
 
+body {
+    padding: 0 10px;
+    background-color: khaki;
+}
+
+article {
+    height: auto;
+    width: 100%;
+
+    float: left;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
 header {
     height: 100px;
     width: 100%;
@@ -61,8 +75,8 @@ hr {
 }
 
 #main_page_logo_picture {
-    margin-top: 5px;
-    width: 90px;
+    margin-top: 10px;
+    width: 80px;
 }
 
 #main_page_logo_name {
@@ -144,48 +158,56 @@ hr {
 
 /* ------- Home page ------- */
 
-article {
-    height: auto;
-    width: 100%;
-
-    float: left;
-    background-color: khaki;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
 /* Profile */
-#profile_container_image {
+
+#home_page_profile{
     height: 100%;
-    width: 10%;
+    width: 30%;
 
     float: left;
 }
 
-#profile_picture_center {
-    height: 90%;
-
-    margin-top: 3%;
-    margin-left: 25%;
-}
-
-#profile_container_description {
+#profile_container_image {
     height: 100%;
     width: 20%;
 
     float: left;
-    padding: 25px 0px;
+    padding: 5px;
 }
+
+#profile_picture_center {
+    height: 100%;
+    max-width: 100%;
+}
+
+#profile_container_description {
+    height: 100%;
+    width: 60%;
+
+    float: left;
+    padding: 25px 0px;
+
+    text-align: center;
+}
+
+#home_page_notifications {
+    height: 100%;
+    width: 20%;
+
+    float: left;
+}
+
 /***********************/
 
 /* Search */
 #search_bar_box {
     height: 100%;
-    width: 40%;
+    width: 69%;
 
     float: left;
+    margin-left: 1%;
     padding-top: 30px;
-    padding-left: 10%;
+    padding-left: 28%;
 }
 
 #search_bar_form {
@@ -193,39 +215,16 @@ article {
 }
 
 #search_bar_input {
+    height: 35px;
     float: left;
 }
 
 #search_bar_icon {
-    max-height: 40px;
+    max-height: 25px;
 
     float: left;
+    margin-top: 5px;
     margin-left: 5px;
-}
-/***********************/
-
-/* Logo */
-#home_page_logo {
-    height: 100%;
-    width: 30%;    
-        
-    float: right;
-    padding: 0px 50px;  
-}
-
-#home_page_logo_picture {
-    width: 80px;
-
-    margin-top: 10px;
-    float: right;
-}
-
-#home_page_logo_name {
-    height: 100px;
-    line-height: 100px;
-
-    float: right;
-    font-size: xx-large;
 }
 /***********************/
 
@@ -242,9 +241,8 @@ article {
     height: 50px;
     width: 100%;
 
-    float: left;
-    padding: 5px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 #create_new_group:hover {
@@ -269,7 +267,7 @@ article {
 /***********************/
 
 /* Group */
-#group_container {
+.group_container {
     height: 100px;
     width: 100%;
 
@@ -284,29 +282,21 @@ article {
     float: left;
     padding: 5px;
 }
+
 .left_panel_group_picture {
     height: 100%;
-    width: 100%;
-
-    float: left;
+    max-width: 100%;
 }
 
 .left_panel_group_text {
     height: 100%;
-    width: 70%;
+    width: 60%;
 
     float: left;
     padding: 5px;
 }
 
-.left_panel_group {
-    height: 100%;
-    width: 90%;
-
-    float: left;
-}
-
-.left_panel_group:hover {
+.left_panel_group_text:hover {
     background-color: grey;
 }
 
@@ -329,25 +319,25 @@ article {
     display: inline-block;
     text-align: center;
 }
+
 .left_panel_arrow_container {
     height: 100%;
-    width: 10%;
+    width: 20%;
 
     float: left;
-    padding: 5px;
-
     display: inline;
+}
+
+.left_panel_menu_arrow {
+    width: 40%;
+
+    float: left;
+    margin-left: 30%;
+    margin-top: 37px;
 }
 
 .left_panel_arrow_container:hover {
     background-color: grey;
-}
-
-.left_panel_menu_arrow {
-    width: 100%;
-
-    float: left;
-    margin-top: 35px;
 }
 
 /***********************/
@@ -382,6 +372,10 @@ article {
     padding: 5px;
 
     display: none;
+}
+
+#create_new_thread_button {
+    cursor: pointer;
 }
 /***********************/
 
@@ -424,6 +418,8 @@ article {
 
     float: left;
     margin-top: 10px;
+    padding: 25px;
+
     text-align: center;
 }
 
@@ -438,23 +434,29 @@ article {
     height: 100%; 
     width: 30%;   
         
-    float: left;
+    float: right;
     padding: 0px 50px;  
 }
 
 #profile_page_logo_name {
     height: 100px;
     line-height: 100px;
-    float: left;
+    float: right;
 
     font-size: xx-large;
+    background-color: chartreuse;
 }
 
 #profile_page_logo_picture {
-    margin-top: 5px;
-    width: 90px;
+    width: 80px;
 
-    float: left;
+    float: right;
+    margin-top: 10px;
+    background-color: chocolate;
+}
+
+#profile_page_home {
+    float: right;
 }
 
 /***********************/

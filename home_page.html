@@ -8,31 +8,31 @@
 </head>
 <body> 
     <!-- HEADER - profile + search + logo -->
-    <header class="background_color_dark_grey">
+    <header>
         <!-- PROFILE -->
         <a href="profile_page.html">
-            <div id="profile_container_image">
-                <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
-            </div>
-            <div id="profile_container_description" class="text_orange">
-                <h2>Alojz Hlina</h2>
-                <p>Admin</p>
+            <div id="home_page_profile" class="background_color_dark_grey">
+                <div id="profile_container_image">
+                    <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
+                </div>
+                <div id="profile_container_description" class="text_orange">
+                    
+                        <h2>Alojz Hlina</h2>
+                        <p>Admin</p>
+                </div>
+                <div id="home_page_notifications">
+
+                </div>
             </div>
         </a>
         <!-- SEARCH -->
-        <div id="search_bar_box">
+        <div id="search_bar_box" class="background_color_dark_grey">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
             </form>
-        </div>
-        <!-- LOGO -->
-        <div id="home_page_logo" class="">
-            <a href="home_page.html">
-                <div id="home_page_logo_name" class="text_orange" >Free chat</div><img src="pictures/logo.png" alt="Logo Free Chat" id="home_page_logo_picture" />
-            </a>
-        </div>       
+        </div>     
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -40,24 +40,39 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            <input type="button" value="Create New Group" id="create_new_group" class="background_color_dark_grey text_white" onclick="create_new_group_show()">
+            <input type="button" value="Create New Group" id="create_new_group" class="background_color_orange text_white" onclick="create_new_group_show()">
             
             <!-- GROUPS -->
-            <div id="group_container" class="background_color_dark_grey text_white">
-                <div class="left_panel_group">
-                    <div class="left_panel_group_picture_container">
-                        <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
-                    </div>
-                    <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">Group name</h3>
-                        <p class="left_panel_group_desrciption">Description</p>
-                    </div>
+            <div class="group_container background_color_dark_grey text_white">
+               
+                <div class="left_panel_group_picture_container">
+                    <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
+                </div>
+
+                <div class="left_panel_group_text">
+                    <h3 class="left_panel_group_title">Group name</h3>
+                    <p class="left_panel_group_desrciption">Description</p>
+                </div>
+               
+                <div class="left_panel_arrow_container">
+                    <img src="pictures/arrow_down.png" alt="arrow" class="left_panel_menu_arrow">
+                </div>
+            </div>
+
+            <div class="group_container background_color_dark_grey text_white">
+                <div class="left_panel_group_picture_container">
+                    <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
+                </div>
+                <div class="left_panel_group_text">
+                    <h3 class="left_panel_group_title">Group name</h3>
+                    <p class="left_panel_group_desrciption">Description</p>
                 </div>
                 <div class="left_panel_arrow_container">
                     <img src="pictures/arrow_down.png" alt="arrow" class="left_panel_menu_arrow">
                 </div>
             </div>
         </div>
+
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -97,13 +112,22 @@
             <!-- GROUP THREADS -->
             <div class="group_threads">
                 <!-- Create new thread -->
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread background_color_orange">
+
+                <div class="thread text_white background_color_dark_grey">
+                    <h3>Thread subject</h3>
+                    <p>Author: Alojz Hlina</p>
+                </div>
+            </div>   
+            <div class="group_threads">
+                <!-- Create new thread -->
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread background_color_dark_grey">
 
                 <div class="thread text_white background_color_dark_grey">
                     <h3>Thread subject</h3>
                     <p>Author: Alojz Hlina</p>
                 </div>
-            </div>        
+            </div>      
         </div>
     </article>
 </body>
@@ -124,6 +148,14 @@
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
         document.getElementById("creating_new_thread").style.display = 'none';
+    }
+
+    function group_threads_show(){
+        var x = document.getElementByClassName("group_threads");
+        var i;
+        for(i = 0; i < x.length; i++){
+            x[i].style.display = none;
+        }
     }
 </script>
 </html>

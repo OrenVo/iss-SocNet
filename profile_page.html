@@ -9,7 +9,7 @@
 
 <body class="background_color_light_grey">
     <!-- HEADER - search + logo -->
-    <header class="background_color_dark_grey">
+    <header class="background_color_dark">
         <!-- LOGO -->
         <div id="profile_page_logo">
             <a href="home_page.html">
@@ -24,7 +24,12 @@
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
             </form>
-        </div>     
+        </div> 
+        <div id="profile_page_home" class="text_orange">
+            <a href="home_page.html">
+                <h2>Home</h2>
+            </a>
+        </div>    
     </header>
 
     <!-- PROFILE PICTURE CONTAINTER -->
@@ -47,6 +52,7 @@
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
         <form action="php_action.php">
+            <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
             <h1 class="text_orange">Settings</h1>
             <hr class="border_1px_solid_white">
 
@@ -64,7 +70,6 @@
 
             <button type="submit" class="background_color_green">Save changes</button> 
             <hr class="border_1px_solid_white">
-            <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
         </form>    
     </div>
        
