@@ -9,9 +9,9 @@
 <body> 
     <!-- HEADER - profile + search + logo -->
     <header>
-        <!-- PROFILE -->
-        <a href="profile_page.html">
-            <div id="home_page_profile" class="background_color_dark_grey">
+        <!-- PROFILE -->        
+        <div id="home_page_profile" class="background_color_dark_grey">
+            <a href="profile_page.html">
                 <div id="profile_container_image">
                     <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
                 </div>
@@ -20,11 +20,20 @@
                         <h2>Alojz Hlina</h2>
                         <p>Admin</p>
                 </div>
-                <div id="home_page_notifications">
-
+            </a>
+            <!-- Notifications dropdown menu -->
+            <div class="dropdown">
+                <button onclick="dropdownFunction()" class="dropbtn">
+                    <img src="pictures/bell2.png" alt="Notifications" class="icon_center">
+                </button>
+                <div id="myDropdown" class="myDropdown click_dropdown-content">
+                  <a href="#">Link 1</a>
+                  <a href="#">Link 2</a>
+                  <a href="#">Link 3</a>
                 </div>
-            </div>
-        </a>
+              </div> 
+        </div>
+        
         <!-- SEARCH -->
         <div id="search_bar_box" class="background_color_dark_grey">
             <form action="/action_page.php" id="search_bar_form" >
@@ -40,36 +49,27 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            <input type="button" value="Create New Group" id="create_new_group" class="background_color_orange text_white" onclick="create_new_group_show()">
+            <input type="button" value="Create New Group" id="create_new_group" class="text_white" onclick="create_new_group_show()">
             
             <!-- GROUPS -->
             <div class="group_container background_color_dark_grey text_white">
-               
-                <div class="left_panel_group_picture_container">
-                    <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
-                </div>
-
-                <div class="left_panel_group_text">
-                    <h3 class="left_panel_group_title">Group name</h3>
-                    <p class="left_panel_group_desrciption">Description</p>
-                </div>
-               
-                <div class="left_panel_arrow_container">
-                    <img src="pictures/arrow_down.png" alt="arrow" class="left_panel_menu_arrow">
-                </div>
-            </div>
-
-            <div class="group_container background_color_dark_grey text_white">
                 <div class="left_panel_group_picture_container">
                     <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
                 </div>
                 <div class="left_panel_group_text">
                     <h3 class="left_panel_group_title">Group name</h3>
                     <p class="left_panel_group_desrciption">Description</p>
-                </div>
-                <div class="left_panel_arrow_container">
-                    <img src="pictures/arrow_down.png" alt="arrow" class="left_panel_menu_arrow">
-                </div>
+                </div>               
+                <div class="dropdown">
+                    <button class="dropbtn">
+                        <img src="pictures/arrow_down.png" alt="Notifications" class="icon_center">
+                    </button>
+                    <div class="dropdown-content">
+                      <a href="#">Members</a>
+                      <a href="#">Settings</a>
+                      <a href="#">Link 3</a>
+                    </div>
+                  </div>
             </div>
         </div>
 
@@ -112,22 +112,13 @@
             <!-- GROUP THREADS -->
             <div class="group_threads">
                 <!-- Create new thread -->
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread background_color_orange">
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread">
 
                 <div class="thread text_white background_color_dark_grey">
                     <h3>Thread subject</h3>
                     <p>Author: Alojz Hlina</p>
                 </div>
-            </div>   
-            <div class="group_threads">
-                <!-- Create new thread -->
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread background_color_dark_grey">
-
-                <div class="thread text_white background_color_dark_grey">
-                    <h3>Thread subject</h3>
-                    <p>Author: Alojz Hlina</p>
-                </div>
-            </div>      
+            </div>     
         </div>
     </article>
 </body>
@@ -157,6 +148,27 @@
             x[i].style.display = none;
         }
     }
+
+    /* When the user clicks on the button,
+toggle between hiding and showing the dropdown content */
+function dropdownFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("click_dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+} 
+
 </script>
 </html>
 </doctype>

@@ -243,10 +243,11 @@ hr {
 
     font-weight: bold;
     cursor: pointer;
+    background-color: #f75f00c5;
 }
 
 #create_new_group:hover {
-    background-color: grey;
+    background-color: #3e8e41;
 }
 
 #new_group_title { 
@@ -320,25 +321,87 @@ hr {
     text-align: center;
 }
 
-.left_panel_arrow_container {
+.icon_center {
+    width: 70%;
+
+    float: left;
+    margin-left: 15%;
+    margin-top: 10%;
+}
+
+/* Dropdown */
+.dropbtn {
     height: 100%;
+    width: 100%;
+
+    background-color: #f75f00c5;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+
     width: 20%;
+    height: 100%;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #f1f1f1}
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 
-    float: left;
-    display: inline;
-}
-
-.left_panel_menu_arrow {
-    width: 40%;
-
-    float: left;
-    margin-left: 30%;
-    margin-top: 37px;
-}
-
-.left_panel_arrow_container:hover {
-    background-color: grey;
-}
+  /* Click Dropdown Content (Hidden by Default) */
+  .click_dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .click_dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .click_dropdown-content a:hover {background-color: #ddd}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;} 
 
 /***********************/
 
@@ -376,6 +439,11 @@ hr {
 
 #create_new_thread_button {
     cursor: pointer;
+    background-color: #f75f00c5;
+}
+
+#create_new_thread_button:hover {
+    background-color: #3e8e41;
 }
 /***********************/
 
