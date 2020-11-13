@@ -147,7 +147,15 @@
                     <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
 
                     <label for="group_picture"><b>Group picture</b></label>
-                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture>
+                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture><br><br>
+
+                    <label for="group_privacy"><b>Visibility for:</b></label><br>
+                    <input type="radio" id="visibility1" name="visibility" value="30">
+                    <label for="visibility1">All users</label><br>
+                    <input type="radio" id="visibility2" name="visibility" value="60">
+                    <label for="visibility2">Registered users</label><br>  
+                    <input type="radio" id="visibility3" name="visibility" value="100">
+                    <label for="visibility3">Members of this group</label><br>
                     
                     <hr>
                     <button type="submit" id="create_group_button" class="background_color_green">Create group</button>

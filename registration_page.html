@@ -41,11 +41,44 @@
             <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" class="input_box background_color_light" required>
             <hr>
 
-            <p>By creating an account you agree to our <a href="#" class="text_underline">Terms & Privacy</a>.</p>
+            <p>By creating an account you agree to our <a href="#" id="myBtn" class="text_underline">Terms & Privacy</a>.</p>
             <button type="submit" id="register_button" class="background_color_green">Register</button>
         </form> 
     </div>
+
+    <!-- The Modal for Settings -->
+    <div id="myModal" class="modal">
+        <!-- Modal content for Settings-->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Terms & Privacy</h2> 
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis viverra diam non justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Aliquam ante. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Nullam at arcu a est sollicitudin euismod. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Quisque tincidunt scelerisque libero. Pellentesque pretium lectus id turpis. Nullam at arcu a est sollicitudin euismod. Curabitur vitae diam non enim vestibulum interdum. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>           
+        </div>
+    </div>
 </body>
+
+<script>
+    /* Terms & Privacy  - Inspired by W3Schools https://www.w3schools.com/howto/howto_css_modals.asp */
+    var modal = document.getElementById("myModal");
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.addEventListener('click',function(event){
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    });
+</script>
 
 </html>
 </doctype>

@@ -582,33 +582,22 @@ hr {
 /* ---PROFILE PAGE--- */
 
 /* HEADER */
-#profile_page_logo {
-    height: 100%; 
-    width: 30%;   
-        
-    float: right;
-    padding: 0px 50px;  
+.go_home_boy {
+    height: 100%;
+    width: 30%;
+
+    float: left;
+    padding: 35px 0px;
+    text-align: center;
 }
 
-#profile_page_logo_name {
-    height: 100px;
-    line-height: 100px;
-    float: right;
+.search_bar_box_profile {
+    height: 100%;
+    width: 70%;
 
-    font-size: xx-large;
-    background-color: chartreuse;
-}
-
-#profile_page_logo_picture {
-    width: 80px;
-
-    float: right;
-    margin-top: 10px;
-    background-color: chocolate;
-}
-
-#profile_page_home {
-    float: right;
+    float: left;
+    padding-top: 30px;
+    padding-left: 28%;
 }
 
 /***********************/
@@ -622,11 +611,11 @@ hr {
 }
 
 .profile_picture {
-    height: 70%;
-    max-width: 80%;
+    max-height: 70%;
+    width: 30%;
 
     margin-top: 15%;
-    margin-left: 10%;
+    margin-left: 35%;
 }
 /*************************/
 
@@ -637,6 +626,7 @@ hr {
 
     float: right;
     padding: 70px 0;
+    text-align: center;
 }
 /*************************/
 
@@ -647,6 +637,7 @@ hr {
 
     float: right;
     padding: 70px 0;
+    text-align: center;
 
     display: none;
 }

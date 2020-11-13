@@ -11,25 +11,17 @@
     <!-- HEADER - search + logo -->
     <header class="background_color_dark">
         <!-- LOGO -->
-        <div id="profile_page_logo">
-            <a href="home_page.html">
-                <img src="pictures/logo.png" alt="Logo Free Chat" id="profile_page_logo_picture" />
-                <div id="profile_page_logo_name" class="text_orange" >Free chat</div>
-            </a>
-        </div>  
+        <div class="go_home_boy">
+            <a href="home_page.html"><h2 class="text_orange">Home</h2></a>
+        </div>        
         <!-- SEARCH -->
-        <div id="search_bar_box">
+        <div class="search_bar_box_profile">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
             </form>
-        </div> 
-        <div id="profile_page_home" class="text_orange">
-            <a href="home_page.html">
-                <h2>Home</h2>
-            </a>
-        </div>    
+        </div>     
     </header>
 
     <!-- PROFILE PICTURE CONTAINTER -->
@@ -39,20 +31,19 @@
 
     <!-- PROFILE INFO CONTAINER -->
     <div id="info_container">
-        <h1 class="text_orange">Alojz HlinaMAGA</h1>
+        <h1 class="text_orange">Alojz Hlina</h1>
         <hr class="border_1px_solid_white">
         <h2>Date of birth:</h2>
-        <p>04.05.1995</p>
+        <p>04.05.1995</p><br>
         <h2>Groups:</h2>
-        <p>Make America Great Again, DeusVult</p>       
+        <p>Make America Great Again, DeusVult</p>       <br>
 
         <button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="php_action.php">
-            <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
+        <form action="php_action.php">            
             <h1 class="text_orange">Settings</h1>
             <hr class="border_1px_solid_white">
 
@@ -65,10 +56,19 @@
             <label for="password"><b>Repeat Password</b></label>
             <input type="text" placeholder="Repeat Password" name="password" id="password" class="input_box background_color_light">
 
+            <br>
+            <label for="group_privacy"><b>Visibility for:</b></label><br>
+            <input type="radio" id="visibility1" name="visibility" value="30">
+            <label for="visibility1">All users</label><br>
+            <input type="radio" id="visibility2" name="visibility" value="60">
+            <label for="visibility2">Registered users</label><br>  
+            <input type="radio" id="visibility3" name="visibility" value="100">
+            <label for="visibility3">Members of your groups</label><br><br>
+
             <label for="password"><b>Enter current password</b></label>
             <input type="text" placeholder="Enter current password" name="password" id="password" class="input_box background_color_light" required>
 
-            <button type="submit" class="background_color_green">Save changes</button> 
+            <button type="submit" class="background_color_green">Save changes</button> <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
             <hr class="border_1px_solid_white">
         </form>    
     </div>
