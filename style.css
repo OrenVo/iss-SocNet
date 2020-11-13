@@ -330,6 +330,10 @@ hr {
 }
 
 /* Dropdown */
+.dropbtn_notifications {
+    background: url(pictures/bell.png) 100% no-repeat;
+}
+
 .dropbtn {
     height: 100%;
     width: 100%;
@@ -364,7 +368,8 @@ hr {
   }
   
   /* Links inside the dropdown */
-  .dropdown-content a {
+  .dropdown_button {
+    width: 100%;
     color: black;
     padding: 12px 16px;
     text-decoration: none;
@@ -372,7 +377,7 @@ hr {
   }
   
   /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #f1f1f1}
+  .dropdown_button:hover {background-color: #3e8e41}
   
   /* Show the dropdown menu on hover */
   .dropdown:hover .dropdown-content {
@@ -404,6 +409,80 @@ hr {
   .show {display:block;} 
 
 /***********************/
+
+/* The Modal Windows */
+/* Modal window for Members */
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+/****************************/
+
+/* Table Members */
+.members_title {
+    text-align: center;
+}
+.table_members {
+    width: 100%;
+}
+
+.table_members th {
+    width: 33%;
+}
+
+.table_members tr {
+    height: 50px;
+}
+
+.table_members tr td {
+    text-align: center;
+}
+
+.members_picture {
+    height: 70px;
+    max-width: 70px;
+}
+/*****************/
+
+/* Table settings */
+.settings_title {
+    text-align: center;
+}
+/******************/
 
 /* Right panel */
 .right_panel {

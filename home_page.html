@@ -23,7 +23,7 @@
             </a>
             <!-- Notifications dropdown menu -->
             <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn">
+                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications">
                     <img src="pictures/bell2.png" alt="Notifications" class="icon_center">
                 </button>
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
@@ -65,11 +65,59 @@
                         <img src="pictures/arrow_down.png" alt="Notifications" class="icon_center">
                     </button>
                     <div class="dropdown-content">
-                      <a href="#">Members</a>
-                      <a href="#">Settings</a>
-                      <a href="#">Link 3</a>
+                      <button id="myBtnMembers" class="dropdown_button">Members</button>
+                      <button id="myBtnSettings" class="dropdown_button">Settings</button>
+                      <button class="dropdown_button">Link 3</button>
                     </div>
                   </div>
+            </div>
+        </div>
+
+        
+        <!-- The Modal for Members -->
+        <div id="myModalMembers" class="modal">
+            <!-- Modal content for Members-->
+            <div class="modal-content">
+                <h2 class="members_title">Members</h2>
+                <table class="table_members">
+                    <tr>
+                        <th>Picture</th>
+                        <th>Login</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><img src="pictures/profile_picture.jpeg" alt="Profile picture" class="members_picture"></td>
+                        <td>PenelopeCruz</td>
+                        <td><button class="background_color_green">Remove</button></td>
+                    </tr>
+                    <tr>
+                        <td><img src="pictures/profile_picture2.jpg" alt="Profile picture" class="members_picture"></td>
+                        <td>Alojz</td>
+                        <td><button class="background_color_green">Remove</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- The Modal for Members -->
+        <div id="myModalSettings" class="modal">
+            <!-- Modal content for Members-->
+            <div class="modal-content">
+                <h2 class="settings_title">Settings</h2>
+                <form action="action_page_php">
+                    <hr>
+                    <label for="group_name"><b>Group name</b></label>
+                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light">
+
+                    <label for="description"><b>Description</b></label>
+                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light">
+
+                    <label for="group_picture"><b>Group picture</b></label>
+                    <input type="file" placeholder="Group pricture" name="profile_photo" capture>
+                    
+                    <hr>
+                    <button type="submit" class="background_color_green">Submit</button>
+                </form>
             </div>
         </div>
 
@@ -150,24 +198,55 @@
     }
 
     /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function dropdownFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
-
-// Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("click_dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
+    toggle between hiding and showing the dropdown content */
+    function dropdownFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
     }
-  }
-} 
+    
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("click_dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    } 
+
+    /* Modal windows */
+    /* Members */
+    var modal_members = document.getElementById("myModalMembers");
+    // Get the button that opens the modal
+    var btn_mems = document.getElementById("myBtnMembers");
+    // When the user clicks the button, open the modal 
+    btn_mems.onclick = function() {
+      modal_members.style.display = "block";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.addEventListener('click',function(event){
+      if (event.target == modal_members) {
+        modal_members.style.display = "none";
+      }
+    });
+
+    /* Settings */
+    var modal_settings = document.getElementById("myModalSettings");
+    // Get the button that opens the modal
+    var btn_setts = document.getElementById("myBtnSettings");
+    // When the user clicks the button, open the modal 
+    btn_setts.onclick = function() {
+      modal_settings.style.display = "block";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.addEventListener('click',function(event){
+      if (event.target == modal_settings) {
+        modal_settings.style.display = "none";
+      }
+    });
 
 </script>
 </html>
