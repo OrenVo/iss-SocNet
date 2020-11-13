@@ -27,9 +27,12 @@
                     <img src="pictures/bell2.png" alt="Notifications" class="icon_center">
                 </button>
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
-                  <a href="#">Link 1</a>
-                  <a href="#">Link 2</a>
-                  <a href="#">Link 3</a>
+                    <div >User <a href="#"><b>Alojz</b></a> wants to join your group <a href="#"><b>DeusVult!</b></a>
+                        <button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
+                    </div>
+                    <div >User <a href="#"><b>PenelopeCruz</b></a> wants to join your group <a href="#"><b>DeusVult!</b></a>
+                        <button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
+                    </div>
                 </div>
               </div> 
         </div>
@@ -67,7 +70,6 @@
                     <div class="dropdown-content">
                       <button id="myBtnMembers" class="dropdown_button">Members</button>
                       <button id="myBtnSettings" class="dropdown_button">Settings</button>
-                      <button class="dropdown_button">Link 3</button>
                     </div>
                   </div>
             </div>
@@ -99,9 +101,9 @@
             </div>
         </div>
 
-        <!-- The Modal for Members -->
+        <!-- The Modal for Settings -->
         <div id="myModalSettings" class="modal">
-            <!-- Modal content for Members-->
+            <!-- Modal content for Settings-->
             <div class="modal-content">
                 <h2 class="settings_title">Settings</h2>
                 <form action="action_page_php">
@@ -114,6 +116,15 @@
 
                     <label for="group_picture"><b>Group picture</b></label>
                     <input type="file" placeholder="Group pricture" name="profile_photo" capture>
+
+                    <br><br>
+                    <label for="group_privacy"><b>Visibility for:</b></label><br>
+                    <input type="radio" id="age1" name="age" value="30">
+                    <label for="age1">All users</label><br>
+                    <input type="radio" id="age2" name="age" value="60">
+                    <label for="age2">Registered users</label><br>  
+                    <input type="radio" id="age3" name="age" value="100">
+                    <label for="age3">Members of this group</label><br>
                     
                     <hr>
                     <button type="submit" class="background_color_green">Submit</button>
@@ -197,7 +208,8 @@
         }
     }
 
-    /* When the user clicks on the button,
+    /* Code from W3Schools - https://www.w3schools.com/css/css_dropdowns.asp */
+    /* When the user clicks on the button, 
     toggle between hiding and showing the dropdown content */
     function dropdownFunction() {
       document.getElementById("myDropdown").classList.toggle("show");
