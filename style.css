@@ -5,7 +5,19 @@
     box-sizing: border-box;
 }
 
+
 /**** Build-in tags ****/
+
+html {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-shadow: black 1px 1px 1px;
+    color: #f75f00c5;
+}
 
 body {
     padding: 0 10px;
@@ -34,29 +46,35 @@ a { /* Hyperlinks will have inherited color and no decoration */
     color: inherit; 
     text-decoration: none;
 } 
+input {
+    border: none;
+    font-weight: bold;
+    
+}
+
+button { /* Set a style for all buttons */
+    padding: 14px 20px;
+    
+    border: none;
+    color: white;
+    font-weight: bold;  
+    cursor: pointer;
+  }
 
 input[type=text], input[type=password] { /* Full-width inputs */
     padding: 12px 20px;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid grey;
   }
 
 input[type=text]:focus, input[type=password]:focus {
     background-color: #ddd;
     outline: none;
   }
-  
-button { /* Set a style for all buttons */
-    padding: 14px 20px;
-
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
 
 hr {
-    border: 1px solid #f1f1f1;
-    margin-bottom: 25px;
+    border: 1px solid  grey;
+    margin-bottom: 15px;
   }
 
 /**** ---ID--- ****/
@@ -531,6 +549,13 @@ hr {
 }
 /***********************/
 
+.join_group {
+    height: 50px;
+    width: 100px;
+
+    cursor: pointer;
+}
+
 /* Group threads */
 .group_threads {
     height: auto;
@@ -545,6 +570,7 @@ hr {
     width: 100%;
 
     float: left;
+    margin-top: 10px;
     padding: 5px;
     font-weight: bold;
 }
@@ -578,6 +604,37 @@ hr {
 .thread:hover {
     background-color: grey;
 }
+/*********/
+
+/* Posts */
+.thread_posts {
+    height: auto;
+    width: 100%;
+
+    float: left;
+}
+
+.post {
+    height: auto;
+    width: 100%;
+
+    color: white;
+}
+
+.post_text {
+    height: auto;
+    width: 100%;
+
+    padding: 20px;
+}
+
+.ranking {
+    height: auto;
+    width: 100%;
+
+    padding: 10px 20px;
+}
+/*********/
 
 /* ---PROFILE PAGE--- */
 
@@ -647,6 +704,7 @@ hr {
 /* Text */
 .text_shadow_white {
     text-shadow: white 1px 1px 3px;
+    color:white;
 }
 
 .text_size_xxl {
@@ -712,19 +770,6 @@ hr {
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
-.box_shadow{
-      height: 100px;
-      box-shadow: 0px 3px 2px black;
-  }
-
-.border_1px_solid_black {
-    border: 1px solid black;
-}
-
-.border_1px_solid_white {
-    border: 1px solid white;
-}
 
 /* Responsive - adjusting with smaller screens */
 /* Max-width 1100px */

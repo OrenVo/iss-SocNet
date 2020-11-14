@@ -6,7 +6,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
     <title>Free chat</title>
 </head>
-<body> 
+<body class="background_color_light_grey"> 
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->        
@@ -80,6 +80,7 @@
         <div id="myModalMembers" class="modal">
             <!-- Modal content for Members-->
             <div class="modal-content">
+                <span class="close">&times;</span>
                 <h2 class="members_title">Members</h2>
                 <table class="table_members">
                     <tr>
@@ -105,6 +106,7 @@
         <div id="myModalSettings" class="modal">
             <!-- Modal content for Settings-->
             <div class="modal-content">
+                <span class="close">&times;</span>
                 <h2 class="settings_title">Settings</h2>
                 <form action="action_page_php">
                     <hr>
@@ -137,7 +139,7 @@
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
                 <form action="action_page_php">
-                    <h1>Create new group</h1>
+                    <h2>Create new group</h2>
                     <hr>
 
                     <label for="group_name"><b>Group name</b></label>
@@ -165,7 +167,7 @@
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
                 <form action="action_page_php">
-                    <h1>Create new thread</h1>
+                    <h2>Create new thread</h2>
                     <hr>
 
                     <label for="thread_subject"><b>Subject</b></label>
@@ -176,6 +178,10 @@
                     <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
                 </form>
             </div>
+
+            <!-- JOIN GROUP -->
+            <input type="button" value="Join group" class="join_group text_white background_color_green" />
+
             <!-- GROUP THREADS -->
             <div class="group_threads">
                 <!-- Create new thread -->
@@ -185,13 +191,50 @@
                     <h3>Thread subject</h3>
                     <p>Author: Alojz Hlina</p>
                 </div>
-            </div>     
+            </div> 
+            
+            <div class="thread_posts">
+                <div class="post background_color_grey">
+                    <div class="post_text">
+                        <h4>AlojzHlina</h4><br>
+                        <p>Hello, I would like to tell you something people!</p>
+                    </div>
+                    <div class="ranking">
+                        <p>42 <b>increment</b> <b>decrement</b></p>                        
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="post background_color_grey">
+                    <div class="post_text">
+                        <h4>PenelopeCruz</h4><br>
+                        <p>Speak! What is in your heart and on your mind.</p>
+                    </div>
+                    <div class="ranking">
+                        <p>32 <b>increment</b> <b>decrement</b></p>                        
+                    </div>
+                    <hr>
+                </div>
+
+                <div class="post background_color_grey">
+                    <div class="post_text">
+                        <h4>AlojzHlina</h4><br>
+                        <p>I am a straight white male.</p>
+                    </div>
+                    <div class="ranking">
+                        <p>-7 <b>increment</b> <b>decrement</b></p>                        
+                    </div>
+                    <hr>
+                </div>
+            </div>
         </div>
     </article>
 </body>
 
+
 <!-- JavaScript -->
 <script>
+    /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
         document.getElementById("creating_new_group").style.display= 'block';
     }
@@ -208,13 +251,7 @@
         document.getElementById("creating_new_thread").style.display = 'none';
     }
 
-    function group_threads_show(){
-        var x = document.getElementByClassName("group_threads");
-        var i;
-        for(i = 0; i < x.length; i++){
-            x[i].style.display = none;
-        }
-    }
+    
 
     /* Code from W3Schools - https://www.w3schools.com/css/css_dropdowns.asp */
     /* When the user clicks on the button, 
@@ -267,6 +304,14 @@
         modal_settings.style.display = "none";
       }
     });
+
+    //TODO - skusit dokoncit vypinanie okien cez x
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal_members.style.display = "none";        
+    }
 
 </script>
 </html>
