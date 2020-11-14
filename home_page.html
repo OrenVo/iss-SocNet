@@ -52,7 +52,7 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            <input type="button" value="Create New Group" id="create_new_group" class="text_white" onclick="create_new_group_show()">
+            <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
             
             <!-- GROUPS -->
             <div class="group_container background_color_dark_grey text_white">
@@ -185,7 +185,7 @@
             <!-- GROUP THREADS -->
             <div class="group_threads">
                 <!-- Create new thread -->
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="text_white create_new_thread">
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
 
                 <div class="thread text_white background_color_dark_grey">
                     <h3>Thread subject</h3>
@@ -193,6 +193,7 @@
                 </div>
             </div> 
             
+            <!-- POSTS -->
             <div class="thread_posts">
                 <div class="post background_color_grey">
                     <div class="post_text">
@@ -201,8 +202,8 @@
                     </div>
                     <div class="ranking">
                         <p>42 <b>increment</b> <b>decrement</b></p>                        
-                    </div>
-                    <hr>
+                    </div>    
+                    <hr class="hr_for_posts">
                 </div>
 
                 <div class="post background_color_grey">
@@ -213,7 +214,7 @@
                     <div class="ranking">
                         <p>32 <b>increment</b> <b>decrement</b></p>                        
                     </div>
-                    <hr>
+                    <hr class="hr_for_posts">
                 </div>
 
                 <div class="post background_color_grey">
@@ -224,7 +225,7 @@
                     <div class="ranking">
                         <p>-7 <b>increment</b> <b>decrement</b></p>                        
                     </div>
-                    <hr>
+                    <hr class="hr_for_posts">
                 </div>
             </div>
         </div>

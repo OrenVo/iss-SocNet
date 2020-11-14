@@ -20,7 +20,6 @@ h1, h2, h3 {
 }
 
 body {
-    padding: 0 10px;
     background-color: khaki;
 }
 
@@ -29,7 +28,6 @@ article {
     width: 100%;
 
     float: left;
-    padding: 10px 0;
     box-sizing: border-box;
 }
 
@@ -49,7 +47,6 @@ a { /* Hyperlinks will have inherited color and no decoration */
 input {
     border: none;
     font-weight: bold;
-    
 }
 
 button { /* Set a style for all buttons */
@@ -59,7 +56,17 @@ button { /* Set a style for all buttons */
     color: white;
     font-weight: bold;  
     cursor: pointer;
-  }
+}
+
+input[type=button] {
+    color: white;
+    background-color: #f75f00c5;
+    cursor: pointer;
+}
+
+input[type=button]:hover {
+    background-color: #3e8e41;
+}
 
 input[type=text], input[type=password] { /* Full-width inputs */
     padding: 12px 20px;
@@ -68,14 +75,14 @@ input[type=text], input[type=password] { /* Full-width inputs */
   }
 
 input[type=text]:focus, input[type=password]:focus {
-    background-color: #ddd;
     outline: none;
   }
 
 hr {
     border: 1px solid  grey;
     margin-bottom: 15px;
-  }
+}
+
 
 /**** ---ID--- ****/
 /* ------- Main page & registration page ------- */
@@ -220,10 +227,9 @@ hr {
 /* Search */
 #search_bar_box {
     height: 100%;
-    width: 69%;
+    width: 70%;
 
     float: left;
-    margin-left: 1%;
     padding-top: 30px;
     padding-left: 28%;
 }
@@ -258,31 +264,8 @@ hr {
 #create_new_group {
     height: 50px;
     width: 100%;
-
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #f75f00c5;
 }
 
-#create_new_group:hover {
-    background-color: #3e8e41;
-}
-
-#new_group_title { 
-    width: 90%;
-
-    float:left;
-    margin-top: 10px;
-
-    font-size: large;
-    text-align: center;
-}
-
-#add_icon_group {
-    width: 10%;
-
-    float: right;
-}
 /***********************/
 
 /* Group */
@@ -291,7 +274,6 @@ hr {
     width: 100%;
 
     float: left;
-    margin-top: 10px;
 }
 
 .left_panel_group_picture_container {
@@ -510,10 +492,9 @@ hr {
 /* Right panel */
 .right_panel {
     height: auto;
-    width: 69%;
+    width: 70%;
 
     float: left;
-    margin-left: 1%;
 }
 
 /* Creating new group */
@@ -538,15 +519,6 @@ hr {
 
     display: none;
 }
-
-#create_new_thread_button {
-    cursor: pointer;
-    background-color: #f75f00c5;
-}
-
-#create_new_thread_button:hover {
-    background-color: #3e8e41;
-}
 /***********************/
 
 .join_group {
@@ -568,21 +540,11 @@ hr {
 .create_new_thread {
     height: 50px;
     width: 100%;
-
-    float: left;
-    margin-top: 10px;
-    padding: 5px;
-    font-weight: bold;
 }
 
-.create_new_thread:hover {
-    background-color: grey;
-}
 
 .new_thread_title {
     width: 100%;
-
-    margin-top: 10px;
 
     font-size: large;
     text-align: center;
@@ -595,7 +557,6 @@ hr {
     width: 100%;
 
     float: left;
-    margin-top: 10px;
     padding: 25px;
 
     text-align: center;
@@ -633,6 +594,10 @@ hr {
     width: 100%;
 
     padding: 10px 20px;
+}
+
+.hr_for_posts {
+    margin: 0;
 }
 /*********/
 
