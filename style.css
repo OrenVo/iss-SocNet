@@ -331,7 +331,7 @@ hr {
 
 /* Dropdown */
 .dropbtn_notifications {
-    background-image: url(pictures/bell2.png);
+    background-image: url('pictures/bell2.png');
     background-repeat: no-repeat;
     background-size: 40%;
     background-position-x: 50%;

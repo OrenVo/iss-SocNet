@@ -11,7 +11,7 @@
 <body class="background_color_light_grey">
     <!-- HEADER - search + logo -->
     <header class="background_color_dark">
-        <!-- LOGO -->
+        <!-- GO HOME -->
         <div class="go_home_boy">
             <a href="home_page.html"><h2 class="text_orange">Home</h2></a>
         </div>        
@@ -34,11 +34,11 @@
 
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
-            <h1 class="text_orange">Alojz</h1><br>
-            <p>Description of this profile. I like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but it is nice out there</p>
+            <h1 class="text_orange"> {{ username }}</h1><br>
+            <p>{{ description }}</p>
             <br><b>Groups:</b><br>
-            <p>DeusVult</p>
-            <p>Muskitieri</p>
+            {% for groupname in groups: %}
+            <p> {{ groupname }}</p>
             <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
         </div>
     </div>
