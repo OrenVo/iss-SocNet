@@ -3,8 +3,8 @@
 
 <head>
     <meta charset = "utf-8" />
-    <link rel="stylesheet" href="style.css" type="text/css" />
-    <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
 <body>
@@ -14,20 +14,20 @@
         <form action="/action_page.php" method="post" id="main_page_login_form">
             <div class="container">
                 <input type="text" placeholder="Username" name="uname" required>
-            
+
                 <input type="password" placeholder="Password" name="psw" required>
                 <button type="submit" class="background_color_orange">Login</button>
-            </div>    
-        </form>    
-        <!-- LOGO -->   
+            </div>
+        </form>
+        <!-- LOGO -->
         <div id="main_page_logo" class="text_orange">
             <a href="main_page.html">
-                <img src="pictures/logo.png" alt="Logo Free Chat" id="main_page_logo_picture">
+                <img src="{{url_for('static', filename='pictures/logo.png')}}" alt="Logo Free Chat" id="main_page_logo_picture">
                 <div id="main_page_logo_name"><h3>Free chat</h3></div>
             </a>
-        </div> 
+        </div>
     </div>
-    
+
     <div id="main_page_background">
         <form action="action_page.php" id="registration_form">
             <h1 class="text_orange text_center">Register</h1>
@@ -38,14 +38,14 @@
 
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" id="psw" class="input_box background_color_light" required>
-        
+
             <label for="psw-repeat"><b>Repeat Password</b></label>
             <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" class="input_box background_color_light" required>
             <hr>
 
             <p>By creating an account you agree to our <a href="#" id="myBtn" class="text_underline">Terms & Privacy</a>.</p>
             <button type="submit" id="register_button" class="background_color_green">Register</button>
-        </form> 
+        </form>
     </div>
 
     <!-- The Modal for Settings -->
@@ -53,8 +53,8 @@
         <!-- Modal content for Settings-->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Terms & Privacy</h2> 
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis viverra diam non justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Aliquam ante. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Nullam at arcu a est sollicitudin euismod. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Quisque tincidunt scelerisque libero. Pellentesque pretium lectus id turpis. Nullam at arcu a est sollicitudin euismod. Curabitur vitae diam non enim vestibulum interdum. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>           
+            <h2>Terms & Privacy</h2>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis viverra diam non justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Aliquam ante. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Nullam at arcu a est sollicitudin euismod. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Quisque tincidunt scelerisque libero. Pellentesque pretium lectus id turpis. Nullam at arcu a est sollicitudin euismod. Curabitur vitae diam non enim vestibulum interdum. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
         </div>
     </div>
 </body>
@@ -64,7 +64,7 @@
     var modal = document.getElementById("myModal");
     // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
-    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal
     btn.onclick = function() {
       modal.style.display = "block";
     }

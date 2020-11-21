@@ -41,9 +41,9 @@ header {
 }
 
 a { /* Hyperlinks will have inherited color and no decoration */
-    color: inherit; 
+    color: inherit;
     text-decoration: none;
-} 
+}
 input {
     border: none;
     font-weight: bold;
@@ -51,10 +51,10 @@ input {
 
 button { /* Set a style for all buttons */
     padding: 14px 20px;
-    
+
     border: none;
     color: white;
-    font-weight: bold;  
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -95,10 +95,10 @@ hr {
 
 /* Logo */
 #main_page_logo {
-    height: 100%;    
-        
+    height: 100%;
+
     float: left;
-    padding: 0px 50px;  
+    padding: 0px 50px;
 }
 
 #main_page_logo_picture {
@@ -119,32 +119,32 @@ hr {
 #main_page_login_form { /* Login form */
     line-height: 100px;
 
-    float: right; 
-    margin-right: 30px;   
+    float: right;
+    margin-right: 30px;
 }
 
 #main_page_signup { /* Sign up */
-    height: 45px;   
-    line-height: 45px; 
-    
+    height: 45px;
+    line-height: 45px;
+
     margin-top: 28px;
     margin-right: 50px;
-        
+
     float: right;
-    padding: 0px 20px;  
+    padding: 0px 20px;
 }
 /***********************/
 
 #main_page_background { /* Main page background */
     height: 100%;
-    width: 100%;    
-    
-    background-image: url('pictures/main_page_background.jpg');
+    width: 100%;
+
+    background-image: url('../pictures/main_page_background.jpg');
     background-attachment: fixed;
     background-size: 100% 100%;
 
     font-family: 'Courier New', Courier, monospace;
-    
+
     position: relative;    /* Can adjust top,left,right,bottom  - mayb fixed? */
 }
 
@@ -152,13 +152,13 @@ hr {
     padding: 5px;
 
     text-shadow: none;
-    border: 2px solid white;    
+    border: 2px solid white;
 }
 
 #main_page_visitor:hover { /* On hover - Continue as a visitor */
-    color: rgba(0, 0, 0, 1);  
+    color: rgba(0, 0, 0, 1);
     border: 2px solid transparent;
-    background-color: white;      
+    background-color: white;
 }
 
 /* Registration */
@@ -331,7 +331,11 @@ hr {
 
 /* Dropdown */
 .dropbtn_notifications {
+<<<<<<< HEAD:static/css/style.css
+    background-image: url('../pictures/bell2.png');
+=======
     background-image: url('pictures/bell2.png');
+>>>>>>> main:style.css
     background-repeat: no-repeat;
     background-size: 40%;
     background-position-x: 50%;
@@ -346,7 +350,7 @@ hr {
     border: none;
     cursor: pointer;
 }
-  
+
   .dropdown {
     position: relative;
     display: inline-block;
@@ -354,11 +358,11 @@ hr {
     width: 20%;
     height: 100%;
 }
-  
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
-  
+
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
@@ -371,7 +375,7 @@ hr {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
-  
+
 /* Links inside the dropdown */
 .dropdown_button {
     width: 100%;
@@ -380,10 +384,10 @@ hr {
     text-decoration: none;
     display: block;
 }
-  
+
 /* Change color of dropdown links on hover */
 .dropdown_button:hover {background-color: #3e8e41}
-  
+
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
@@ -398,7 +402,7 @@ hr {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
-  
+
   /* Links inside the dropdown */
   .click_dropdown-content div {
     color: black;
@@ -411,12 +415,12 @@ hr {
   .myDropdown {
       width: 400px;
   }
-  
+
   /* Change color of dropdown links on hover */
   .click_dropdown-content a:hover {background-color: #ddd}
-  
+
   /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-  .show {display:block;} 
+  .show {display:block;}
 
 /***********************/
 
@@ -766,9 +770,9 @@ hr {
         float: left;
         height: 50px;
         line-height: 50px;
-        width: 100%;       
-        
-        text-align: center; 
+        width: 100%;
+
+        text-align: center;
 
         margin:-1px 0 0 -1px;   /* No border collapse */
         padding: 0px;
@@ -777,11 +781,11 @@ hr {
     #main_page_logo {
         display: none;
     }
-    
+
     #registration_form {
         margin: 0;
         width: 100%;
-        background-image: url('pictures/main_page_background.jpg');
+        background-image: url('../pictures/main_page_background.jpg');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         color: white;

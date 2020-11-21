@@ -2,20 +2,20 @@
 <html>
 <head>
     <meta charset = "utf-8" />
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
-<body class="background_color_light_grey"> 
+<body class="background_color_light_grey">
     <!-- HEADER - profile + search + logo -->
     <header>
-        <!-- PROFILE -->        
+        <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
             <a href="profile_page.html">
                 <div id="profile_container_image">
-                    <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
+                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description" class="text_orange">                    
+                <div id="profile_container_description" class="text_orange">
                         <h2>Alojz Hlina</h2>
                         <p>Admin</p>
                 </div>
@@ -31,17 +31,17 @@
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
                     </div>
                 </div>
-              </div> 
+              </div>
         </div>
-        
+
         <!-- SEARCH -->
         <div id="search_bar_box" class="background_color_dark_grey">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
-                <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
+                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
-        </div>     
+        </div>
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -50,19 +50,19 @@
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
-            
+
             <!-- GROUPS -->
             <div class="group_container background_color_dark_grey text_white">
                 <div class="left_panel_group_picture_container">
-                    <img src="pictures/profile_picture.jpeg" alt="Group icon" class="left_panel_group_picture">
+                    <img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Group icon" class="left_panel_group_picture">
                 </div>
                 <div class="left_panel_group_text">
                     <h3 class="left_panel_group_title">Group name</h3>
                     <p class="left_panel_group_desrciption">Description</p>
-                </div>               
+                </div>
                 <div class="dropdown">
                     <button class="dropbtn">
-                        <img src="pictures/arrow_down.png" alt="Notifications" class="icon_center">
+                        <img src="{{url_for('static', filename='pictures/arrow_down.png')}}" alt="Notifications" class="icon_center">
                     </button>
                     <div class="dropdown-content">
                       <button id="myBtnMembers" class="dropdown_button">Members</button>
@@ -71,7 +71,7 @@
                   </div>
             </div>
         </div>
-        
+
         <!-- The Modal for Members -->
         <div id="myModalMembers" class="modal">
             <!-- Modal content for Members-->
@@ -85,12 +85,12 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <td><img src="pictures/profile_picture.jpeg" alt="Profile picture" class="members_picture"></td>
+                        <td><img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Profile picture" class="members_picture"></td>
                         <td><a href="#">PenelopeCruz</a></td>
                         <td><button class="background_color_green">Remove</button></td>
                     </tr>
                     <tr>
-                        <td><img src="pictures/profile_picture2.jpg" alt="Profile picture" class="members_picture"></td>
+                        <td><img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" class="members_picture"></td>
                         <td><a href="#">Alojz</a></td>
                         <td><button class="background_color_green">Remove</button></td>
                     </tr>
@@ -120,10 +120,10 @@
                     <input type="radio" id="visibility1" name="visibility" value="30">
                     <label for="visibility1">All users</label><br>
                     <input type="radio" id="visibility2" name="visibility" value="60">
-                    <label for="visibility2">Registered users</label><br>  
+                    <label for="visibility2">Registered users</label><br>
                     <input type="radio" id="visibility3" name="visibility" value="100">
-                    <label for="visibility3">Members of this group</label><br>                    
-                    
+                    <label for="visibility3">Members of this group</label><br>
+
                     <button type="submit" class="background_color_green">Submit</button>
                 </form>
             </div>
@@ -148,10 +148,10 @@
                     <input type="radio" id="visibility1" name="visibility" value="30">
                     <label for="visibility1">All users</label><br>
                     <input type="radio" id="visibility2" name="visibility" value="60">
-                    <label for="visibility2">Registered users</label><br>  
+                    <label for="visibility2">Registered users</label><br>
                     <input type="radio" id="visibility3" name="visibility" value="100">
                     <label for="visibility3">Members of this group</label><br>
-                   
+
                     <br>
                     <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
                     <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
@@ -184,8 +184,8 @@
                     <h3>Thread subject</h3>
                     <p>Author: Alojz Hlina</p>
                 </div>
-            </div> 
-            
+            </div>
+
             <!-- POSTS -->
             <div class="thread_posts">
                 <div class="post background_color_grey">
@@ -194,8 +194,8 @@
                         <p>Hello, I would like to tell you something people!</p>
                     </div>
                     <div class="ranking">
-                        <p>42 <b>increment</b> <b>decrement</b></p>                        
-                    </div>    
+                        <p>42 <b>increment</b> <b>decrement</b></p>
+                    </div>
                     <hr class="hr_for_posts">
                 </div>
 
@@ -205,7 +205,7 @@
                         <p>Speak! What is in your heart and on your mind.</p>
                     </div>
                     <div class="ranking">
-                        <p>32 <b>increment</b> <b>decrement</b></p>                        
+                        <p>32 <b>increment</b> <b>decrement</b></p>
                     </div>
                     <hr class="hr_for_posts">
                 </div>
@@ -216,7 +216,7 @@
                         <p>I am a straight white male.</p>
                     </div>
                     <div class="ranking">
-                        <p>-7 <b>increment</b> <b>decrement</b></p>                        
+                        <p>-7 <b>increment</b> <b>decrement</b></p>
                     </div>
                     <hr class="hr_for_posts">
                 </div>
@@ -245,15 +245,15 @@
         document.getElementById("creating_new_thread").style.display = 'none';
     }
 
-    
+
 
     /* Code from W3Schools - https://www.w3schools.com/css/css_dropdowns.asp */
-    /* When the user clicks on the button, 
+    /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
     function dropdownFunction() {
       document.getElementById("myDropdown").classList.toggle("show");
     }
-    
+
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
@@ -266,14 +266,14 @@
           }
         }
       }
-    } 
+    }
 
     /* Modal windows */
     /* Members */
     var modal_members = document.getElementById("myModalMembers");
     // Get the button that opens the modal
     var btn_mems = document.getElementById("myBtnMembers");
-    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal
     btn_mems.onclick = function() {
       modal_members.style.display = "block";
     }
@@ -288,7 +288,7 @@
     var modal_settings = document.getElementById("myModalSettings");
     // Get the button that opens the modal
     var btn_setts = document.getElementById("myBtnSettings");
-    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal
     btn_setts.onclick = function() {
       modal_settings.style.display = "block";
     }
@@ -304,7 +304,7 @@
     var span = document.getElementsByClassName("close")[0];
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
-        modal_members.style.display = "none";        
+        modal_members.style.display = "none";
     }
 
 </script>

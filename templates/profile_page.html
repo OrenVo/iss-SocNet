@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset = "utf-8" />
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
 
@@ -14,22 +14,22 @@
         <!-- GO HOME -->
         <div class="go_home_boy">
             <a href="home_page.html"><h2 class="text_orange">Home</h2></a>
-        </div>        
+        </div>
         <!-- SEARCH -->
         <div class="search_bar_box_profile">
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
-                <img src="pictures/search_bar2.png" alt="Search bar" id="search_bar_icon"/>
+                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
-        </div>     
+        </div>
     </header>
 
     <!-- PROFILE -->
     <div id="profile">
         <!-- PROFILE PICTURE CONTAINTER -->
         <div class="picture_container">
-            <img src="pictures/profile_picture2.jpg" alt="Profile picture" class="profile_picture">
+            <img src="{{url_for('static', filename='pictures/profile_picture2.png')}}" alt="Profile picture" class="profile_picture">
         </div>
 
         <!-- PROFILE INFO CONTAINER -->
@@ -37,15 +37,21 @@
             <h1 class="text_orange"> {{ username }}</h1><br>
             <p>{{ description }}</p>
             <br><b>Groups:</b><br>
+<<<<<<< HEAD:templates/profile_page.html
+            <p>DeusVult</p>
+            <p>Muskitieri</p>
+            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>
+=======
             {% for groupname in groups: %}
             <p> {{ groupname }}</p>
             <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
+>>>>>>> main:profile_page.html
         </div>
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="php_action.php">            
+        <form action="php_action.php">
             <h1 class="text_orange">Settings</h2><br>
 
             <label for="login"><b>Change Login</b></label>
@@ -62,7 +68,7 @@
             <input type="radio" id="visibility1" name="visibility" value="30">
             <label for="visibility1">All users</label><br>
             <input type="radio" id="visibility2" name="visibility" value="60">
-            <label for="visibility2">Registered users</label><br>  
+            <label for="visibility2">Registered users</label><br>
             <input type="radio" id="visibility3" name="visibility" value="100">
             <label for="visibility3">Members of your groups</label><br><br>
 
@@ -73,17 +79,17 @@
             <input type="text" placeholder="Enter current password" name="password" id="password" class="input_box background_color_light" required>
 
             <button type="submit" class="background_color_green">Save changes</button> <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
-            
-        </form>    
+
+        </form>
     </div>
-       
+
 </body>
 
 <!-- JavaScript -->
 <script>
     function show_settings(){
         document.getElementById("settings_container").style.display= 'block';
-        document.getElementById("profile").style.display= 'none';        
+        document.getElementById("profile").style.display= 'none';
     }
     function show_profile_info(){
         document.getElementById("settings_container").style.display= 'none';
