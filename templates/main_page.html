@@ -3,8 +3,8 @@
 
 <head>
     <meta charset = "utf-8" />
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="pictures/logo.ico?v=2" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
 <body>
@@ -18,26 +18,26 @@
         <form action="/action_page.php" method="post" id="main_page_login_form">
             <div class="container">
                 <input type="text" placeholder="Username" name="uname" class="main_page_resize" required>
-            
+
                 <input type="password" placeholder="Password" name="psw" class="main_page_resize" required>
                 <button type="submit" class="main_page_resize background_color_orange">Login</button>
-            </div>    
-        </form>       
+            </div>
+        </form>
         <!-- LOGO -->
         <div id="main_page_logo" class="text_orange">
             <a href="main_page.html">
-                <img src="pictures/logo.png" alt="Logo Free Chat" id="main_page_logo_picture">
+                <img src="{{url_for('static', filename='pictures/logo.png')}}" alt="Logo Free Chat" id="main_page_logo_picture">
                 <div id="main_page_logo_name"><h3>Free chat</h1></div>
             </a>
-        </div> 
+        </div>
     </div>
-    
+
     <!-- BODY -->
     <div id="main_page_background" class="text_white text_size_xxl text_center">
         <span class="center">
             <h1 class="text_shadow_white">Free chat</h1>
         <div id="main_page_visitor"><a href="#">Continue as a visitor</a></div>
-        </span>        
+        </span>
     </div>
 
 </body>
