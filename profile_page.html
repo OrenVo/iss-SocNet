@@ -7,6 +7,7 @@
     <title>Free chat</title>
 </head>
 
+<!-- BODY -->
 <body class="background_color_light_grey">
     <!-- HEADER - search + logo -->
     <header class="background_color_dark">
@@ -24,28 +25,28 @@
         </div>     
     </header>
 
-    <!-- PROFILE PICTURE CONTAINTER -->
-    <div class="picture_container">
-        <img src="pictures/profile_picture2.jpg" alt="Profile picture" class="profile_picture">
-    </div>
+    <!-- PROFILE -->
+    <div id="profile">
+        <!-- PROFILE PICTURE CONTAINTER -->
+        <div class="picture_container">
+            <img src="pictures/profile_picture2.jpg" alt="Profile picture" class="profile_picture">
+        </div>
 
-    <!-- PROFILE INFO CONTAINER -->
-    <div id="info_container">
-        <h1 class="text_orange">Alojz Hlina</h1>
-        <hr class="border_1px_solid_white">
-        <b>Date of birth:</b><br>
-        <p>04.05.1995</p><br>
-        <b>Groups:</b><br>
-        <p>Make America Great Again, DeusVult</p>       <br>
-
-        <button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
+        <!-- PROFILE INFO CONTAINER -->
+        <div id="info_container">
+            <h1 class="text_orange">Alojz</h1><br>
+            <p>Description of this profile. I like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but i like to go outside, sometimes, when its not raining, but it is nice out there</p>
+            <br><b>Groups:</b><br>
+            <p>DeusVult</p>
+            <p>Muskitieri</p>
+            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
+        </div>
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
         <form action="php_action.php">            
-            <h2 class="text_orange">Settings</h2>
-            <hr class="border_1px_solid_white">
+            <h1 class="text_orange">Settings</h2><br>
 
             <label for="login"><b>Change Login</b></label>
             <input type="text" placeholder="Enter Login" name="login" id="login" class="input_box background_color_light">
@@ -65,6 +66,9 @@
             <input type="radio" id="visibility3" name="visibility" value="100">
             <label for="visibility3">Members of your groups</label><br><br>
 
+            <label for="group_picture"><b>Profile picture</b></label>
+            <input type="file" placeholder="Profile pricture" name="profile_photo" required="" capture><br><br>
+
             <label for="password"><b>Enter current password</b></label>
             <input type="text" placeholder="Enter current password" name="password" id="password" class="input_box background_color_light" required>
 
@@ -79,11 +83,11 @@
 <script>
     function show_settings(){
         document.getElementById("settings_container").style.display= 'block';
-        document.getElementById("info_container").style.display= 'none';        
+        document.getElementById("profile").style.display= 'none';        
     }
     function show_profile_info(){
         document.getElementById("settings_container").style.display= 'none';
-        document.getElementById("info_container").style.display= 'block';
+        document.getElementById("profile").style.display= 'block';
     }
 
 </script>

@@ -15,17 +15,14 @@
                 <div id="profile_container_image">
                     <img src="pictures/profile_picture2.jpg" alt="Profile picture" id="profile_picture_center"/>                
                 </div>
-                <div id="profile_container_description" class="text_orange">
-                    
+                <div id="profile_container_description" class="text_orange">                    
                         <h2>Alojz Hlina</h2>
                         <p>Admin</p>
                 </div>
             </a>
             <!-- Notifications dropdown menu -->
             <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications">
-                    <img src="pictures/bell2.png" alt="Notifications" class="icon_center">
-                </button>
+                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
                     <div >User <a href="#"><b>Alojz</b></a> wants to join your group <a href="#"><b>DeusVult!</b></a>
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
@@ -74,7 +71,6 @@
                   </div>
             </div>
         </div>
-
         
         <!-- The Modal for Members -->
         <div id="myModalMembers" class="modal">
@@ -126,9 +122,8 @@
                     <input type="radio" id="visibility2" name="visibility" value="60">
                     <label for="visibility2">Registered users</label><br>  
                     <input type="radio" id="visibility3" name="visibility" value="100">
-                    <label for="visibility3">Members of this group</label><br>
+                    <label for="visibility3">Members of this group</label><br>                    
                     
-                    <hr>
                     <button type="submit" class="background_color_green">Submit</button>
                 </form>
             </div>
@@ -140,8 +135,6 @@
             <div id="creating_new_group">
                 <form action="action_page_php">
                     <h2>Create new group</h2>
-                    <hr>
-
                     <label for="group_name"><b>Group name</b></label>
                     <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
 
@@ -158,8 +151,8 @@
                     <label for="visibility2">Registered users</label><br>  
                     <input type="radio" id="visibility3" name="visibility" value="100">
                     <label for="visibility3">Members of this group</label><br>
-                    
-                    <hr>
+                   
+                    <br>
                     <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
                     <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
                 </form>
@@ -168,12 +161,12 @@
             <div id="creating_new_thread">
                 <form action="action_page_php">
                     <h2>Create new thread</h2>
-                    <hr>
+                    <br>
 
                     <label for="thread_subject"><b>Subject</b></label>
                     <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
 
-                    <hr>
+                    <br>
                     <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
                     <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
                 </form>
