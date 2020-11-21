@@ -331,7 +331,11 @@ hr {
 
 /* Dropdown */
 .dropbtn_notifications {
+<<<<<<< HEAD:static/css/style.css
     background-image: url('../pictures/bell2.png');
+=======
+    background-image: url('pictures/bell2.png');
+>>>>>>> main:style.css
     background-repeat: no-repeat;
     background-size: 40%;
     background-position-x: 50%;
