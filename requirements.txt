@@ -1,2 +1,3 @@
 Flask >= 1.1.2
-flask_mysqldb
+Flask-MySQL >= 1.5.1
+flask_mysqldb >= 0.2.0
