@@ -11,7 +11,7 @@
 ################################################################################
 
 from flask import Flask, redirect, render_template, request, url_for
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
