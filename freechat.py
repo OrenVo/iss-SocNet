@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import sys  
 
+reload(sys)  
+sys.setdefaultencoding('utf8')
 ################################################################################
 # @project Free Chat - IIS2020(Sociální síť: diskuse v diskusních skupinách)
 #

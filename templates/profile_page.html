@@ -29,7 +29,7 @@
     <div id="profile">
         <!-- PROFILE PICTURE CONTAINTER -->
         <div class="picture_container">
-            <img src="{{url_for('static', filename='pictures/profile_picture2.png')}}" alt="Profile picture" class="profile_picture">
+            <img src="{{ url_for('static', filename='pictures/profile_picture2.png') }}" alt="Profile picture" class="profile_picture">
         </div>
 
         <!-- PROFILE INFO CONTAINER -->
@@ -37,15 +37,9 @@
             <h1 class="text_orange"> {{ username }}</h1><br>
             <p>{{ description }}</p>
             <br><b>Groups:</b><br>
-<<<<<<< HEAD:templates/profile_page.html
-            <p>DeusVult</p>
-            <p>Muskitieri</p>
-            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>
-=======
             {% for groupname in groups: %}
-            <p> {{ groupname }}</p>
+            <p>{{ groupname }}</p>
             <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
->>>>>>> main:profile_page.html
         </div>
     </div>
 

@@ -11,36 +11,37 @@
     <!-- HADER -->
     <div id="main_page_header" class="background_color_dark box_shadow">
         <!-- LOGIN -->
-        <form action="/action_page.php" method="post" id="main_page_login_form">
+        <form action="{{ url_for('home') }}" method="post" autocomplete="on" id="main_page_login_form">
             <div class="container">
-                <input type="text" placeholder="Username" name="uname" required>
-
-                <input type="password" placeholder="Password" name="psw" required>
+                <input name="uname" type="text" placeholder="Username" required>
+                <input name="psw" type="password" placeholder="Password" required>
                 <button type="submit" class="background_color_orange">Login</button>
             </div>
         </form>
+
         <!-- LOGO -->
         <div id="main_page_logo" class="text_orange">
-            <a href="main_page.html">
+            <a href="{{ url_for('welcome')}}">
                 <img src="{{url_for('static', filename='pictures/logo.png')}}" alt="Logo Free Chat" id="main_page_logo_picture">
                 <div id="main_page_logo_name"><h3>Free chat</h3></div>
             </a>
         </div>
     </div>
 
+    <!-- REGISTRATION -->
     <div id="main_page_background">
-        <form action="action_page.php" id="registration_form">
+        <form action="{{ url_for('register') }}" method="POST" id="registration_form">
             <h1 class="text_orange text_center">Register</h1>
             <hr>
 
             <label for="login"><b>Login</b></label>
-            <input type="text" placeholder="Enter Login" name="login" id="login" class="input_box background_color_light" required>
+            <input name="login" type="text" placeholder="Enter Login" class="input_box background_color_light" required>
 
             <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" id="psw" class="input_box background_color_light" required>
+            <input name="psw" type="password" placeholder="Enter Password" class="input_box background_color_light" required>
 
             <label for="psw-repeat"><b>Repeat Password</b></label>
-            <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" class="input_box background_color_light" required>
+            <input name="psw-repeat" type="password" placeholder="Repeat Password" class="input_box background_color_light" required>
             <hr>
 
             <p>By creating an account you agree to our <a href="#" id="myBtn" class="text_underline">Terms & Privacy</a>.</p>
@@ -48,9 +49,9 @@
         </form>
     </div>
 
-    <!-- The Modal for Settings -->
+    <!-- The Modal for Terms & Privacy -->
     <div id="myModal" class="modal">
-        <!-- Modal content for Settings-->
+        <!-- Modal content for Terms & Privacy-->
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Terms & Privacy</h2>
