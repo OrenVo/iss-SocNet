@@ -14,7 +14,7 @@ sys.setdefaultencoding('utf8')
 ################################################################################
 
 from flask import Flask, redirect, render_template, request, url_for
-from flask_mysqldb import MySQL
+from flaskext.mysql import MySQL
 
 app = Flask(__name__)
 

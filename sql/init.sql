@@ -13,6 +13,10 @@ DROP TABLE IF EXISTS Uživatel;
 DROP TABLE IF EXISTS Skupina;
 DROP TABLE IF EXISTS Vlákno;
 DROP TABLE IF EXISTS Zpráva;
+DROP TABLE IF EXISTS Moderuje;
+DROP TABLE IF EXISTS Je_členem;
+DROP TABLE IF EXISTS Žádosti;
+DROP TABLE IF EXISTS Hodnocení;
 
 /**     CREATE TABLES     **/
 CREATE TABLE IF NOT EXISTS Uživatel (
@@ -23,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Uživatel (
     Práva               TINYINT DEFAULT 0,
     Heslo               CHAR (64) NOT NULL,               -- Hash hesla (sha256)
     Profilová_fotka     MEDIUMBLOB,
-    Login               VARCHAR(30) NOT NULL
+    Login               VARCHAR(30) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Skupina (
@@ -78,19 +82,21 @@ CREATE TABLE IF NOT EXISTS Zpráva (
     `Rank`          INT DEFAULT 0,
     Datum_čas       TIMESTAMP DEFAULT NOW(),
 
-    Uživatel_ID     INT NOT NULL,  -- ck
+    Uživatel_ID     INT,  -- ck
     Název_vlákna    NVARCHAR(30) NOT NULL,
     ID_skupiny      INT NOT NULL,
-    CONSTRAINT Pk_zpráva PRIMARY KEY (Uživatel_ID, ID),
-    CONSTRAINT CK_uživatel_zpráva FOREIGN KEY (Uživatel_ID) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_vlákno_zpráva FOREIGN KEY (ID_skupiny, Název_vlákna) REFERENCES Vlákno (Skupina_ID, Název)
+    CONSTRAINT Pk_zpráva PRIMARY KEY (ID, Název_vlákna, ID_skupiny),
+    CONSTRAINT CK_uživatel_zpráva FOREIGN KEY (Uživatel_ID) REFERENCES Uživatel (ID) ON DELETE SET NULL,
+    CONSTRAINT CK_vlákno_zpráva FOREIGN KEY (ID_skupiny, Název_vlákna) REFERENCES Vlákno (Skupina_ID, Název) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Hodnocení (
     Uživatel     INT NOT NULL,
     Zpráva       INT NOT NULL,
     Autor_zprávy INT NOT NULL,
-    CONSTRAINT PK_je_členem PRIMARY KEY (Uživatel, Zpráva, Autor_zprávy),
+    Název_vlákna    NVARCHAR(30) NOT NULL,
+    ID_skupiny      INT NOT NULL,
+    CONSTRAINT PK_je_členem PRIMARY KEY (Uživatel, Zpráva, Název_vlákna,ID_skupiny),
     CONSTRAINT CK_uživatel_hodnocení FOREIGN KEY (Uživatel) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_skupina_hodnocení FOREIGN KEY (Zpráva,Autor_zprávy) REFERENCES Zpráva (ID,Uživatel_ID) ON DELETE CASCADE
+    CONSTRAINT CK_vlákno_hodnocení FOREIGN KEY (Zpráva, Název_vlákna, ID_skupiny) REFERENCES Zpráva (ID, Název_vlákna, ID_skupiny) ON DELETE CASCADE
 );
