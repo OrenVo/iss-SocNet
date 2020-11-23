@@ -9,94 +9,100 @@ DROP DATABASE IF EXISTS iis_soc_net;
 CREATE DATABASE IF NOT EXISTS iis_soc_net;
 USE iis_soc_net;
 /**     DROP     **/
-DROP TABLE IF EXISTS Uživatel;
-DROP TABLE IF EXISTS Skupina;
-DROP TABLE IF EXISTS Vlákno;
-DROP TABLE IF EXISTS Zpráva;
-DROP TABLE IF EXISTS Moderuje;
-DROP TABLE IF EXISTS Je_členem;
-DROP TABLE IF EXISTS Žádosti;
-DROP TABLE IF EXISTS Hodnocení;
+DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS `Group`;
+DROP TABLE IF EXISTS Thread;
+DROP TABLE IF EXISTS Messages;
+DROP TABLE IF EXISTS Moderate;
+DROP TABLE IF EXISTS Is_member;
+DROP TABLE IF EXISTS Applications;
+DROP TABLE IF EXISTS Ranking;
 
 /**     CREATE TABLES     **/
-CREATE TABLE IF NOT EXISTS Uživatel (
+CREATE TABLE IF NOT EXISTS Users
+(
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+	Name NVARCHAR(20),
+	Surname NVARCHAR(20),
+	Mode TINYINT DEFAULT 0 ,
+	Password CHAR(97) NOT NULL,
+	Image MEDIUMBLOB,
+	Login VARCHAR(30) NOT NULL
+
+);
+
+CREATE UNIQUE INDEX User_Login_uindex
+	on iis_soc_net.Users (Login);
+
+
+
+CREATE TABLE IF NOT EXISTS `Group` (
     ID                  INT PRIMARY KEY AUTO_INCREMENT,
+    Name               NVARCHAR(30) NOT NULL,
+    Mode         TINYINT DEFAULT 0,
+    Description               NVARCHAR(2000),
+    Image               MEDIUMBLOB,
 
-    Jméno               NVARCHAR (20),
-    Příjmení            NVARCHAR (20),
-    Práva               TINYINT DEFAULT 0,
-    Heslo               CHAR (97) NOT NULL,               -- Hash hesla (sha256) hex + $ + salt (hex) 16b
-    Profilová_fotka     MEDIUMBLOB,
-    Login               VARCHAR(30) NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS Skupina (
-    ID                  INT PRIMARY KEY AUTO_INCREMENT,
-    Název               NVARCHAR(30) NOT NULL,
-    Práva_čtení         TINYINT DEFAULT 0,
-    Popis               NVARCHAR(2000),
-    Ikona               MEDIUMBLOB,
-
-    Uživatel_ID         INT NOT NULL,
-    CONSTRAINT CK_uživatel FOREIGN KEY (Uživatel_ID) REFERENCES Uživatel (ID) ON DELETE CASCADE     -- vlastní
+    User_ID         INT NOT NULL,
+    CONSTRAINT FK_user_group FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE CASCADE     -- vlastní
 
 );
 
-CREATE TABLE IF NOT EXISTS Moderuje (   -- Vazba <uživatel moderuje skupinu>
-    Uživatel    INT NOT NULL,
-    Skupina     INT NOT NULL,
-    CONSTRAINT PK_moderuje PRIMARY KEY (Uživatel,Skupina),
-    CONSTRAINT CK_uživatel_moderuje FOREIGN KEY (Uživatel) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_skupina_moderuje FOREIGN KEY (Skupina) REFERENCES Skupina (ID) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Moderate (   -- Vazba <uživatel moderuje skupinu>
+    User    INT NOT NULL,
+    `Group`     INT NOT NULL,
+    CONSTRAINT PK_moderate PRIMARY KEY (User,`Group`),
+    CONSTRAINT FK_user_moderate FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
+    CONSTRAINT FK_group_moderate FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Je_členem(   -- Vazba <uživatel je členem skupinu>
-    Uživatel    INT NOT NULL,
-    Skupina     INT NOT NULL,
-    CONSTRAINT PK_je_členem PRIMARY KEY (Uživatel, Skupina),
-    CONSTRAINT CK_uživatel_je_členem FOREIGN KEY (Uživatel) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_skupina_je_členem FOREIGN KEY (Skupina) REFERENCES Skupina (ID) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
+    User    INT NOT NULL,
+    `Group`     INT NOT NULL,
+    CONSTRAINT PK_is_member PRIMARY KEY (User, `Group`),
+    CONSTRAINT FK_user_is_member FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
+    CONSTRAINT FK_group_is_member FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Žádosti(     -- Vazby <uživatel žádá o členství/ práva moderátora>
-    Uživatel    INT NOT NULL,
-    Skupina     INT NOT NULL,
-    Datum_čas   TIMESTAMP,
-    Členství    BOOL DEFAULT TRUE,
-    CONSTRAINT PK_žádosti PRIMARY KEY (Uživatel, Skupina,Členství),
-    CONSTRAINT CK_uživatel_žádosti FOREIGN KEY (Uživatel) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_skupina_žádosti FOREIGN KEY (Skupina) REFERENCES Skupina (ID) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o členství/ práva moderátora>
+    User    INT NOT NULL,
+    `Group`     INT NOT NULL,
+    Date_time   TIMESTAMP,
+    Membership    BOOL DEFAULT TRUE,
+    CONSTRAINT PK_application PRIMARY KEY (User, `Group`,Membership),
+    CONSTRAINT FK_user_application FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
+    CONSTRAINT FK_group_application FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
-CREATE TABLE IF NOT EXISTS Vlákno (
-    Název               NVARCHAR(30) NOT NULL,
-    Popis               NVARCHAR(2000),
+CREATE TABLE IF NOT EXISTS Thread (
+    Name               NVARCHAR(30) NOT NULL,
+    Description               NVARCHAR(2000),
 
-    Skupina_ID          INT NOT NULL,   -- CK
-    CONSTRAINT PK_vlákno PRIMARY KEY (Skupina_ID, Název),
-    CONSTRAINT CK_skupina_vlákno FOREIGN KEY (Skupina_ID) REFERENCES Skupina (ID) ON DELETE CASCADE    -- má
+    Group_ID          INT NOT NULL,   -- CK
+    CONSTRAINT PK_thread PRIMARY KEY (Group_ID, Name),
+    CONSTRAINT FK_group_thread FOREIGN KEY (Group_ID) REFERENCES `Group` (ID) ON DELETE CASCADE    -- má
 );
 
-CREATE TABLE IF NOT EXISTS Zpráva (
+CREATE TABLE IF NOT EXISTS Messages (
     ID              INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Obsah           NVARCHAR(2000),
+    Content           NVARCHAR(2000),
     `Rank`          INT DEFAULT 0,
-    Datum_čas       TIMESTAMP DEFAULT NOW(),
+    Date_time       TIMESTAMP DEFAULT NOW(),
 
-    Uživatel_ID     INT,  -- ck
-    Název_vlákna    NVARCHAR(30) NOT NULL,
-    ID_skupiny      INT NOT NULL,
-    CONSTRAINT Pk_zpráva PRIMARY KEY (ID, Název_vlákna, ID_skupiny),
-    CONSTRAINT CK_uživatel_zpráva FOREIGN KEY (Uživatel_ID) REFERENCES Uživatel (ID) ON DELETE SET NULL,
-    CONSTRAINT CK_vlákno_zpráva FOREIGN KEY (ID_skupiny, Název_vlákna) REFERENCES Vlákno (Skupina_ID, Název) ON DELETE CASCADE
+    User_ID     INT,  -- ck
+    Thread_name    NVARCHAR(30) NOT NULL,
+    ID_group      INT NOT NULL,
+    CONSTRAINT Pk_messages PRIMARY KEY (ID, Thread_name, ID_group),
+    CONSTRAINT FK_user_messages FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE SET NULL,
+    CONSTRAINT FK_thread_messages FOREIGN KEY (ID_group, Thread_name) REFERENCES Thread (Group_ID, Name) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Hodnocení (
-    Uživatel     INT NOT NULL,
-    Zpráva       INT NOT NULL,
-    Autor_zprávy INT NOT NULL,
-    Název_vlákna    NVARCHAR(30) NOT NULL,
-    ID_skupiny      INT NOT NULL,
-    CONSTRAINT PK_je_členem PRIMARY KEY (Uživatel, Zpráva, Název_vlákna,ID_skupiny),
-    CONSTRAINT CK_uživatel_hodnocení FOREIGN KEY (Uživatel) REFERENCES Uživatel (ID) ON DELETE CASCADE,
-    CONSTRAINT CK_vlákno_hodnocení FOREIGN KEY (Zpráva, Název_vlákna, ID_skupiny) REFERENCES Zpráva (ID, Název_vlákna, ID_skupiny) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Ranking (
+    User     INT NOT NULL,
+    Message       INT NOT NULL,
+    Message_author INT NOT NULL,
+    Thread_name    NVARCHAR(30) NOT NULL,
+    ID_group      INT NOT NULL,
+    CONSTRAINT PK_ranking PRIMARY KEY (User, Message, Thread_name,ID_group),
+    CONSTRAINT FK_user_ranking FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
+    CONSTRAINT FK_thread_ranking FOREIGN KEY (Message, Thread_name, ID_group) REFERENCES Messages (ID, Thread_name, ID_group) ON DELETE CASCADE
 );
