@@ -539,7 +539,7 @@ hr {
 }
 
 /* Group threads */
-.group_threads {
+#group_threads {
     height: auto;
     width: 100%;
 
@@ -562,7 +562,7 @@ hr {
 /***********************/
 
 /* Thread */
-.thread {
+.thread_container {
     height: 70px;
     width: 100%;
 
@@ -572,13 +572,13 @@ hr {
     text-align: center;
 }
 
-.thread:hover {
+.thread_container:hover {
     background-color: grey;
 }
 /*********/
 
 /* Posts */
-.thread_posts {
+#thread_posts {
     height: auto;
     width: 100%;
 

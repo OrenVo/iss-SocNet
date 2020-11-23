@@ -11,32 +11,35 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
-            <a href="profile_page.html">
+            <!-- TODO prejst z home page na profil -->
+            <a href="{{ url_for('') }}">
                 <div id="profile_container_image">
+                    <!-- TODO url fotky profilu -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description" class="text_orange">
-                        <h2>Alojz Hlina</h2>
-                        <p>Admin</p>
+                    <h2>{{ username }}</h2>
+                    <p>{{ rights }}</p>
                 </div>
             </a>
             <!-- Notifications dropdown menu -->
             <div class="dropdown">
                 <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
-                    <div >User <a href="#"><b>Alojz</b></a> wants to join your group <a href="#"><b>DeusVult!</b></a>
+                    <!-- TODO prejst na profil + prejst na skupinu -->
+                    {% for notification in notifications %}
+                    <div>User <a href="{{ url_for('') }}"><b>{{ notification_username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notificaton_group }}</b></a>
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
                     </div>
-                    <div >User <a href="#"><b>PenelopeCruz</b></a> wants to join your group <a href="#"><b>DeusVult!</b></a>
-                        <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
-                    </div>
+                    {% endfor %}
                 </div>
               </div>
         </div>
 
         <!-- SEARCH -->
         <div id="search_bar_box" class="background_color_dark_grey">
-            <form action="/action_page.php" id="search_bar_form" >
+            <!-- TODO searchbar -->
+            <form action="{{ url_for('') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
@@ -49,34 +52,46 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
+            {% if session.logged_in %}
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
+            {% endif %}
 
             <!-- GROUPS -->
-            <div class="group_container background_color_dark_grey text_white">
-                <div class="left_panel_group_picture_container">
-                    <img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Group icon" class="left_panel_group_picture">
-                </div>
-                <div class="left_panel_group_text">
-                    <h3 class="left_panel_group_title">Group name</h3>
-                    <p class="left_panel_group_desrciption">Description</p>
-                </div>
-                <div class="dropdown">
-                    <button class="dropbtn">
-                        <img src="{{url_for('static', filename='pictures/arrow_down.png')}}" alt="Notifications" class="icon_center">
-                    </button>
-                    <div class="dropdown-content">
-                      <button id="myBtnMembers" class="dropdown_button">Members</button>
-                      <button id="myBtnSettings" class="dropdown_button">Settings</button>
+            {% for group in groups %}
+            <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
+            <a href="">
+                <div class="group_container background_color_dark_grey text_white">
+                    <div class="left_panel_group_picture_container">
+                        <!-- TODO url fotky skupiny -->
+                        <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
-                  </div>
-            </div>
+                    <div class="left_panel_group_text">
+                        <h3 class="left_panel_group_title">{{ group_name }}</h3>
+                        <p class="left_panel_group_desrciption">{{ group_description }}</p>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn">
+                            <img src="{{ url_for('static', filename='pictures/arrow_down.png') }}" alt="Notifications" class="icon_center">
+                        </button>
+                        <div class="dropdown-content">
+                            {% if rights_allowed %}
+                            <button class="myBtnMembers" class="dropdown_button">Members</button>
+                            {% endif %}
+                            {% if rights_allowed %}
+                            <button class="myBtnSettings" class="dropdown_button">Settings</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
         </div>
 
         <!-- The Modal for Members -->
         <div id="myModalMembers" class="modal">
             <!-- Modal content for Members-->
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close close_members">&times;</span>
                 <h2 class="members_title">Members</h2>
                 <table class="table_members">
                     <tr>
@@ -84,16 +99,16 @@
                         <th>Login</th>
                         <th></th>
                     </tr>
+                    {% for member in members %}
+                    <!-- TODO url na fotku membru + url na profil membru -->
                     <tr>
                         <td><img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="#">PenelopeCruz</a></td>
+                        <td><a href="{{ url_for('') }}">{{ username }}</a></td>
+                        {% if rights_allowed %}
                         <td><button class="background_color_green">Remove</button></td>
+                        {% endif %}
                     </tr>
-                    <tr>
-                        <td><img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="#">Alojz</a></td>
-                        <td><button class="background_color_green">Remove</button></td>
-                    </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
@@ -102,26 +117,27 @@
         <div id="myModalSettings" class="modal">
             <!-- Modal content for Settings-->
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close close_settings">&times;</span>
                 <h2 class="settings_title">Settings</h2>
-                <form action="action_page_php">
+                <!-- TODO group settings -->
+                <form action="">
                     <hr>
                     <label for="group_name"><b>Group name</b></label>
-                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light">
+                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box background_color_light">
 
                     <label for="description"><b>Description</b></label>
-                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light">
+                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box background_color_light">
 
                     <label for="group_picture"><b>Group picture</b></label>
-                    <input type="file" placeholder="Group pricture" name="profile_photo" capture>
+                    <input name="profile_photo" type="file" placeholder="Group pricture" capture>
 
                     <br><br>
                     <label for="group_privacy"><b>Visibility for:</b></label><br>
-                    <input type="radio" id="visibility1" name="visibility" value="30">
+                    <input name="visibility" type="radio" id="visibility1" value="30">
                     <label for="visibility1">All users</label><br>
-                    <input type="radio" id="visibility2" name="visibility" value="60">
+                    <input name="visibility" type="radio" id="visibility2" value="60">
                     <label for="visibility2">Registered users</label><br>
-                    <input type="radio" id="visibility3" name="visibility" value="100">
+                    <input name="visibility" type="radio" id="visibility3" value="100">
                     <label for="visibility3">Members of this group</label><br>
 
                     <button type="submit" class="background_color_green">Submit</button>
@@ -172,55 +188,41 @@
                 </form>
             </div>
 
-            <!-- JOIN GROUP -->
-            <input type="button" value="Join group" class="join_group text_white background_color_green" />
-
             <!-- GROUP THREADS -->
-            <div class="group_threads">
+            <div id="group_threads">
+                <!-- JOIN GROUP -->
+                {% if not member and session.logged_in %}
+                <input type="button" value="Join group" class="join_group text_white background_color_green" /> 
+                {% endif %}           
                 <!-- Create new thread -->
+                {% if member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
+                {% endif %}
 
-                <div class="thread text_white background_color_dark_grey">
-                    <h3>Thread subject</h3>
-                    <p>Author: Alojz Hlina</p>
+                {% for thread in threads %}
+                <div class="thread_container text_white background_color_dark_grey">
+                    <h3>{{ thread_sibject }}</h3>
+                    <p>Author: {{ username }}</p>
                 </div>
+                {% endfor %}
             </div>
 
             <!-- POSTS -->
-            <div class="thread_posts">
+            <div id="thread_posts">
+                {% for post in posts %}
                 <div class="post background_color_grey">
                     <div class="post_text">
-                        <h4>AlojzHlina</h4><br>
-                        <p>Hello, I would like to tell you something people!</p>
+                        <h4>{{ username }}</h4><br>
+                        <p>{{ post_content }}</p>
                     </div>
                     <div class="ranking">
-                        <p>42 <b>increment</b> <b>decrement</b></p>
+                        <p>{{ rank_number }} <b>increment</b> <b>decrement</b></p>
                     </div>
                     <hr class="hr_for_posts">
                 </div>
-
-                <div class="post background_color_grey">
-                    <div class="post_text">
-                        <h4>PenelopeCruz</h4><br>
-                        <p>Speak! What is in your heart and on your mind.</p>
-                    </div>
-                    <div class="ranking">
-                        <p>32 <b>increment</b> <b>decrement</b></p>
-                    </div>
-                    <hr class="hr_for_posts">
-                </div>
-
-                <div class="post background_color_grey">
-                    <div class="post_text">
-                        <h4>AlojzHlina</h4><br>
-                        <p>I am a straight white male.</p>
-                    </div>
-                    <div class="ranking">
-                        <p>-7 <b>increment</b> <b>decrement</b></p>
-                    </div>
-                    <hr class="hr_for_posts">
-                </div>
+                {% endfor %}
             </div>
+
         </div>
     </article>
 </body>
@@ -235,7 +237,6 @@
     function create_new_group_hide(){
         document.getElementById("creating_new_group").style.display= 'none';
     }
-
     function create_new_thread_show(){
         document.getElementById("create_new_thread_button").style.display = 'none';
         document.getElementById("creating_new_thread").style.display = 'block';
@@ -245,15 +246,80 @@
         document.getElementById("creating_new_thread").style.display = 'none';
     }
 
+    /* SHOW THREADS AND HIDE POSTS */
+    var btn_group = document.getElementsByClassName("group_container"); // Getting all buttons
+    // Loop thourgh all buttons and creating an event listeners
+    for (var i = 0; i < btn_group.length; i++) {
+        var thisBtn = btn_group[i]; // Actual button
+        thisBtn.addEventListener("click", function(){
+            var modal = document.getElementById("group_threads");
+            modal.style.display = "block";
+            var modal_hide = document.getElementById("thread_posts");
+            modal_hide.style.display = "none";
+    }, false);
 
+    /* SHOW POSTS AND HIDE THREADS */
+    var btn_thread = document.getElementsByClassName("thread_container");
+    for (var i = 0; i < btn_thread.length; i++) {
+      var thisBtn = btn_thread[i];
+        thisBtn.addEventListener("click", function(){
+            var modal = document.getElementById("thread_posts");
+            modal.style.display = "block";
+            var modal_hide = document.getElementById("group_threads");
+            modal_hide.style.display = "none";
+    }, false);
+
+    /* MEMBERS MODAL WINDOW */
+    var btn_members = document.getElementsByClassName("myBtnMembers");     // Getting all buttons
+    var modal_members = document.getElementById("myModalMembers");         // Getting members modal window
+    // Loop through all buttons and creating event listeners
+    for (var i = 0; i < btn_members.length; i++) {
+      var thisBtn = btn_members[i];
+        thisBtn.addEventListener("click", function(){
+            modal_members.style.display = "block";
+    }, false);
+    // Event listener which closes members modal when clicked outside of it
+    window.addEventListener('click',function(event){
+      if (event.target == modal_members) {
+        modal_members.style.display = "none";
+      }
+    });
+    // Get the <span> element that closes the modal
+    var span_members = document.getElementsByClassName("close_members")[0];
+    // When the user clicks on <span> (x), close the modal
+    span_members.onclick = function() {
+        modal_members.style.display = "none";
+    }
+
+    /* SETTINGS MODAL WINDOW */
+    var btn_settings = document.getElementsByClassName("myBtnSettings");     // Getting all buttons
+    var modal_settings = document.getElementById("myModalSettings");         // Getting settings modal window
+    // Loop through all buttons and creating event listeners
+    for (var i = 0; i < btn_settings.length; i++) {
+      var thisBtn = btn_settings[i];
+        thisBtn.addEventListener("click", function(){
+            modal_settings.style.display = "block";
+    }, false);
+    // Event listener which closes settings modal when clicked outside of it
+    window.addEventListener('click',function(event){
+      if (event.target == modal_settings) {
+        modal_settings.style.display = "none";
+      }
+    });
+    // Get the <span> element that closes the modal
+    var span_settings = document.getElementsByClassName("close_settings")[0];
+    // When the user clicks on <span> (x), close the modal
+    span_settings.onclick = function() {
+        modal_settings.style.display = "none";
+    }
 
     /* Code from W3Schools - https://www.w3schools.com/css/css_dropdowns.asp */
+    /* NOTIFICATIONS DROPDOWN */
     /* When the user clicks on the button,
     toggle between hiding and showing the dropdown content */
     function dropdownFunction() {
       document.getElementById("myDropdown").classList.toggle("show");
     }
-
     // Close the dropdown menu if the user clicks outside of it
     window.onclick = function(event) {
       if (!event.target.matches('.dropbtn')) {
@@ -268,8 +334,8 @@
       }
     }
 
-    /* Modal windows */
-    /* Members */
+    /* MODAL WINDOWS 
+    /* Members 
     var modal_members = document.getElementById("myModalMembers");
     // Get the button that opens the modal
     var btn_mems = document.getElementById("myBtnMembers");
@@ -284,7 +350,7 @@
       }
     });
 
-    /* Settings */
+    /* Settings 
     var modal_settings = document.getElementById("myModalSettings");
     // Get the button that opens the modal
     var btn_setts = document.getElementById("myBtnSettings");
@@ -299,13 +365,13 @@
       }
     });
 
-    //TODO - skusit dokoncit vypinanie okien cez x
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal_members.style.display = "none";
     }
+    */
 
 </script>
 </html>
