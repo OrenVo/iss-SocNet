@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import sys  
+# import sys
 
-reload(sys)  
-sys.setdefaultencoding('utf8')
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 ################################################################################
 # @project Free Chat - IIS2020(Sociální síť: diskuse v diskusních skupinách)
 #
@@ -13,10 +13,15 @@ sys.setdefaultencoding('utf8')
 # @author Roman Fulla <xfulla00>
 ################################################################################
 
+import src.load
+from src.error import eprint
+from src.db import DB
 from flask import Flask, redirect, render_template, request, url_for
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'f4abb8b8384bcf305ecdf1c61156cee1'
+db = DB(app)
 
 login = False
 username = "Daniel"
@@ -37,13 +42,20 @@ def welcome():
         return render_template("main_page.html")
 
 
-@app.route("/register/")
-@app.route("/registration/")
+@app.route("/register/", methods=['GET', 'POST'])
+@app.route("/registration/", methods=['GET', 'POST'])
 def register():
-    if login is True:
-        return redirect(url_for("home"))
-    else:
-        return render_template("registration_page.html")
+    if request.method == 'POST':
+        login = request.form['login']
+        if db.check_username(login):
+            eprint("User exists")
+        else:
+            eprint("New user")
+        psw = request.form['psw']
+        if psw != request.form['psw-repeat']:
+            ... # Špatně zadané zopakování hesla
+        ... # TODO create user in db
+    return render_template("registration_page.html")
 
 
 @app.route("/visit/")
