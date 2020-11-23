@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Uživatel (
     Jméno               NVARCHAR (20),
     Příjmení            NVARCHAR (20),
     Práva               TINYINT DEFAULT 0,
-    Heslo               CHAR (64) NOT NULL,               -- Hash hesla (sha256)
+    Heslo               CHAR (97) NOT NULL,               -- Hash hesla (sha256) hex + $ + salt (hex) 16b
     Profilová_fotka     MEDIUMBLOB,
     Login               VARCHAR(30) NOT NULL UNIQUE
 );
