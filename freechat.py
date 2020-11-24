@@ -21,7 +21,6 @@ from flask_login import current_user, LoginManager, login_required, login_user, 
 '''
 TODO List
 Profile picture
-Get public
 Dano's file
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
 Escape links & other input to prevent crashes and hijacking
