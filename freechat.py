@@ -10,12 +10,12 @@
 # @author Roman Fulla <xfulla00>
 # @author Vojtech Ulej <xulejv00>
 ################################################################################
+import io
 
-
-from src.db import DB, init_db, User
+from src.db import DB, init_db, User, Group
 from src.error import eprint
 from datetime import timedelta
-from flask import Flask, redirect, render_template, request, url_for, session
+from flask import Flask, redirect, render_template, request, url_for, session, send_file
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
 
 '''
@@ -83,6 +83,13 @@ def guest():
         return render_template("guest_page.html")
 
 
+@app.route("/profile_image.png")        # Sends current_user profile image to this path
+@login_required
+def profile_img():
+    image = current_user.Image  # Load blob
+    file_object = io.BytesIO(image)  # create file in memory
+    return send_file(file_object, mimetype='image/PNG')  # sends file to path
+
 # User pages #
 
 @app.route("/home/")
@@ -93,7 +100,8 @@ def home():
     admin = mode & 2
     rights = "Admin" if admin else "User"
     return rights
-    picture = "TODO"  # TODO get profile_pic
+    # path for <img src="path">
+    picture = "/profile_image.png"  # TODO change to another route
     return render_template("home_page.html", username=username, rights="user", img_src=picture)
 
 

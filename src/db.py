@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+from sqlalchemy import func
+
 from src.error import eprint
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -33,21 +35,26 @@ class DB:
     def __init__(self, db):
         self.db = db
 
-    # TODO USERNAME CASE INSENSITIVE
+    def insert_photo(self, login: str, blob):
+        user = User.query.filter_by(Login=login).first()
+        user.Image = blob
+        self.db.session.commit()
+
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
         eprint("\n", psw, "\n")
-        new_user = User(Login=username, Password=psw)
-        instance = mysql.session.query(User).filter_by(Login=username).first()
+        new_user = User(Login=username, Password=psw, Image=a)
+        instance = self.db.session.query(User).filter_by(Login=username).first()
         if instance is None:
-            mysql.session.add(new_user)
+            self.db.session.add(new_user)
             try:
-                mysql.session.commit()
+                self.db.session.commit()
             except Exception as e:
                 eprint(str(e))
-                mysql.session.rollback()
+                self.db.session.rollback()
             return new_user
         else:
+            eprint(instance.Login)
             return None
 
     def check_password(self, password: str, username: str):
@@ -65,6 +72,7 @@ class DB:
 
     def check_username(self, username: str):
         user = self.db.session.query(User).filter_by(Login=username).first()
+        if user is not None: eprint(user.Login, username)
         return user is None
 
     # GOOD TO GO
@@ -81,14 +89,28 @@ class DB:
 mysql = SQLAlchemy()
 Base = automap_base(mysql.Model)
 
-
 # CHECK ME
-class User(Base, UserMixin, mysql.Model):
+class User(Base, UserMixin):
     __tablename__ = 'users'
 
     def get_id(self):
         from flask._compat import text_type
         return text_type(self.ID)
+
+class Group(Base):
+    __tablename__ = 'users'
+class Thread(Base):
+    __tablename__ = 'users'
+class Messages(Base):
+    __tablename__ = 'users'
+class Moderate(Base):
+    __tablename__ = 'users'
+class Is_member(Base):
+    __tablename__ = 'users'
+class Applications(Base):
+    __tablename__ = 'users'
+class Ranking(Base):
+    __tablename__ = 'users'
 
 
 # Note this function must be called before others functions that works with database!!!
