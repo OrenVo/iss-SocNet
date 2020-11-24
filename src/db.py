@@ -66,13 +66,27 @@ class DB:
         user = mysql.session.query(User).filter_by(Login=username).first()
         return user is None
 
+    # CHECK ME
+    def get_user(self, username):
+        instance = mysql.session.query(User).filter_by(Login=username).first()
+        return instance
+
+    # CHECK ME
+    def get_id(self):
+        # TODO
+        pass
+
 
 mysql = SQLAlchemy()
 Base = automap_base()
 
 
+# CHECK ME
 class User(Base, UserMixin):
     __tablename__ = 'users'
+    id = mysql.Column(mysql.Integer, primary_key=True)
+    password = mysql.Column(mysql.String(97))
+    login = mysql.Column(mysql.String(30), unique=True)
 
 
 # Note this function must be called before others functions that works with database!!!

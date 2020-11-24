@@ -11,14 +11,25 @@
 # @author Vojtech Ulej <xulejv00>
 ################################################################################
 
+
 from src.db import DB, init_db
 from src.error import eprint
+from datetime import timedelta
 from flask import Flask, redirect, render_template, request, url_for
-from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user  # TODO NEED EVERYTHING?
+from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
 
+'''
+TODO List
+LoginManager
+User class
 
-# TO BE REMOVED
-# TRANSFORM links and other input into save strings to prevent crashes
+Login duration to autologoff
+Home
+Get public
+Dano's file
+https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
+Escape links & other input to prevent crashes and hijacking
+'''
 
 # App initialization #
 app = Flask(__name__)
@@ -28,6 +39,7 @@ db = DB(database)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "welcome"
+
 
 ################################################################################
 # Pages
@@ -51,21 +63,18 @@ def welcome():
 @app.route("/register/", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return render_template("lost_page.html")
+        return redirect(url_for("lost"))
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['psw']
         repeat = request.form['psw-repeat']
-
+        if not db.check_username(login):
+            # TODO add message what was wrong
+            return render_template("registration_page.html")
         if password != repeat:
             # TODO add message what was wrong & keep the username
             return render_template("registration_page.html")
-
-        if db.check_username(login):
-            # TODO add message what was wrong
-            return render_template("registration_page.html")
-
-        eprint(db.insert_new_user(login, password))
+        db.insert_new_user(login, password)
         # TODO add message that it was succesful
         return redirect(url_for("welcome"))
     return render_template("registration_page.html")
@@ -84,12 +93,11 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    # TODO NOW Dano's file (nechapem otazke)
-    # TODO NOW https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
+    return "got home"
     username = current_user.username
-    # TODO get rights
-    # TODO get profile_pic
-    return render_template("home_page.html", username=username, rights="user", img_src=profile_pic)
+    rights = "user"   # TODO get rights
+    picture = r"static\pictures\profile_picture.jpeg"  # TODO get profile_pic
+    return render_template("home_page.html", username=username, rights="user", img_src=picture)
 
 
 @app.route("/profile/<name>/")
@@ -97,10 +105,8 @@ def home():
 @app.route("/users/<name>/")
 @app.route("/profiles/<name>/")
 def profile(name):
-    return render_template("welcome_page.html")
-    # TODO get private
-    private = False
-    if private and current_user.is_anonymous:
+    public = True  # TODO get public
+    if not public and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("profile_page.html", username=name)
 
@@ -108,9 +114,8 @@ def profile(name):
 @app.route("/group/<name>/")
 @app.route("/groups/<name>/")
 def group(name):
-    # TODO get private
-    private = False
-    if private and current_user.is_anonymous:
+    public = True  # TODO get public
+    if not public and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("group_page.html", groupname=name)
 
@@ -118,9 +123,8 @@ def group(name):
 @app.route("/group/<name>/<thread>")
 @app.route("/groups/<name>/<thread>")
 def thread(name, thread):
-    # TODO get private
-    private = False
-    if private and current_user.is_anonymous:
+    public = True  # TODO get public
+    if not public and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("thread_page.html", groupname=name, threadname=thread)
 
@@ -145,18 +149,28 @@ def lost(path):
 # Requests
 ################################################################################
 
-@app.route("/login", methods=['POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    if request.method == 'GET':
+        if current_user.is_authenticated:
+            return redirect(url_for("lost"))
+        return redirect(url_for("welcome"))
     login = request.form["uname"]
     password = request.form["psw"]
-
     if not db.check_password(password, login):
-        # TODO add message that login was unsuccesful
-        eprint("unauthorized")
+        # TODO add message that login was unsuccesful & keep username
         return redirect(url_for("welcome"))
 
-    eprint("yes")
+    # user = DB.session.query(User).filter_by(Login=username).first()
+    user = db.get_user(login)
+    login_user(user, duration=timedelta(hours=1))
     return redirect(url_for("home"))
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("welcome"))
 
 
 '''
@@ -187,19 +201,17 @@ def group_settings(name):
 # Supporting functions
 ################################################################################
 
-'''
 @app.before_request
 def enforce_https():
     if request.headers.get('X-Forwarded-Proto') == 'http':
         url = request.url.replace('http://', 'https://', 1)
         code = 301
         return redirect(url, code=code)
-'''
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.query.get(int(user_id))
 
 
 '''
