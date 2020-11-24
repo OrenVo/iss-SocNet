@@ -14,6 +14,7 @@
 
 from src.db import DB, init_db, User
 from src.error import eprint
+from collections import namedtuple
 from datetime import timedelta
 from flask import Flask, redirect, render_template, request, url_for, session
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
@@ -193,6 +194,71 @@ def group_settings(name):
         return render_template("tresspassing_page.html")
     return name + " settings page."
     # TODO return settings
+
+@app.route("/group/<name>/notifications")
+@app.route("/groups/<name>/notifications")
+@login_required
+def group_settings(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settingsň
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def see_posts(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
+
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def increment(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def decrement(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def send_message(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def create_group(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
+
+
+@app.route("/group/<name>/<thread>")
+@app.route("/groups/<name>/<thread>")
+@login_required
+def create_thread(name):
+    if current_user.id != group.owner:
+        return render_template("tresspassing_page.html")
+    return name + " settings page."
+    # TODO return settings
 '''
 
 
@@ -207,7 +273,6 @@ def make_session_permanent():
     session.modified = True
 
 
-# Works?
 @app.before_request
 def enforce_https():
     if request.headers.get('X-Forwarded-Proto') == 'http':
@@ -219,6 +284,23 @@ def enforce_https():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+# WE don't know if it works
+@app.route('/search', methods=['GET'])
+def search():
+    return flask.render_template('search.html')
+
+
+# WE don't know if it works
+@app.route('/search_result')
+def search_for():
+    query = flask.request.args.get('search')
+    result = namedtuple('result', ['val', 'btn'])
+    vals = [("Article1", 60), ("Article2", 50), ("Article 3", 40)]
+    # below is a very simple search algorithm to filter vals based on user input:
+    html = flask.render_template('results.html', results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
+    return flask.jsonify({'results': html})
 
 
 if __name__ == "__main__":
