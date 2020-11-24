@@ -11,24 +11,23 @@
 # @author Vojtech Ulej <xulejv00>
 ################################################################################
 
-from src.db import DB
+from src.db import DB, init_db
 from src.error import eprint
 from flask import Flask, redirect, render_template, request, url_for
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user  # TODO NEED EVERYTHING?
-from flaskext.mysql import MySQL
+
 
 # TO BE REMOVED
 # TRANSFORM links and other input into save strings to prevent crashes
-import src.load
 
 # App initialization #
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'f4abb8b8384bcf305ecdf1c61156cee1'
-db = DB(app)
+database = init_db(app)
+db = DB(database)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "welcome"
-
 
 ################################################################################
 # Pages
@@ -58,14 +57,15 @@ def register():
         password = request.form['psw']
         repeat = request.form['psw-repeat']
 
-        if db.check_username(login):
-            # TODO add message what was wrong
-            return render_template("registration_page.html")
         if password != repeat:
             # TODO add message what was wrong & keep the username
             return render_template("registration_page.html")
 
-        insert_new_user(username, password)
+        if db.check_username(login):
+            # TODO add message what was wrong
+            return render_template("registration_page.html")
+
+        eprint(db.insert_new_user(login, password))
         # TODO add message that it was succesful
         return redirect(url_for("welcome"))
     return render_template("registration_page.html")
@@ -150,7 +150,7 @@ def login():
     login = request.form["uname"]
     password = request.form["psw"]
 
-    if not db.check_username(login) or not check_password(password, login):
+    if not db.check_username(login) or not db.check_password(password, login):
         # TODO add message that login was unsuccesful
         return redirect(url_for("welcome"))
 

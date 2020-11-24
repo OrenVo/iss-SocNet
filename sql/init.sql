@@ -9,7 +9,7 @@ DROP DATABASE IF EXISTS iis_soc_net;
 CREATE DATABASE IF NOT EXISTS iis_soc_net;
 USE iis_soc_net;
 /**     DROP     **/
-DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS `Group`;
 DROP TABLE IF EXISTS Thread;
 DROP TABLE IF EXISTS Messages;
@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `Group` (
 );
 
 CREATE TABLE IF NOT EXISTS Moderate (   -- Vazba <uživatel moderuje skupinu>
+    ID      INT NOT NULL UNIQUE AUTO_INCREMENT, -- for easier mapping to sql alchemy orm
     User    INT NOT NULL,
     `Group`     INT NOT NULL,
     CONSTRAINT PK_moderate PRIMARY KEY (User,`Group`),
@@ -57,6 +58,7 @@ CREATE TABLE IF NOT EXISTS Moderate (   -- Vazba <uživatel moderuje skupinu>
 );
 
 CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
+    ID      INT NOT NULL UNIQUE AUTO_INCREMENT, -- for easier mapping to sql alchemy orm
     User    INT NOT NULL,
     `Group`     INT NOT NULL,
     CONSTRAINT PK_is_member PRIMARY KEY (User, `Group`),
