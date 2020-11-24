@@ -23,10 +23,13 @@
                     <p>{{ rights }}</p>
                 </div>
             </a>
-            <!-- Notifications dropdown menu -->
-            <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
-            </div>
+            <!-- Notifications -->
+            <!-- TODO -->
+            <a href="">
+                <div class="dropdown">
+                    <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+                </div>
+            </a>
         </div>
 
         <!-- SEARCH -->
@@ -111,14 +114,43 @@
             <div id="group_threads">
                 <!-- JOIN GROUP -->
                 {% if !member and session.logged_in %}
-                <input type="button" value="Join group" class="join_group text_white background_color_green" />
+                <!-- TODO -->
+                <a href="">
+                    <input type="button" value="Join group" class="join_group text_white background_color_green" />
+                </a>
                 {% endif %}
-                <!-- Create new thread -->
+
+                <!-- REQUEST MOD -->
+                {% if member and !mod %}
+                <!-- TODO -->
+                <a href="">
+                    <input type="button" value="Request mod" class="join_group text_white background_color_green" />
+                </a>
+                {% endif %}
+
+                <!-- SEE MEMBERS -->
+                {% if member %}
+                <!-- TODO -->
+                <a href="">
+                    <input type="button" value="Members" class="join_group text_white background_color_green" />
+                </a>
+                {% endif %}
+
+                <!-- SETTINGS -->
+                {% if mod %}
+                <!-- TODO -->
+                <a href="">
+                    <input type="button" value="Settings" class="join_group text_white background_color_green" />
+                </a>
+                {% endif %}
+
+                <!-- CREATE NEW THREAD -->
                 {% if member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
                 {% endif %}
 
                 {% for thread in threads %}
+                <!-- TODO -->
                 <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
                     <div class="thread_container text_white background_color_dark_grey">
                         <h3>{{ thread.subject }}</h3>

@@ -1,7 +1,6 @@
-<!-- TODO pridat upozornenie ak je zabrane meno -->
+<!-- TODO pridat upozornenie ak je zabrane meno pri registracii + prihlasenie zle meno/heslo -->
 <doctype! html>
 <html>
-
 <head>
     <meta charset = "utf-8" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
@@ -19,7 +18,6 @@
                 <button type="submit" class="background_color_orange">Login</button>
             </div>
         </form>
-
         <!-- LOGO -->
         <div id="main_page_logo" class="text_orange">
             <a href="{{ url_for('welcome')}}">
@@ -31,7 +29,7 @@
 
     <!-- REGISTRATION -->
     <div id="main_page_background">
-        <form action="{{ url_for('register') }}" method="POST" id="registration_form">
+        <form action="{{ url_for('register') }}" method="POST" autocomplete="on" id="registration_form">
             <h1 class="text_orange text_center">Register</h1>
             <hr>
 
