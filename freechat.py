@@ -12,7 +12,7 @@
 ################################################################################
 
 
-from src.db import DB, init_db
+from src.db import DB, init_db, User
 from src.error import eprint
 from datetime import timedelta
 from flask import Flask, redirect, render_template, request, url_for

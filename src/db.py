@@ -50,7 +50,7 @@ class DB:
             return None
 
     def check_password(self, password: str, username: str):
-        user = mysql.session.query(User).filter_by(Login=username).first()
+        user = self.db.session.query(User).filter_by(Login=username).first()
         if user is None: return False
         p_s = user.Password.split('$')
         hash_alg = hashlib.sha256((p_s[1] + password).encode())
@@ -63,12 +63,12 @@ class DB:
         return hash_alg.hexdigest() + "$" + salt
 
     def check_username(self, username: str):
-        user = mysql.session.query(User).filter_by(Login=username).first()
+        user = self.db.session.query(User).filter_by(Login=username).first()
         return user is None
 
-    # CHECK ME
+    # GOOD TO GO
     def get_user(self, username):
-        instance = mysql.session.query(User).filter_by(Login=username).first()
+        instance = self.db.session.query(User).filter_by(Login=username).first()
         return instance
 
     # CHECK ME
@@ -78,15 +78,16 @@ class DB:
 
 
 mysql = SQLAlchemy()
-Base = automap_base()
+Base = automap_base(mysql.Model)
 
 
 # CHECK ME
-class User(Base, UserMixin):
+class User(Base, UserMixin, mysql.Model):
     __tablename__ = 'users'
-    id = mysql.Column(mysql.Integer, primary_key=True)
-    password = mysql.Column(mysql.String(97))
-    login = mysql.Column(mysql.String(30), unique=True)
+
+    def get_id(self):
+        from flask._compat import text_type
+        return text_type(self.ID)
 
 
 # Note this function must be called before others functions that works with database!!!
