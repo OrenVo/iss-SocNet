@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from src.error import eprint
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import hashlib
 from configparser import ConfigParser
@@ -33,7 +34,9 @@ class DB:
         self.db = db
 
     def insert_new_user(self, username, password):
-        new_user = User(Login=username, Password=self.create_password(password))
+        psw = self.create_password(password)
+        eprint("\n", psw, "\n")
+        new_user = User(Login=username, Password=psw)
         instance = mysql.session.query(User).filter_by(Login=username).first()
         if instance is None:
             mysql.session.add(new_user)
@@ -43,15 +46,14 @@ class DB:
                 eprint(str(e))
                 mysql.session.rollback()
             return new_user
-        else: return None
+        else:
+            return None
 
     def check_password(self, password: str, username: str):
-        query = self.db.session.query(User)
-        query = query.options(undefer('Image'))
-        user = query.filter_by(Login=username).first()
+        user = mysql.session.query(User).filter_by(Login=username).first()
         if user is None: return False
-        p_s = user.password.split('$')
-        hash_alg = hashlib.sha256(p_s[1] + password)
+        p_s = user.Password.split('$')
+        hash_alg = hashlib.sha256((p_s[1] + password).encode())
         return p_s[0] == hash_alg.hexdigest()
 
     @staticmethod
@@ -61,13 +63,30 @@ class DB:
         return hash_alg.hexdigest() + "$" + salt
 
     def check_username(self, username: str):
-        query = self.db.session.query(User)
-        query = query.options(undefer('Image'))
-        user = query.filter_by(Login=username).first()
+        user = mysql.session.query(User).filter_by(Login=username).first()
         return user is None
+
+    # CHECK ME
+    def get_user(self, username):
+        instance = mysql.session.query(User).filter_by(Login=username).first()
+        return instance
+
+    # CHECK ME
+    def get_id(self):
+        # TODO
+        pass
 
 
 mysql = SQLAlchemy()
+Base = automap_base()
+
+
+# CHECK ME
+class User(Base, UserMixin):
+    __tablename__ = 'users'
+    id = mysql.Column(mysql.Integer, primary_key=True)
+    password = mysql.Column(mysql.String(97))
+    login = mysql.Column(mysql.String(30), unique=True)
 
 
 # Note this function must be called before others functions that works with database!!!
@@ -86,10 +105,10 @@ def init_db(app, fname='db.ini', sect='mysql'):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     global mysql
     mysql = SQLAlchemy(app)
-    Base = automap_base()
+    global Base
     Base.prepare(mysql.engine, reflect=True)
     global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
-    User = Base.classes.users
+    # User = Base.classes.users
     Group = Base.classes.group
     Thread = Base.classes.thread
     Message = Base.classes.messages
