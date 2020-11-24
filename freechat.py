@@ -15,16 +15,12 @@
 from src.db import DB, init_db, User
 from src.error import eprint
 from datetime import timedelta
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, session
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
 
 '''
 TODO List
-LoginManager
-User class
-
-Login duration to autologoff
-Home
+Profile picture
 Get public
 Dano's file
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
@@ -93,10 +89,12 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    return "got home"
-    username = current_user.username
-    rights = "user"   # TODO get rights
-    picture = r"static\pictures\profile_picture.jpeg"  # TODO get profile_pic
+    username = current_user.Login
+    mode = current_user.Mode
+    admin = mode & 2
+    rights = "Admin" if admin else "User"
+    return rights
+    picture = "TODO"  # TODO get profile_pic
     return render_template("home_page.html", username=username, rights="user", img_src=picture)
 
 
@@ -105,8 +103,9 @@ def home():
 @app.route("/users/<name>/")
 @app.route("/profiles/<name>/")
 def profile(name):
-    public = True  # TODO get public
-    if not public and current_user.is_anonymous:
+    user = name
+    private = user.Mode & 1
+    if private and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("profile_page.html", username=name)
 
@@ -114,8 +113,9 @@ def profile(name):
 @app.route("/group/<name>/")
 @app.route("/groups/<name>/")
 def group(name):
-    public = True  # TODO get public
-    if not public and current_user.is_anonymous:
+    group = name
+    private = group.Mode & 1
+    if private and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("group_page.html", groupname=name)
 
@@ -123,8 +123,9 @@ def group(name):
 @app.route("/group/<name>/<thread>")
 @app.route("/groups/<name>/<thread>")
 def thread(name, thread):
-    public = True  # TODO get public
-    if not public and current_user.is_anonymous:
+    group = name
+    private = group.Mode & 1
+    if private and current_user.is_anonymous:
         return render_template("tresspassing_page.html")
     return render_template("thread_page.html", groupname=name, threadname=thread)
 
@@ -161,9 +162,8 @@ def login():
         # TODO add message that login was unsuccesful & keep username
         return redirect(url_for("welcome"))
 
-    # user = DB.session.query(User).filter_by(Login=username).first()
-    user = db.get_user(login)
-    login_user(user, duration=timedelta(hours=1))
+    user = User.query.filter_by(Login=login).first()
+    login_user(user)
     return redirect(url_for("home"))
 
 
@@ -202,6 +202,14 @@ def group_settings(name):
 ################################################################################
 
 @app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=1)
+    session.modified = True
+
+
+# Works?
+@app.before_request
 def enforce_https():
     if request.headers.get('X-Forwarded-Proto') == 'http':
         url = request.url.replace('http://', 'https://', 1)
@@ -212,14 +220,6 @@ def enforce_https():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-'''
-@login_manager.unauthorized_handler
-def unauthorized():
-    # do stuff
-    return a_response
-'''
 
 
 if __name__ == "__main__":

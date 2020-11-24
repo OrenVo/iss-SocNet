@@ -33,6 +33,7 @@ class DB:
     def __init__(self, db):
         self.db = db
 
+    # TODO USERNAME CASE INSENSITIVE
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
         eprint("\n", psw, "\n")
