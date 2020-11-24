@@ -256,7 +256,7 @@
             modal.style.display = "block";
             var modal_hide = document.getElementById("thread_posts");
             modal_hide.style.display = "none";
-    }, false);
+    }, false);}
 
     /* SHOW POSTS AND HIDE THREADS */
     var btn_thread = document.getElementsByClassName("thread_container");
@@ -267,7 +267,7 @@
             modal.style.display = "block";
             var modal_hide = document.getElementById("group_threads");
             modal_hide.style.display = "none";
-    }, false);
+    }, false);}
 
     /* MEMBERS MODAL WINDOW */
     var btn_members = document.getElementsByClassName("myBtnMembers");     // Getting all buttons
@@ -277,7 +277,7 @@
       var thisBtn = btn_members[i];
         thisBtn.addEventListener("click", function(){
             modal_members.style.display = "block";
-    }, false);
+    }, false);}
     // Event listener which closes members modal when clicked outside of it
     window.addEventListener('click',function(event){
       if (event.target == modal_members) {
@@ -299,7 +299,7 @@
       var thisBtn = btn_settings[i];
         thisBtn.addEventListener("click", function(){
             modal_settings.style.display = "block";
-    }, false);
+    }, false);}
     // Event listener which closes settings modal when clicked outside of it
     window.addEventListener('click',function(event){
       if (event.target == modal_settings) {
