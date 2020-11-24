@@ -12,10 +12,10 @@
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
             <!-- TODO prejst z home page na profil -->
-            <a href="{{ url_for('profile') }}">
+            <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
                     <!-- TODO url fotky profilu -->
-                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{ url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description" class="text_orange">
                     <h2>{{ username }}</h2>
@@ -28,12 +28,12 @@
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
                     <!-- TODO prejst na profil + prejst na skupinu -->
                     {% for notfication in mem_notifications %}
-                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
+                    <div>User <a href="{{ url_for('profile', username=notification.username) }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('group', groupname=notification.groupname) }}"><b>{{ notification.group_name }}</b></a>
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
                     </div>
                     {% endfor %}
                     {% for notification in mod_notifications %}
-                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
+                    <div>User <a href="{{ url_for('profile', username=notification.username) }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('group', groupname=notification.groupname) }}"><b>{{ notificaton.group_name }}</b></a>
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
                     </div>
                     {% endfor %}
@@ -44,7 +44,7 @@
         <!-- SEARCH -->
         <div id="search_bar_box" class="background_color_dark_grey">
             <!-- TODO searchbar -->
-            <form action="{{ url_for('') }}" id="search_bar_form" >
+            <form action="{{ url_for('') }}" method="POST" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
