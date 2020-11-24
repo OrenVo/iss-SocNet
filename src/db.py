@@ -30,7 +30,7 @@ class DB:
         hash_alg = hashlib.sha256(p_s[1] + password)
         return p_s[0] == hash_alg.hexdigest()
 
-    def insert_new_user(self, password, username, ):
+    def insert_new_user(self, username, password):
         ...
 
 def init_db(app, fname='db.ini', sect='mysql'):

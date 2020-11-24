@@ -12,7 +12,7 @@
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
             <!-- TODO prejst z home page na profil -->
-            <a href="{{ url_for('') }}">
+            <a href="{{ url_for('profile') }}">
                 <div id="profile_container_image">
                     <!-- TODO url fotky profilu -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
@@ -192,8 +192,8 @@
             <div id="group_threads">
                 <!-- JOIN GROUP -->
                 {% if not member and session.logged_in %}
-                <input type="button" value="Join group" class="join_group text_white background_color_green" /> 
-                {% endif %}           
+                <input type="button" value="Join group" class="join_group text_white background_color_green" />
+                {% endif %}
                 <!-- Create new thread -->
                 {% if member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
@@ -334,8 +334,8 @@
       }
     }
 
-    /* MODAL WINDOWS 
-    /* Members 
+    /* MODAL WINDOWS
+    /* Members
     var modal_members = document.getElementById("myModalMembers");
     // Get the button that opens the modal
     var btn_mems = document.getElementById("myBtnMembers");
@@ -350,7 +350,7 @@
       }
     });
 
-    /* Settings 
+    /* Settings
     var modal_settings = document.getElementById("myModalSettings");
     // Get the button that opens the modal
     var btn_setts = document.getElementById("myBtnSettings");

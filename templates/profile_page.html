@@ -38,17 +38,17 @@
             <p>{{ description }}</p>
             <br><b>Groups:</b><br>
             <ol>
-                {% for groupname in groups %} 
+                {% for groupname in groups %}
                 <li>{{ groupname }}</li>
                 {% endfor %}
             </ol>
-            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>     
+            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>
         </div>
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="{{ url_for('setting') }}">
+        <form action="{{ url_for('profile_settings') }}">
             <h1 class="text_orange">Settings</h2><br>
 
             <label for="login"><b>Change Login</b></label>

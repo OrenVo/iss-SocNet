@@ -15,7 +15,7 @@
             <a href="{{ url_for('register')}}">Sign up</a>
         </div>
         <!-- LOGIN -->
-        <form action="{{ url_for('home')}}" method="POST" id="main_page_login_form">
+        <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="main_page_login_form">
             <div class="container">
                 <input name="uname" type="text" placeholder="Username" class="main_page_resize" required>
                 <input name="psw" type="password" placeholder="Password" class="main_page_resize" required>
@@ -35,7 +35,7 @@
     <div id="main_page_background" class="text_white text_size_xxl text_center">
         <span class="center">
             <h1 class="text_shadow_white">Free chat</h1>
-        <div id="main_page_visitor"><a href="{{ url_for('visit')}}">Continue as a visitor</a></div>
+        <div id="main_page_visitor"><a href="{{ url_for('guest')}}">Continue as a visitor</a></div>
         </span>
     </div>
 
