@@ -9,14 +9,16 @@
 
 <!-- BODY -->
 <body class="background_color_light_grey">
-    <!-- HEADER - search + logo -->
+    <!-- HEADER - search + home -->
     <header class="background_color_dark">
         <!-- GO HOME -->
         <div class="go_home_boy">
+            <!-- TODO go home -->
             <a href="home_page.html"><h2 class="text_orange">Home</h2></a>
         </div>
         <!-- SEARCH -->
         <div class="search_bar_box_profile">
+            <!-- TODO search -->
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
@@ -29,6 +31,7 @@
     <div id="profile">
         <!-- PROFILE PICTURE CONTAINTER -->
         <div class="picture_container">
+            <!-- TODO ziskat foto z db -->
             <img src="{{ url_for('static', filename='pictures/profile_picture2.png') }}" alt="Profile picture" class="profile_picture">
         </div>
 
@@ -48,7 +51,7 @@
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="{{ url_for('profile_settings') }}">
+        <form action="{{ url_for('profile_settings') }}" method="POST">
             <h1 class="text_orange">Settings</h2><br>
 
             <label for="login"><b>Change Login</b></label>
@@ -78,7 +81,6 @@
             <button type="submit" class="background_color_green">Save changes</button> <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
         </form>
     </div>
-
 </body>
 
 <!-- JavaScript -->
@@ -93,6 +95,5 @@
     }
 
 </script>
-
 </html>
 </doctype>

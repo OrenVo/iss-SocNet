@@ -23,9 +23,12 @@
                 </div>
             </a>
             <!-- Notifications dropdown menu -->
-            <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
-            </div>
+            <!-- TODO -->
+            <a href="">
+                <div class="dropdown">
+                    <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+                </div>
+            </a>
         </div>
 
         <!-- SEARCH -->
@@ -42,11 +45,6 @@
     <article>
         <!-- LEFT PANEL -->
         <div id="left_panel">
-            <!-- CREATE NEW GROUP-->
-            {% if session.logged_in %}
-            <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
-            {% endif %}
-
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
@@ -66,49 +64,6 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- CREATING NEW GROUP -->
-            <div id="creating_new_group">
-                <!-- TODO tvorba novej skupiny -->
-                <form action="action_page_php" method="POST">
-                    <h2>Create new group</h2>
-                    <label for="group_name"><b>Group name</b></label>
-                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
-
-                    <label for="description"><b>Description</b></label>
-                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
-
-                    <label for="group_picture"><b>Group picture</b></label>
-                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture><br><br>
-
-                    <label for="group_privacy"><b>Visibility for:</b></label><br>
-                    <input type="radio" id="visibility1" name="visibility" value="30">
-                    <label for="visibility1">All users</label><br>
-                    <input type="radio" id="visibility2" name="visibility" value="60">
-                    <label for="visibility2">Registered users</label><br>
-                    <input type="radio" id="visibility3" name="visibility" value="100">
-                    <label for="visibility3">Members of this group</label><br>
-
-                    <br>
-                    <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
-                    <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
-                </form>
-            </div>
-            <!-- CREATING NEW THREAD -->
-            <div id="creating_new_thread">
-                <!-- TODO tvorba noveho vlakna -->
-                <form action="action_page_php" method="POST">
-                    <h2>Create new thread</h2>
-                    <br>
-
-                    <label for="thread_subject"><b>Subject</b></label>
-                    <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
-
-                    <br>
-                    <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
-                    <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
-                </form>
-            </div>
-
             <!-- The Modal for Members -->
             <div class="modal">
                 <!-- Modal content for Members-->
@@ -133,30 +88,9 @@
                         {% endfor %}
                     </table>
                 </div>
-            </div>
-          
+            </div>          
         </div>
     </article>
 </body>
-
-
-<!-- JavaScript -->
-<script>
-    /* Showing and closing windows on click - create new group and thread */
-    function create_new_group_show(){
-        document.getElementById("creating_new_group").style.display= 'block';
-    }
-    function create_new_group_hide(){
-        document.getElementById("creating_new_group").style.display= 'none';
-    }
-    function create_new_thread_show(){
-        document.getElementById("create_new_thread_button").style.display = 'none';
-        document.getElementById("creating_new_thread").style.display = 'block';
-    }
-    function create_new_thread_hide(){
-        document.getElementById("create_new_thread_button").style.display = 'block';
-        document.getElementById("creating_new_thread").style.display = 'none';
-    }    
-</script>
 </html>
 </doctype>

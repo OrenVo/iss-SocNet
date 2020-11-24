@@ -23,9 +23,12 @@
                 </div>
             </a>
             <!-- Notifications dropdown menu -->
-            <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
-            </div>
+            <!-- TODO -->
+            <a href="">
+                <div class="dropdown">
+                    <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+                </div>
+            </a>
         </div>
 
         <!-- SEARCH -->
@@ -48,15 +51,17 @@
             <!-- GROUPS -->
             {% for group in groups %}
                 <!-- TODO -->
-                <div class="group_container background_color_dark_grey text_white">
-                    <div class="left_panel_group_picture_container">
-                        <!-- TODO url fotky skupiny -->
-                        <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
+                <a href="">
+                    <div class="group_container background_color_dark_grey text_white">
+                        <div class="left_panel_group_picture_container">
+                            <!-- TODO url fotky skupiny -->
+                            <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group.name }}</h3>
+                        </div>
                     </div>
-                    <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">{{ group.name }}</h3>
-                    </div>
-                </div>
+                </a>
             {% endfor %}
         </div>
 
@@ -64,7 +69,7 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
-                <!-- TODO tvorba novej skupiny -->
+                <!-- TODO -->
                 <form action="action_page_php" method="POST">
                     <h2>Create new group</h2>
                     <label for="group_name"><b>Group name</b></label>
@@ -89,57 +94,29 @@
                     <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
                 </form>
             </div>
-            <!-- CREATING NEW THREAD -->
-            <div id="creating_new_thread">
-                <!-- TODO tvorba noveho vlakna -->
-                <form action="action_page_php" method="POST">
-                    <h2>Create new thread</h2>
-                    <br>
-
-                    <label for="thread_subject"><b>Subject</b></label>
-                    <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
-
-                    <br>
-                    <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
-                    <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
-                </form>
-            </div>
-
-            <!-- GROUP THREADS -->
-            <div id="group_threads">
-                <!-- JOIN GROUP -->
-                {% if !member and session.logged_in %}
-                <input type="button" value="Join group" class="join_group text_white background_color_green" />
-                {% endif %}
-                <!-- Create new thread -->
-                {% if member %}
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
-                {% endif %}
-
-                {% for thread in threads %}
-                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
-                    <div class="thread_container text_white background_color_dark_grey">
-                        <h3>{{ thread.subject }}</h3>
-                        <p>Author: {{ thread.username }}</p>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
 
             <!-- POSTS -->
             <div id="thread_posts">
                 {% for post in posts %}
                 <div class="post background_color_grey">
                     <div class="post_text">
-                        <h4>{{ username }}</h4><br>
-                        <p>{{ post_content }}</p>
+                        <h4>{{ post.username }}</h4><br>
+                        <p>{{ post.content }}</p>
                     </div>
                     <div class="ranking">
-                        <p>{{ rank_number }} <b>increment</b> <b>decrement</b></p>
+                        <!-- TODO tlacidla na increment decrement -->
+                        <p>{{ post.rank }} <b>increment</b> <b>decrement</b></p>
                     </div>
                     <hr class="hr_for_posts">
                 </div>
                 {% endfor %}
+
+                <!-- TODO vytvorit pridanie postu -->
+                <form action="" method="POST">
+                    <input type="text">
+
+                    <input type="button" value="Post">
+                </form>
             </div>
 
         </div>
@@ -155,15 +132,7 @@
     }
     function create_new_group_hide(){
         document.getElementById("creating_new_group").style.display= 'none';
-    }
-    function create_new_thread_show(){
-        document.getElementById("create_new_thread_button").style.display = 'none';
-        document.getElementById("creating_new_thread").style.display = 'block';
-    }
-    function create_new_thread_hide(){
-        document.getElementById("create_new_thread_button").style.display = 'block';
-        document.getElementById("creating_new_thread").style.display = 'none';
-    }    
+    }   
 </script>
 </html>
 </doctype>
