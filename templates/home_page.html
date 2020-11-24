@@ -27,8 +27,13 @@
                 <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                 <div id="myDropdown" class="myDropdown click_dropdown-content">
                     <!-- TODO prejst na profil + prejst na skupinu -->
-                    {% for notification in notifications %}
-                    <div>User <a href="{{ url_for('') }}"><b>{{ notification_username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notificaton_group }}</b></a>
+                    {% for notfication in mem_notifications %}
+                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
+                        <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
+                    </div>
+                    {% endfor %}
+                    {% for notification in mod_notifications %}
+                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
                         <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
                     </div>
                     {% endfor %}
@@ -41,7 +46,6 @@
             <!-- TODO searchbar -->
             <form action="{{ url_for('') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
@@ -59,26 +63,26 @@
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="">
+            <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
                 <div class="group_container background_color_dark_grey text_white">
                     <div class="left_panel_group_picture_container">
                         <!-- TODO url fotky skupiny -->
                         <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
                     <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">{{ group_name }}</h3>
-                        <p class="left_panel_group_desrciption">{{ group_description }}</p>
+                        <h3 class="left_panel_group_title">{{ group.name }}</h3>
+                        <p class="left_panel_group_desrciption">{{ group.description }}</p>
                     </div>
                     <div class="dropdown">
                         <button class="dropbtn">
                             <img src="{{ url_for('static', filename='pictures/arrow_down.png') }}" alt="Notifications" class="icon_center">
                         </button>
                         <div class="dropdown-content">
-                            {% if rights_allowed %}
-                            <button class="myBtnMembers" class="dropdown_button">Members</button>
-                            {% endif %}
-                            {% if rights_allowed %}
-                            <button class="myBtnSettings" class="dropdown_button">Settings</button>
+                            <a href="{{ url_for('see_members') + ?group_name=group.name + ?username=username }}">
+                                <button class="myBtnMembers" class="dropdown_button">Members</button>
+                            </a> 
+                            {% if group.mod %}
+                                <button class="myBtnSettings" class="dropdown_button">Settings</button>                             
                             {% endif %}
                         </div>
                     </div>
@@ -103,8 +107,8 @@
                     <!-- TODO url na fotku membru + url na profil membru -->
                     <tr>
                         <td><img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="{{ url_for('') }}">{{ username }}</a></td>
-                        {% if rights_allowed %}
+                        <td><a href="{{ url_for('') }}">{{ member.username }}</a></td>
+                        {% if group_mod %}
                         <td><button class="background_color_green">Remove</button></td>
                         {% endif %}
                     </tr>
@@ -149,7 +153,8 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
-                <form action="action_page_php">
+                <!-- TODO tvorba novej skupiny -->
+                <form action="action_page_php" method="POST">
                     <h2>Create new group</h2>
                     <label for="group_name"><b>Group name</b></label>
                     <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
@@ -175,7 +180,8 @@
             </div>
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
-                <form action="action_page_php">
+                <!-- TODO tvorba noveho vlakna -->
+                <form action="action_page_php" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
@@ -191,7 +197,7 @@
             <!-- GROUP THREADS -->
             <div id="group_threads">
                 <!-- JOIN GROUP -->
-                {% if not member and session.logged_in %}
+                {% if !member and session.logged_in %}
                 <input type="button" value="Join group" class="join_group text_white background_color_green" />
                 {% endif %}
                 <!-- Create new thread -->
@@ -200,10 +206,12 @@
                 {% endif %}
 
                 {% for thread in threads %}
-                <div class="thread_container text_white background_color_dark_grey">
-                    <h3>{{ thread_sibject }}</h3>
-                    <p>Author: {{ username }}</p>
-                </div>
+                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
+                    <div class="thread_container text_white background_color_dark_grey">
+                        <h3>{{ thread.subject }}</h3>
+                        <p>Author: {{ thread.username }}</p>
+                    </div>
+                </a>
                 {% endfor %}
             </div>
 
@@ -244,135 +252,7 @@
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
         document.getElementById("creating_new_thread").style.display = 'none';
-    }
-
-    /* SHOW THREADS AND HIDE POSTS */
-    var btn_group = document.getElementsByClassName("group_container"); // Getting all buttons
-    // Loop thourgh all buttons and creating an event listeners
-    for (var i = 0; i < btn_group.length; i++) {
-        var thisBtn = btn_group[i]; // Actual button
-        thisBtn.addEventListener("click", function(){
-            var modal = document.getElementById("group_threads");
-            modal.style.display = "block";
-            var modal_hide = document.getElementById("thread_posts");
-            modal_hide.style.display = "none";
-    }, false);}
-
-    /* SHOW POSTS AND HIDE THREADS */
-    var btn_thread = document.getElementsByClassName("thread_container");
-    for (var i = 0; i < btn_thread.length; i++) {
-      var thisBtn = btn_thread[i];
-        thisBtn.addEventListener("click", function(){
-            var modal = document.getElementById("thread_posts");
-            modal.style.display = "block";
-            var modal_hide = document.getElementById("group_threads");
-            modal_hide.style.display = "none";
-    }, false);}
-
-    /* MEMBERS MODAL WINDOW */
-    var btn_members = document.getElementsByClassName("myBtnMembers");     // Getting all buttons
-    var modal_members = document.getElementById("myModalMembers");         // Getting members modal window
-    // Loop through all buttons and creating event listeners
-    for (var i = 0; i < btn_members.length; i++) {
-      var thisBtn = btn_members[i];
-        thisBtn.addEventListener("click", function(){
-            modal_members.style.display = "block";
-    }, false);}
-    // Event listener which closes members modal when clicked outside of it
-    window.addEventListener('click',function(event){
-      if (event.target == modal_members) {
-        modal_members.style.display = "none";
-      }
-    });
-    // Get the <span> element that closes the modal
-    var span_members = document.getElementsByClassName("close_members")[0];
-    // When the user clicks on <span> (x), close the modal
-    span_members.onclick = function() {
-        modal_members.style.display = "none";
-    }
-
-    /* SETTINGS MODAL WINDOW */
-    var btn_settings = document.getElementsByClassName("myBtnSettings");     // Getting all buttons
-    var modal_settings = document.getElementById("myModalSettings");         // Getting settings modal window
-    // Loop through all buttons and creating event listeners
-    for (var i = 0; i < btn_settings.length; i++) {
-      var thisBtn = btn_settings[i];
-        thisBtn.addEventListener("click", function(){
-            modal_settings.style.display = "block";
-    }, false);}
-    // Event listener which closes settings modal when clicked outside of it
-    window.addEventListener('click',function(event){
-      if (event.target == modal_settings) {
-        modal_settings.style.display = "none";
-      }
-    });
-    // Get the <span> element that closes the modal
-    var span_settings = document.getElementsByClassName("close_settings")[0];
-    // When the user clicks on <span> (x), close the modal
-    span_settings.onclick = function() {
-        modal_settings.style.display = "none";
-    }
-
-    /* Code from W3Schools - https://www.w3schools.com/css/css_dropdowns.asp */
-    /* NOTIFICATIONS DROPDOWN */
-    /* When the user clicks on the button,
-    toggle between hiding and showing the dropdown content */
-    function dropdownFunction() {
-      document.getElementById("myDropdown").classList.toggle("show");
-    }
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("click_dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-        }
-      }
-    }
-
-    /* MODAL WINDOWS
-    /* Members
-    var modal_members = document.getElementById("myModalMembers");
-    // Get the button that opens the modal
-    var btn_mems = document.getElementById("myBtnMembers");
-    // When the user clicks the button, open the modal
-    btn_mems.onclick = function() {
-      modal_members.style.display = "block";
-    }
-    // When the user clicks anywhere outside of the modal, close it
-    window.addEventListener('click',function(event){
-      if (event.target == modal_members) {
-        modal_members.style.display = "none";
-      }
-    });
-
-    /* Settings
-    var modal_settings = document.getElementById("myModalSettings");
-    // Get the button that opens the modal
-    var btn_setts = document.getElementById("myBtnSettings");
-    // When the user clicks the button, open the modal
-    btn_setts.onclick = function() {
-      modal_settings.style.display = "block";
-    }
-    // When the user clicks anywhere outside of the modal, close it
-    window.addEventListener('click',function(event){
-      if (event.target == modal_settings) {
-        modal_settings.style.display = "none";
-      }
-    });
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal_members.style.display = "none";
-    }
-    */
-
+    }    
 </script>
 </html>
 </doctype>

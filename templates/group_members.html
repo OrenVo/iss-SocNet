@@ -1,4 +1,3 @@
-<!-- TODO pridat settings a members button -->
 <!doctype html>
 <html>
 <head>
@@ -44,14 +43,17 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
+            {% if session.logged_in %}
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
+            {% endif %}
 
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads') + ?group_name=group.name }}">
+            <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
                 <div class="group_container background_color_dark_grey text_white">
                     <div class="left_panel_group_picture_container">
+                        <!-- TODO url fotky skupiny -->
                         <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
                     <div class="left_panel_group_text">
@@ -61,7 +63,7 @@
             </a>
             {% endfor %}
         </div>
-        
+
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -107,26 +109,32 @@
                 </form>
             </div>
 
-            <!-- GROUP THREADS -->
-            <div id="group_threads">
-                <!-- JOIN GROUP -->
-                {% if !member and session.logged_in %}
-                <input type="button" value="Join group" class="join_group text_white background_color_green" />
-                {% endif %}
-                <!-- Create new thread -->
-                {% if member %}
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
-                {% endif %}
-
-                {% for thread in threads %}
-                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
-                    <div class="thread_container text_white background_color_dark_grey">
-                        <h3>{{ thread.subject }}</h3>
-                        <p>Author: {{ thread.username }}</p>
-                    </div>
-                </a>
-                {% endfor %}
+            <!-- The Modal for Members -->
+            <div class="modal">
+                <!-- Modal content for Members-->
+                <div class="modal-content">
+                    <span class="close close_members">&times;</span>
+                    <h2 class="members_title">Members</h2>
+                    <table class="table_members">
+                        <tr>
+                            <th>Picture</th>
+                            <th>Login</th>
+                            <th></th>
+                        </tr>
+                        {% for member in members %}
+                        <!-- TODO url na fotku membru + url na profil membru -->
+                        <tr>
+                            <td><img src="{{url_for('static', filename='pictures/profile_picture.jpeg')}}" alt="Profile picture" class="members_picture"></td>
+                            <td><a href="{{ url_for('') }}">{{ member.username }}</a></td>
+                            {% if group_mod %}
+                            <td><button class="background_color_green">Remove</button></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
+          
         </div>
     </article>
 </body>
@@ -152,4 +160,3 @@
 </script>
 </html>
 </doctype>
-

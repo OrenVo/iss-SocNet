@@ -1,4 +1,3 @@
-<!-- TODO pridat settings a members button -->
 <!doctype html>
 <html>
 <head>
@@ -44,14 +43,17 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
+            {% if session.logged_in %}
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
+            {% endif %}
 
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads') + ?group_name=group.name }}">
+            <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
                 <div class="group_container background_color_dark_grey text_white">
                     <div class="left_panel_group_picture_container">
+                        <!-- TODO url fotky skupiny -->
                         <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
                     <div class="left_panel_group_text">
@@ -61,7 +63,7 @@
             </a>
             {% endfor %}
         </div>
-        
+
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -107,26 +109,38 @@
                 </form>
             </div>
 
-            <!-- GROUP THREADS -->
-            <div id="group_threads">
-                <!-- JOIN GROUP -->
-                {% if !member and session.logged_in %}
-                <input type="button" value="Join group" class="join_group text_white background_color_green" />
-                {% endif %}
-                <!-- Create new thread -->
-                {% if member %}
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
-                {% endif %}
+            <!-- The Modal for Settings -->
+            <div id="myModalSettings" class="modal">
+                <!-- Modal content for Settings-->
+                <div class="modal-content">
+                    <span class="close close_settings">&times;</span>
+                    <h2 class="settings_title">Settings</h2>
+                    <!-- TODO group settings -->
+                    <form action="">
+                        <hr>
+                        <label for="group_name"><b>Group name</b></label>
+                        <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box background_color_light">
 
-                {% for thread in threads %}
-                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
-                    <div class="thread_container text_white background_color_dark_grey">
-                        <h3>{{ thread.subject }}</h3>
-                        <p>Author: {{ thread.username }}</p>
-                    </div>
-                </a>
-                {% endfor %}
+                        <label for="description"><b>Description</b></label>
+                        <input name="description" type="text" placeholder="Enter description" id="description" class="input_box background_color_light">
+
+                        <label for="group_picture"><b>Group picture</b></label>
+                        <input name="profile_photo" type="file" placeholder="Group pricture" capture>
+
+                        <br><br>
+                        <label for="group_privacy"><b>Visibility for:</b></label><br>
+                        <input name="visibility" type="radio" id="visibility1" value="30">
+                        <label for="visibility1">All users</label><br>
+                        <input name="visibility" type="radio" id="visibility2" value="60">
+                        <label for="visibility2">Registered users</label><br>
+                        <input name="visibility" type="radio" id="visibility3" value="100">
+                        <label for="visibility3">Members of this group</label><br>
+
+                        <button type="submit" class="background_color_green">Submit</button>
+                    </form>
+                </div>
             </div>
+
         </div>
     </article>
 </body>
@@ -152,4 +166,3 @@
 </script>
 </html>
 </doctype>
-

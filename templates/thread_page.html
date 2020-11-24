@@ -1,1 +1,170 @@
-??? budem potrebna? ak nie tak ma vymaz a zmen link vo funkcii thread()
+<!doctype html>
+<html>
+<head>
+    <meta charset = "utf-8" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
+    <title>Free chat</title>
+</head>
+<body class="background_color_light_grey">
+    <!-- HEADER - profile + search + logo -->
+    <header>
+        <!-- PROFILE -->
+        <div id="home_page_profile" class="background_color_dark_grey">
+            <!-- TODO -->
+            <a href="{{ url_for('profile') }}">
+                <div id="profile_container_image">
+                    <!-- TODO  -->
+                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
+                </div>
+                <div id="profile_container_description" class="text_orange">
+                    <h2>{{ username }}</h2>
+                    <p>{{ rights }}</p>
+                </div>
+            </a>
+            <!-- Notifications dropdown menu -->
+            <div class="dropdown">
+                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+            </div>
+        </div>
+
+        <!-- SEARCH -->
+        <div id="search_bar_box" class="background_color_dark_grey">
+            <!-- TODO -->
+            <form action="{{ url_for('') }}" id="search_bar_form" >
+                <input type="text" placeholder="Search.." name="search" id="search_bar_input">
+                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
+            </form>
+        </div>
+    </header>
+
+    <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
+    <article>
+        <!-- LEFT PANEL -->
+        <div id="left_panel">
+            <!-- CREATE NEW GROUP-->
+            <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
+
+            <!-- GROUPS -->
+            {% for group in groups %}
+                <!-- TODO -->
+                <div class="group_container background_color_dark_grey text_white">
+                    <div class="left_panel_group_picture_container">
+                        <!-- TODO url fotky skupiny -->
+                        <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
+                    </div>
+                    <div class="left_panel_group_text">
+                        <h3 class="left_panel_group_title">{{ group.name }}</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- RIGHT PANEL-->
+        <div class="right_panel">
+            <!-- CREATING NEW GROUP -->
+            <div id="creating_new_group">
+                <!-- TODO tvorba novej skupiny -->
+                <form action="action_page_php" method="POST">
+                    <h2>Create new group</h2>
+                    <label for="group_name"><b>Group name</b></label>
+                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
+
+                    <label for="description"><b>Description</b></label>
+                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
+
+                    <label for="group_picture"><b>Group picture</b></label>
+                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture><br><br>
+
+                    <label for="group_privacy"><b>Visibility for:</b></label><br>
+                    <input type="radio" id="visibility1" name="visibility" value="30">
+                    <label for="visibility1">All users</label><br>
+                    <input type="radio" id="visibility2" name="visibility" value="60">
+                    <label for="visibility2">Registered users</label><br>
+                    <input type="radio" id="visibility3" name="visibility" value="100">
+                    <label for="visibility3">Members of this group</label><br>
+
+                    <br>
+                    <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
+                    <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
+                </form>
+            </div>
+            <!-- CREATING NEW THREAD -->
+            <div id="creating_new_thread">
+                <!-- TODO tvorba noveho vlakna -->
+                <form action="action_page_php" method="POST">
+                    <h2>Create new thread</h2>
+                    <br>
+
+                    <label for="thread_subject"><b>Subject</b></label>
+                    <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
+
+                    <br>
+                    <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
+                    <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
+                </form>
+            </div>
+
+            <!-- GROUP THREADS -->
+            <div id="group_threads">
+                <!-- JOIN GROUP -->
+                {% if !member and session.logged_in %}
+                <input type="button" value="Join group" class="join_group text_white background_color_green" />
+                {% endif %}
+                <!-- Create new thread -->
+                {% if member %}
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
+                {% endif %}
+
+                {% for thread in threads %}
+                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
+                    <div class="thread_container text_white background_color_dark_grey">
+                        <h3>{{ thread.subject }}</h3>
+                        <p>Author: {{ thread.username }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+            <!-- POSTS -->
+            <div id="thread_posts">
+                {% for post in posts %}
+                <div class="post background_color_grey">
+                    <div class="post_text">
+                        <h4>{{ username }}</h4><br>
+                        <p>{{ post_content }}</p>
+                    </div>
+                    <div class="ranking">
+                        <p>{{ rank_number }} <b>increment</b> <b>decrement</b></p>
+                    </div>
+                    <hr class="hr_for_posts">
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </article>
+</body>
+
+
+<!-- JavaScript -->
+<script>
+    /* Showing and closing windows on click - create new group and thread */
+    function create_new_group_show(){
+        document.getElementById("creating_new_group").style.display= 'block';
+    }
+    function create_new_group_hide(){
+        document.getElementById("creating_new_group").style.display= 'none';
+    }
+    function create_new_thread_show(){
+        document.getElementById("create_new_thread_button").style.display = 'none';
+        document.getElementById("creating_new_thread").style.display = 'block';
+    }
+    function create_new_thread_hide(){
+        document.getElementById("create_new_thread_button").style.display = 'block';
+        document.getElementById("creating_new_thread").style.display = 'none';
+    }    
+</script>
+</html>
+</doctype>
+
