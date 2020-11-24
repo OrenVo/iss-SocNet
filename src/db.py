@@ -46,9 +46,7 @@ class DB:
         else: return None
 
     def check_password(self, password: str, username: str):
-        query = self.db.session.query(User)
-        query = query.options(undefer('Image'))
-        user = query.filter_by(Login=username).first()
+        user = mysql.session.query(User).filter_by(Login=username).first()
         if user is None: return False
         p_s = user.password.split('$')
         hash_alg = hashlib.sha256(p_s[1] + password)
@@ -61,9 +59,7 @@ class DB:
         return hash_alg.hexdigest() + "$" + salt
 
     def check_username(self, username: str):
-        query = self.db.session.query(User)
-        query = query.options(undefer('Image'))
-        user = query.filter_by(Login=username).first()
+        user = mysql.session.query(User).filter_by(Login=username).first()
         return user is None
 
 
