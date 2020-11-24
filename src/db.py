@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from src.error import eprint
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import hashlib
 from configparser import ConfigParser
@@ -33,7 +34,9 @@ class DB:
         self.db = db
 
     def insert_new_user(self, username, password):
-        new_user = User(Login=username, Password=self.create_password(password))
+        psw = self.create_password(password)
+        eprint("\n", psw, "\n")
+        new_user = User(Login=username, Password=psw)
         instance = mysql.session.query(User).filter_by(Login=username).first()
         if instance is None:
             mysql.session.add(new_user)
@@ -43,7 +46,8 @@ class DB:
                 eprint(str(e))
                 mysql.session.rollback()
             return new_user
-        else: return None
+        else:
+            return None
 
     def check_password(self, password: str, username: str):
         user = mysql.session.query(User).filter_by(Login=username).first()
@@ -64,6 +68,11 @@ class DB:
 
 
 mysql = SQLAlchemy()
+Base = automap_base()
+
+
+class User(Base, UserMixin):
+    __tablename__ = 'users'
 
 
 # Note this function must be called before others functions that works with database!!!
@@ -82,10 +91,10 @@ def init_db(app, fname='db.ini', sect='mysql'):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     global mysql
     mysql = SQLAlchemy(app)
-    Base = automap_base()
+    global Base
     Base.prepare(mysql.engine, reflect=True)
     global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
-    User = Base.classes.users
+    # User = Base.classes.users
     Group = Base.classes.group
     Thread = Base.classes.thread
     Message = Base.classes.messages
