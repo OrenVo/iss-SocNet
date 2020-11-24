@@ -150,10 +150,12 @@ def login():
     login = request.form["uname"]
     password = request.form["psw"]
 
-    if not db.check_username(login) or not db.check_password(password, login):
+    if not db.check_password(password, login):
         # TODO add message that login was unsuccesful
+        eprint("unauthorized")
         return redirect(url_for("welcome"))
 
+    eprint("yes")
     return redirect(url_for("home"))
 
 

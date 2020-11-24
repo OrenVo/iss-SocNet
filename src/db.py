@@ -48,8 +48,8 @@ class DB:
     def check_password(self, password: str, username: str):
         user = mysql.session.query(User).filter_by(Login=username).first()
         if user is None: return False
-        p_s = user.password.split('$')
-        hash_alg = hashlib.sha256(p_s[1] + password)
+        p_s = user.Password.split('$')
+        hash_alg = hashlib.sha256((p_s[1] + password).encode())
         return p_s[0] == hash_alg.hexdigest()
 
     @staticmethod
