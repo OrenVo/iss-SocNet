@@ -17,18 +17,16 @@ from src.db import User, Group, Thread, Messages, Moderate, Is_member, Applicati
 from src.error import eprint
 from collections import namedtuple
 from datetime import timedelta
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, send_file
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
+import io
 
 '''
 TODO List
-Vymazanie uctu pocas prihlasovania - potencialna nekonzistencia
 Profile picture
 Escape links & other input to prevent crashes and hijacking
 
 Povinne & nepovinne udaje, oznacit povinne
-/settings iba
-Dano ja ti mozem posielat cele objekty
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
 Dano's file
 '''
@@ -90,7 +88,10 @@ def login():
     if not db.check_password(password, login):
         return redirect(url_for("welcome"))  # TODO add message that login was unsuccesful & keep username
     user = User.query.filter_by(Login=login).first()
-    login_user(user)
+    if user:
+        login_user(user)
+    else:
+        return redirect(url_for("welcome"))
     return redirect(url_for("home"))
 
 
@@ -112,6 +113,27 @@ def home():
     rights = "Admin" if admin else "User"
     picture = "TODO"  # TODO get profile_pic
     return render_template("home_page.html", username=username, rights="user", img_src=picture)
+
+
+@app.route("/<name>/profile_image")        # Sends current_user profile image to this path
+def user_img(name):
+    user = User.query.filter_by(Login=name).first()
+    if user is None:
+        return redirect(url_for("lost"))
+    private = user.Mode & 1
+    if private and current_user.is_anonymous:
+        return redirect(url_for("welcome"))
+    image = user.Image  # Load blob
+    file_object = io.BytesIO(image)  # create file in memory
+    return send_file(file_object, mimetype='image/PNG')  # sends file to path
+
+
+@app.route("/profile_image")        # Sends current_user profile image to this path
+@login_required
+def profile_img():
+    image = current_user.Image  # Load blob
+    file_object = io.BytesIO(image)  # create file in memory
+    return send_file(file_object, mimetype='image/PNG')  # sends file to path
 
 
 @app.route("/logout/")
@@ -307,7 +329,11 @@ def remove(name):
     owner = current_user.Login == name
     if not admin and not owner:
         return render_template("tresspassing_page.html")
-    # TODO remove user from database and logoff if owner
+    if owner:
+        logout_user()
+    # TODO remove user from database
+    if owner:
+        return redirect(url_for("welcome"))
     pass
 
 
@@ -352,7 +378,12 @@ def egg():
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def lost(path):
+def lostdef(path):
+    return render_template("lost_page.html")
+
+
+@app.route("/lost")
+def lost():
     return render_template("lost_page.html")
 
 

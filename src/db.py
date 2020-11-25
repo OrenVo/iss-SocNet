@@ -43,7 +43,7 @@ class DB:
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
         eprint("\n", psw, "\n")
-        new_user = User(Login=username, Password=psw, Image=a)
+        new_user = User(Login=username, Password=psw)
         instance = self.db.session.query(User).filter_by(Login=username).first()
         if instance is None:
             self.db.session.add(new_user)
