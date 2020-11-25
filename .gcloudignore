@@ -12,7 +12,8 @@
 # below:
 .git
 .gitignore
-
+venv/
+.idea/
 # Python pycache:
 __pycache__/
 # Ignored by the build system
