@@ -35,26 +35,25 @@ class DB:
     def __init__(self, db):
         self.db = db
 
-    def insert_photo(self, login: str, blob):
+    def insert_image(self, login: str, blob, mimetype=None):
         user = User.query.filter_by(Login=login).first()
+        if not user:
+            return None
         user.Image = blob
+        user.Mimetype = mimetype
         self.db.session.commit()
+        eprint("here")
+        return user
 
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
-        eprint("\n", psw, "\n")
         new_user = User(Login=username, Password=psw)
         instance = self.db.session.query(User).filter_by(Login=username).first()
         if instance is None:
             self.db.session.add(new_user)
-            try:
-                self.db.session.commit()
-            except Exception as e:
-                eprint(str(e))
-                self.db.session.rollback()
+            self.db.session.commit()
             return new_user
         else:
-            eprint(instance.Login)
             return None
 
     def check_password(self, password: str, username: str):
@@ -72,18 +71,11 @@ class DB:
 
     def check_username(self, username: str):
         user = self.db.session.query(User).filter_by(Login=username).first()
-        if user is not None: eprint(user.Login, username)
         return user is None
 
-    # GOOD TO GO
     def get_user(self, username):
         instance = self.db.session.query(User).filter_by(Login=username).first()
         return instance
-
-    # CHECK ME
-    def get_id(self):
-        # TODO
-        pass
 
 
 mysql = SQLAlchemy()
@@ -133,16 +125,11 @@ def init_db(app, fname='db.ini', sect='mysql'):
     Base.prepare(mysql.engine, reflect=True)
     global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
     # User = Base.classes.users
-    Group = Base.classes.group
-    Thread = Base.classes.thread
-    Message = Base.classes.messages
-    Moderate = Base.classes.moderate
-    Is_member = Base.classes.is_member
-    Application = Base.classes.applications
-    Ranking = Base.classes.ranking
-    # admin = User(Login='Admin', Password=DB.create_password('nimdA'))
-    # instance = mysql.session.query(User).filter_by(Login='Admin').first()
-    # if instance is None:
-    #    mysql.session.add(admin,)
-    #    mysql.session.commit()
+    # Group = Base.classes.group
+    # Thread = Base.classes.thread
+    # Message = Base.classes.messages
+    # Moderate = Base.classes.moderate
+    # Is_member = Base.classes.is_member
+    # Application = Base.classes.applications
+    # Ranking = Base.classes.ranking
     return mysql

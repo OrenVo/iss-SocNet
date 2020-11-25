@@ -17,7 +17,7 @@ from src.db import User, Group, Thread, Messages, Moderate, Is_member, Applicati
 from src.error import eprint
 from collections import namedtuple
 from datetime import timedelta
-from flask import Flask, redirect, render_template, request, session, url_for, send_file
+from flask import Flask, redirect, render_template, request, session, url_for, send_file, Response, jsonify
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
 import io
 
@@ -33,7 +33,7 @@ Dano's file
 
 # App initialization #
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'f4abb8b8384bcf305ecdf1c61156cee1'
+app.config['SECRET_KEY'] = 'a4abb8b8384bcf305ecdf1c61156cee1'
 database = init_db(app)
 db = DB(database)
 login_manager = LoginManager()
@@ -105,6 +105,31 @@ def guest():
 
 # Users #
 
+########  Test pro nahrávání fotek  ########
+@app.route("/test")
+def test():
+    return render_template("test.html")
+
+# It worked, before recreating database
+@app.route("/receive_image", methods=['POST'])  # just example of uploading image
+@login_required
+def receive_image():
+    file = request.files['img']  # change img to id in template that upload profile images
+    if file:
+        blob = file.read()
+        mimetype = file.mimetype
+        eprint(current_user.Login, mimetype, blob, sep="\n")
+        db.db = database
+        if db.insert_image(current_user.Login, blob, mimetype) is None:
+            status_code = Response(status=404)
+        else: status_code = Response(status=200)
+    else:
+        status_code = Response(status=404)
+    return status_code
+
+########  Konec testu nahrávání fotek  ########
+
+
 @app.route("/home/")
 @login_required
 def home():
@@ -125,7 +150,7 @@ def user_img(name):
         return redirect(url_for("welcome"))
     image = user.Image  # Load blob
     file_object = io.BytesIO(image)  # create file in memory
-    return send_file(file_object, mimetype='image/PNG')  # sends file to path
+    return send_file(file_object, mimetype='image/JPEG')  # sends file to path
 
 
 @app.route("/profile_image")        # Sends current_user profile image to this path
@@ -360,12 +385,12 @@ def search():
 # TODO WE don't know if it works
 @app.route('/search_result')
 def search_for():
-    query = flask.request.args.get('search')
+    query = request.args.get('search')
     result = namedtuple('result', ['val', 'btn'])
     vals = [("Article1", 60), ("Article2", 50), ("Article 3", 40)]
     # below is a very simple search algorithm to filter vals based on user input:
-    html = flask.render_template('results.html', results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
-    return flask.jsonify({'results': html})
+    html = render_template('results.html', results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
+    return jsonify({'results': html})
 
 
 @app.route("/egg/")
