@@ -12,7 +12,8 @@
 ################################################################################
 
 
-from src.db import DB, init_db, User
+from src.db import DB, init_db
+from src.db import User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
 from src.error import eprint
 from collections import namedtuple
 from datetime import timedelta
@@ -21,10 +22,11 @@ from flask_login import current_user, LoginManager, login_required, login_user, 
 
 '''
 TODO List
-Login potencialna nekonzistencia - vymaze ucet pocas prihlasovania
+Vymazanie uctu pocas prihlasovania - potencialna nekonzistencia
 Profile picture
 Escape links & other input to prevent crashes and hijacking
 
+Povinne & nepovinne udaje, oznacit povinne
 /settings iba
 Dano ja ti mozem posielat cele objekty
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
@@ -70,17 +72,14 @@ def register():
     password = request.form['psw']
     repeat = request.form['psw-repeat']
     if not db.check_username(login):
-        # TODO add message what was wrong
-        return render_template("registration_page.html")
+        return render_template("registration_page.html")  # TODO add message what was wrong
     if password != repeat:
-        # TODO add message what was wrong & keep the username
-        return render_template("registration_page.html")
+        return render_template("registration_page.html")  # TODO add message what was wrong & keep the username
     db.insert_new_user(login, password)
-    # TODO add message that it was succesful
-    return redirect(url_for("welcome"))
+    return redirect(url_for("welcome"))  # TODO add message that it was succesful
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login/", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if current_user.is_authenticated:
@@ -89,8 +88,7 @@ def login():
     login = request.form["uname"]
     password = request.form["psw"]
     if not db.check_password(password, login):
-        # TODO add message that login was unsuccesful & keep username
-        return redirect(url_for("welcome"))
+        return redirect(url_for("welcome"))  # TODO add message that login was unsuccesful & keep username
     user = User.query.filter_by(Login=login).first()
     login_user(user)
     return redirect(url_for("home"))
@@ -110,15 +108,13 @@ def guest():
 @login_required
 def home():
     username = current_user.Login
-    mode = current_user.Mode
-    admin = mode & 2
+    admin = current_user.Mode & 2
     rights = "Admin" if admin else "User"
-    return rights
     picture = "TODO"  # TODO get profile_pic
     return render_template("home_page.html", username=username, rights="user", img_src=picture)
 
 
-@app.route("/logout")
+@app.route("/logout/")
 @login_required
 def logout():
     logout_user()
@@ -131,61 +127,74 @@ def logout():
 @app.route("/profiles/<name>/")
 def profile(name):
     user = User.query.filter_by(Login=name).first()
+    if user is None:
+        return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return render_template("tresspassing_page.html")
+        return redirect(url_for("welcome"))
     return render_template("profile_page.html", username=name)
 
 
-@app.route("/settings")
+@app.route("/settings/")
 @login_required
 def profile_settings():
-    # TODO return settings
-    return current_user.username + " settings page."
+    return current_user.Login + " settings page."  # TODO return settings
 
 
-@app.route("/profile/<name>/settings")
-@app.route("/user/<name>/settings")
-@app.route("/users/<name>/settings")
-@app.route("/profiles/<name>/settings")
+@app.route("/profile/<name>/settings/")
+@app.route("/user/<name>/settings/")
+@app.route("/users/<name>/settings/")
+@app.route("/profiles/<name>/settings/")
 @login_required
-def profile_settings_two(name):
-    if current_user.username != name:
+def admin_profile_settings(name):
+    admin = current_user.Mode & 2
+    owner = current_user.Login == name
+    if admin:
+        return name + " settings page."
+    if not owner:
         return render_template("tresspassing_page.html")
     return redirect(url_for("profile_settings"))
 
 
 # Groups #
 
-@app.route("/create/group/")
+@app.route("/create/group/new/")
+@app.route("/create/groups/new/")
 @login_required
 def create_group():
     # TODO
     pass
 
 
-@app.route("/create/thread/<name>/")
+@app.route("/create/group/<group>/newthread/")
+@app.route("/create/groups/<group>/newthread/")
 @login_required
-def create_thread():
+def create_thread(group):
     # TODO
     pass
 
 
-@app.route("/group/<group>/<thread>/new")
-@app.route("/groups/<group>/<thread>/new")
+@app.route("/group/<group>/<thread>/new/")
+@app.route("/groups/<group>/<thread>/new/")
 @login_required
 def send_message(group, thread):
     # TODO
     pass
 
 
+@app.route("/group/<group>/<thread>/<message>/inc/")
+@app.route("/groups/<group>/<thread>/<message>/inc/")
 @login_required
-def increment(name):
+def increment(group, thread, message):
+    # TODO
     pass
 
 
+@app.route("/group/<group>/<thread>/<message>/dec/")
+@app.route("/groups/<group>/<thread>/<message>/dec/")
 @login_required
-def decrement(name):
+def decrement(group, thread, message):
+    # TODO
     pass
 
 
@@ -193,64 +202,125 @@ def decrement(name):
 @app.route("/groups/<name>/")
 def group(name):
     group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
-        return render_template("tresspassing_page.html")
+        return redirect(url_for("welcome"))
     return render_template("group_page.html", groupname=name)
 
 
-@app.route("/group/<group>/<thread>")
-@app.route("/groups/<group>/<thread>")
+@app.route("/group/<group>/<thread>/")
+@app.route("/groups/<group>/<thread>/")
 def see_posts(group, thread):
-    group = Group.query.filter_by(Name=name).first()
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
-        return render_template("tresspassing_page.html")
-    return render_template("thread_page.html", groupname=name, threadname=thread)
+        return redirect(url_for("welcome"))
+    return render_template("thread_page.html", groupname=group, threadname=thread)
 
 
-@app.route("/group/<name>/settings")
-@app.route("/groups/<name>/settings")
+@app.route("/settings/group/<name>/")
+@app.route("/settings/groups/<name>/")
 @login_required
 def group_settings(name):
     group = Group.query.filter_by(Name=name).first()
-    if current_user.ID != group.User_ID:
+    if group is None:
+        return redirect(url_for("lost"))
+    admin = current_user.Mode & 2
+    owner = current_user.ID == group.User_ID
+    if not admin and not owner:
         return render_template("tresspassing_page.html")
-    # TODO return settings
-    return name + " settings page."
+    return name + " settings page."  # TODO return settings
 
 
-@app.route("/group/<name>/notifications")
-@app.route("/groups/<name>/notifications")
+@app.route("/notifications/group/<name>/")
+@app.route("/notifications/groups/<name>/")
 @login_required
 def group_notifications(name):
-    pass
+    group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    admin = current_user.Mode & 2
+    owner = current_user.ID == group.User_ID
+    moderator = True  # TODO moderator
+    if not admin and not owner and not moderator:
+        return render_template("tresspassing_page.html")
+    return name + " notifications page."  # TODO return notifications
 
 
+@app.route("/apply/member/group/<name>/")
+@app.route("/apply/member/groups/<name>/")
 @login_required
 def ask_mem(name):
+    # TODO
     pass
 
 
+@app.route("/apply/moderator/group/<name>/")
+@app.route("/apply/moderator/groups/<name>/")
 @login_required
 def ask_mod(name):
+    # TODO if not member: tresspass
+    # TODO
     pass
 
 
 # Moderation #
 
+@app.route("/group/<group>/<thread>/<message>/delete/")
+@app.route("/groups/<group>/<thread>/<message>/delete/")
 @login_required
-def delete(name):
+def delete(group, thread, message):
+    group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    # TODO
     pass
 
 
+@app.route("/kick/group/<group>/<name>/")
+@app.route("/kick/groups/<group>/<name>/")
 @login_required
-def kick(name):
+def kick(group, name):
+    group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    admin = current_user.Mode & 2
+    owner = current_user.ID == group.User_ID
+    moderator = True  # TODO moderator
+    if not admin and not owner and not moderator:
+        return render_template("tresspassing_page.html")
+    # Kick user
     pass
 
 
+@app.route("/profile/<name>/remove/")
+@app.route("/user/<name>/remove/")
+@app.route("/users/<name>/remove/")
+@app.route("/profiles/<name>/remove/")
+@login_required
+def remove(name):
+    admin = current_user.Mode & 2
+    owner = current_user.Login == name
+    if not admin and not owner:
+        return render_template("tresspassing_page.html")
+    # TODO remove user from database and logoff if owner
+    pass
+
+
+@app.route("/profile/<name>/ban/")
+@app.route("/user/<name>/ban/")
+@app.route("/users/<name>/ban/")
+@app.route("/profiles/<name>/ban/")
 @login_required
 def ban(name):
+    admin = current_user.Mode & 2
+    if not admin:
+        return render_template("tresspassing_page.html")
+    # TODO Ban user
     pass
 
 # Other #
@@ -270,6 +340,7 @@ def search_for():
     # below is a very simple search algorithm to filter vals based on user input:
     html = flask.render_template('results.html', results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
     return flask.jsonify({'results': html})
+
 
 @app.route("/egg/")
 @app.route("/easter/")
