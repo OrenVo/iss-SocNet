@@ -11,8 +11,7 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
-            <!-- TODO prejst z home page na profil -->
-            <a href="{{ url_for('profile') }}">
+            <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
                     <!-- TODO url fotky profilu -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>

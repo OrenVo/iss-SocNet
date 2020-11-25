@@ -12,7 +12,7 @@
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
             <!-- TODO -->
-            <a href="{{ url_for('profile') }}">
+            <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
                     <!-- TODO  -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
@@ -20,13 +20,6 @@
                 <div id="profile_container_description" class="text_orange">
                     <h2>{{ username }}</h2>
                     <p>{{ rights }}</p>
-                </div>
-            </a>
-            <!-- Notifications dropdown menu -->
-            <!-- TODO -->
-            <a href="">
-                <div class="dropdown">
-                    <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                 </div>
             </a>
         </div>
@@ -43,58 +36,6 @@
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
     <article>
-        <!-- LEFT PANEL -->
-        <div id="left_panel">
-            <!-- CREATE NEW GROUP-->
-            <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
-
-            <!-- GROUPS -->
-            {% for group in groups %}
-                <!-- TODO -->
-                <a href="">
-                    <div class="group_container background_color_dark_grey text_white">
-                        <div class="left_panel_group_picture_container">
-                            <!-- TODO url fotky skupiny -->
-                            <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
-                        </div>
-                        <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group.name }}</h3>
-                        </div>
-                    </div>
-                </a>
-            {% endfor %}
-        </div>
-
-        <!-- RIGHT PANEL-->
-        <div class="right_panel">
-            <!-- CREATING NEW GROUP -->
-            <div id="creating_new_group">
-                <!-- TODO -->
-                <form action="action_page_php" method="POST">
-                    <h2>Create new group</h2>
-                    <label for="group_name"><b>Group name</b></label>
-                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
-
-                    <label for="description"><b>Description</b></label>
-                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
-
-                    <label for="group_picture"><b>Group picture</b></label>
-                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture><br><br>
-
-                    <label for="group_privacy"><b>Visibility for:</b></label><br>
-                    <input type="radio" id="visibility1" name="visibility" value="30">
-                    <label for="visibility1">All users</label><br>
-                    <input type="radio" id="visibility2" name="visibility" value="60">
-                    <label for="visibility2">Registered users</label><br>
-                    <input type="radio" id="visibility3" name="visibility" value="100">
-                    <label for="visibility3">Members of this group</label><br>
-
-                    <br>
-                    <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
-                    <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
-                </form>
-            </div>
-
             <!-- POSTS -->
             <div id="thread_posts">
                 {% for post in posts %}
@@ -105,21 +46,27 @@
                     </div>
                     <div class="ranking">
                         <!-- TODO tlacidla na increment decrement -->
-                        <p>{{ post.rank }} <b>increment</b> <b>decrement</b></p>
+                        <p>{{ post.rank }} 
+                        {% if is_logged %}
+                            <a href="{{ url_for('increment', postid=post.ID) }}">
+                                <b>increment</b>
+                            </a>
+                            <a href="{{ url_for('decrement', postid=post.ID) }}">
+                                <b>decrement</b>
+                            </a>                         
+                        {% endif %}
+                        </p>
                     </div>
                     <hr class="hr_for_posts">
                 </div>
                 {% endfor %}
 
                 <!-- TODO vytvorit pridanie postu -->
-                <form action="" method="POST">
+                <form action="{{ url_for('send_message'), threadname=threadname}}" method="POST">
                     <input type="text">
-
                     <input type="button" value="Post">
                 </form>
             </div>
-
-        </div>
     </article>
 </body>
 
