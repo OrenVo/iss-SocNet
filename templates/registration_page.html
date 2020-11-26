@@ -36,6 +36,23 @@
             <label for="login"><b>Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box background_color_light" {% if form  %} value="{{ form['login'] }}"{% endif %} required>
 
+
+            <!-- FLASH WAY ale posielam aj error tak nepotrebne vymaz -->
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <!-- ERROR WAY -->
+            {% if error  %}
+            <h1 class="text_orange text_center">{{error}}</h1>
+            {% endif %}
+
             <label for="psw"><b>Password</b></label>
             <input name="psw" type="password" placeholder="Enter Password" class="input_box background_color_light" required>
 

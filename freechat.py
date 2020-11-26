@@ -17,7 +17,7 @@ from src.db import User, Group, Thread, Messages, Moderate, Is_member, Applicati
 from src.error import eprint
 from collections import namedtuple
 from datetime import timedelta
-from flask import Flask, redirect, render_template, request, session, url_for, send_file, Response, jsonify
+from flask import Flask, redirect, render_template, request, session, url_for, send_file, Response, jsonify, flash
 from flask_login import current_user, LoginManager, login_required, login_user, logout_user, UserMixin
 import io
 
@@ -71,11 +71,13 @@ def register():
     password = request.form['psw']
     repeat = request.form['psw-repeat']
     if not db.check_username(login):
-        return render_template("registration_page.html", form=request.form)  # TODO add message what was wrong
+        flash('Username already taken')  # Flash or error
+        return render_template("registration_page.html", form=request.form, error='Username already taken')  # Flash or error
     if password != repeat:
-        return render_template("registration_page.html", form=request.form)  # TODO add message what was wrong & keep the username
+        return render_template("registration_page.html", form=request.form, error='Passwords do not match')  # Flash or error
     db.insert_new_user(login, password)
-    return redirect(url_for("welcome"))  # TODO add message that it was succesful
+    flash('Your registration was succesful. You can now login.')  # TODO
+    return redirect(url_for("welcome"))
 
 
 @app.route("/login/", methods=['GET', 'POST'])
@@ -87,12 +89,14 @@ def login():
     login = request.form["uname"]
     password = request.form["psw"]
     if not db.check_password(password, login):
-        return redirect(url_for("welcome"))  # TODO add message that login was unsuccesful & keep username
+        flash('Your credentials were incorrect. Please try again.')  # TODO
+        return render_template("main_page.html", form=request.form)
     user = User.query.filter_by(Login=login).first()
     if user:
         login_user(user)
     else:
-        return redirect(url_for("welcome"))
+        flash('Something went wrong. Please try again.')  # TODO
+        return render_template("main_page.html", form=request.form)
     return redirect(url_for("home"))
 
 
@@ -137,7 +141,11 @@ def home():
     username = current_user.Login
     admin = current_user.Mode & 2
     rights = "Admin" if admin else "User"
-    picture = "TODO"  # TODO get profile_pic
+    picture = current_user.Image
+    if picture is None:
+        picture = "/static/pictures/defaults/default_profile_picture.png"
+    else:
+        picture = "/" + current_user.Login + "/profile_image"
     return render_template("home_page.html", username=username, rights="user", img_src=picture)
 
 
@@ -179,6 +187,12 @@ def profile(name):
     private = user.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome"))
+
+    # image
+    # Meno
+    # Priezviko
+    # Práva ?
+    # Fotka
     return render_template("profile_page.html", username=name)
 
 
@@ -205,24 +219,39 @@ def admin_profile_settings(name):
 
 # Groups #
 
-@app.route("/create/group/new/")
-@app.route("/create/groups/new/")
+@app.route("/create/group/", methods=['POST'])
+@app.route("/create/groups/", methods=['POST'])
 @login_required
 def create_group():
-    # TODO
+    # Názov
+    # Práva na čítanie
+    # Popis (optional)
+    # Ikona (Optional)
+    # odkaz na vytvorenie v template
     pass
 
 
-@app.route("/create/group/<group>/newthread/")
-@app.route("/create/groups/<group>/newthread/")
+# @app.route("/create/group/<group>/newthread/")
+# @app.route("/create/groups/<group>/newthread/")
+@app.route("/create/<group>/thread/", methods=['POST'])
 @login_required
 def create_thread(group):
-    # TODO
+    # Názov
+    # Skupina ?
+    # Popis (optional)
+    pass
+
+@app.route("/create/<group>/thread/", methods=['GET'])
+@login_required
+def render_create_thread():
+    # Názov
+    # Skupina ?
+    # Popis (optional)
     pass
 
 
-@app.route("/group/<group>/<thread>/new/")
-@app.route("/groups/<group>/<thread>/new/")
+@app.route("/group/<group>/<thread>/new/", methods=['POST'])
+@app.route("/groups/<group>/<thread>/new/", methods=['POST'])
 @login_required
 def send_message(group, thread):
     # TODO

@@ -11,13 +11,13 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
-            <a href="{{ url_for('profile', name=user.username) }}">
+            <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
-                    <img src="{{ url_for('profile_image')}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description" class="text_orange">
-                    <h2>{{ user.username }}</h2>
-                    <p>{{ user.rights }}</p>
+                    <h2>{{ username }}</h2>
+                    <p>{{ rights }}</p>
                 </div>
             </a>
             <!-- Notifications dropdown menu -->
@@ -27,13 +27,18 @@
         </div>
 
         <!-- SEARCH -->
-        <div id="search_bar_box" class="background_color_dark_grey">
-            <!-- TODO searchbar -->
-            <form action="{{ url_for('') }}" method="POST" id="search_bar_form" >
-                <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
-            </form>
-        </div>
+        {#
+            <div id="search_bar_box" class="background_color_dark_grey">
+
+                <!-- TODO searchbar -->
+
+               <form action="{{ #url_for('') }}" method="POST" id="search_bar_form" >
+                    <input type="text" placeholder="Search.." name="search" id="search_bar_input">
+                    <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
+               </form>
+            </div>
+         #}
+
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -93,7 +98,7 @@
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
                 <!-- TODO tvorba noveho vlakna -->
-                <form action="{{ url_for('create_thread', groupname=groupname)}}" method="POST">
+                <form action="{{ '/create/' + 'TODO' + '/thread' }}" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
@@ -109,7 +114,7 @@
             <!-- GROUP THREADS -->
             <div id="group_threads">
                 <!-- JOIN GROUP -->
-                {% if !member and session.logged_in %}
+                {% if not member and session.logged_in %}
                 <input type="button" value="Join group" class="join_group text_white background_color_green" />
                 {% endif %}
                 <!-- Create new thread -->
@@ -118,7 +123,7 @@
                 {% endif %}
 
                 {% for thread in threads %}
-                <a href="{{ url_for('see_posts') + ?groupname=groupname + ?thread_subject=thread.subject }}">
+                <a href="{{ url_for('see_posts') + "?groupname=" + groupname + "?thread_subject=" + thread.subject }}">
                     <div class="thread_container text_white background_color_dark_grey">
                         <h3>{{ thread.subject }}</h3>
                         <p>Author: {{ thread.username }}</p>
@@ -139,7 +144,7 @@
     }
     function create_new_group_hide(){
         document.getElementById("creating_new_group").style.display= 'none';
-    }  
+    }
 </script>
 </html>
 </doctype>
