@@ -1,5 +1,6 @@
 <!-- TODO pridat settings a members button -->
 <!-- TODO nacitat nove prispevky -->
+<!-- TODO logout button -->
 <!doctype html>
 <html>
 <head>
@@ -15,12 +16,11 @@
         <div id="home_page_profile" class="background_color_dark_grey">
             <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
-                    <!-- TODO url fotky profilu -->
-                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{url_for('profile_image'}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description" class="text_orange">
-                    <h2>{{ username }}</h2>
-                    <p>{{ rights }}</p>
+                    <h2>{{ user.username }}</h2>
+                    <p>{{ user.rights }}</p>
                 </div>
             </a>
         </div>
@@ -44,11 +44,10 @@
 
             <!-- GROUPS -->
             {% for group in groups %}
-            <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
             <a href="{{ url_for('see_threads', groupname=group.name) }}">
                 <div class="group_container background_color_dark_grey text_white">
                     <div class="left_panel_group_picture_container">
-                        <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
+                        <img src="{{ url_for('group_image') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
                     <div class="left_panel_group_text">
                         <h3 class="left_panel_group_title">{{ group.name }}</h3>
@@ -62,24 +61,23 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
-                <!-- TODO tvorba novej skupiny -->
                 <form action="{{ url_for('create_group') }}" method="POST">
                     <h2>Create new group</h2>
                     <label for="group_name"><b>Group name</b></label>
-                    <input type="text" placeholder="Enter group name" name="group_name" id="group_name" class="input_box background_color_light" required>
+                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box background_color_light" required>
 
                     <label for="description"><b>Description</b></label>
-                    <input type="text" placeholder="Enter description" name="description" id="description" class="input_box background_color_light" required>
+                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box background_color_light" required>
 
-                    <label for="group_picture"><b>Group picture</b></label>
-                    <input type="file" placeholder="Group pricture" name="profile_photo" required="" capture><br><br>
+                    <label for="group_image"><b>Group picture</b></label>
+                    <input name="group_image" type="file" placeholder="Group pricture" required="" capture><br><br>
 
                     <label for="group_privacy"><b>Visibility for:</b></label><br>
-                    <input type="radio" id="visibility1" name="visibility" value="30">
+                    <input id="visibility1" type="radio" name="visibility" value="30">
                     <label for="visibility1">All users</label><br>
-                    <input type="radio" id="visibility2" name="visibility" value="60">
+                    <input id="visibility2" type="radio" name="visibility" value="60">
                     <label for="visibility2">Registered users</label><br>
-                    <input type="radio" id="visibility3" name="visibility" value="100">
+                    <input id="visibility3" type="radio" name="visibility" value="100">
                     <label for="visibility3">Members of this group</label><br>
 
                     <br>
@@ -89,13 +87,12 @@
             </div>
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
-                <!-- TODO tvorba noveho vlakna -->
                 <form action="{{ url_for('create_thread', groupname=groupname)}}" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
                     <label for="thread_subject"><b>Subject</b></label>
-                    <input type="text" placeholder="Enter subject" name="thread_subject" id="thread_subject" class="input_box background_color_light" required>
+                    <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box background_color_light" required>
 
                     <br>
                     <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
@@ -105,6 +102,11 @@
 
             <!-- GROUP THREADS -->
             <div id="group_threads">
+
+                {% if admin or mod %}
+                <button formaction="{{url_for('remove_group')}}">Remove group</button>
+                {% endif %}
+
                 <!-- JOIN GROUP -->
                 {% if !member %}
                 <!-- TODO -->

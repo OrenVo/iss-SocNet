@@ -11,11 +11,9 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile" class="background_color_dark_grey">
-            <!-- TODO -->
             <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
-                    <!-- TODO  -->
-                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{url_for('profile_image')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description" class="text_orange">
                     <h2>{{ username }}</h2>
@@ -41,12 +39,17 @@
                 {% for post in posts %}
                 <div class="post background_color_grey">
                     <div class="post_text">
-                        <h4>{{ post.username }}</h4><br>
+                        <a href="{{ url_for('profile', username=post.username) }}">
+                            <h4>{{ post.username }}</h4>
+                        </a><br>
                         <p>{{ post.content }}</p>
                     </div>
+                    {% if mod %}
+                    <button formaction="{{url_for('remove_post')}}">Remove post</button>
+                    {% endif %}
                     <div class="ranking">
-                        <!-- TODO tlacidla na increment decrement -->
                         <p>{{ post.rank }} 
+                            <!-- TODO tlacidla na increment decrement -->
                         {% if is_logged %}
                             <a href="{{ url_for('increment', postid=post.ID) }}">
                                 <b>increment</b>
@@ -69,18 +72,6 @@
             </div>
     </article>
 </body>
-
-
-<!-- JavaScript -->
-<script>
-    /* Showing and closing windows on click - create new group and thread */
-    function create_new_group_show(){
-        document.getElementById("creating_new_group").style.display= 'block';
-    }
-    function create_new_group_hide(){
-        document.getElementById("creating_new_group").style.display= 'none';
-    }   
-</script>
 </html>
 </doctype>
 

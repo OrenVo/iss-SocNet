@@ -1,3 +1,5 @@
+<!-- TODO pridat settings a members button -->
+<!-- TODO nacitat nove prispevky -->
 <!doctype html>
 <html>
 <head>
@@ -20,10 +22,6 @@
                     <p>{{ rights }}</p>
                 </div>
             </a>
-            <!-- Notifications dropdown menu -->
-            <div class="dropdown">
-                <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
-            </div>
         </div>
 
         <!-- SEARCH -->
@@ -46,14 +44,11 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            {% if session.logged_in %}
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
-            {% endif %}
 
             <!-- GROUPS -->
             {% for group in groups %}
-            <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads', groupname=group.name, username=user.name) }}">
+            <a href="{{ url_for('see_threads', groupname=group.name) }}">
                 <div class="group_container background_color_dark_grey text_white">
                     <div class="left_panel_group_picture_container">
                         <img src="{{ url_for('group_image') }}" alt="Group icon" class="left_panel_group_picture">
@@ -65,7 +60,7 @@
             </a>
             {% endfor %}
         </div>
-
+        
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -117,10 +112,27 @@
                 {% if not member and session.logged_in %}
                 <input type="button" value="Join group" class="join_group text_white background_color_green" />
                 {% endif %}
-                <!-- Create new thread -->
+
+                <!-- SETTINGS -->
+                {% if mod %}
+                <!-- TODO -->
+                <a href="">
+                    <input type="button" value="Settings" class="join_group text_white background_color_green" />
+                </a>
+                {% endif %}
+
+                <!-- CREATE NEW THREAD -->
                 {% if member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
                 {% endif %}
+
+
+                <!-- NOTIFICATIONS -->
+                <a href="{{ url_for('notifications', groupname=groupname) }}">
+                    <div class="dropdown">
+                        <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+                    </div>
+                </a>
 
                 {% for thread in threads %}
                 <a href="{{ url_for('see_posts') + "?groupname=" + groupname + "?thread_subject=" + thread.subject }}">
@@ -148,3 +160,4 @@
 </script>
 </html>
 </doctype>
+

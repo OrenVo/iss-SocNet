@@ -13,8 +13,8 @@
         <!-- LOGIN -->
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="main_page_login_form">
             <div class="container">
-                <input name="uname" type="text" placeholder="Username" required>
-                <input name="psw" type="password" placeholder="Password" required>
+                <input name="uname" type="text" placeholder="Username" autocomplete="nickname" required>
+                <input name="psw" type="password" placeholder="Password" minlength="7" autocomplete="current-password" required>
                 <button type="submit" class="background_color_orange">Login</button>
             </div>
         </form>
@@ -53,11 +53,11 @@
             <h1 class="text_orange text_center">{{error}}</h1>
             {% endif %}
 
-            <label for="psw"><b>Password</b></label>
-            <input name="psw" type="password" placeholder="Enter Password" class="input_box background_color_light" required>
+            <label for="psw"><b>Password, at least 7 characters</b></label>
+            <input name="psw" type="password" placeholder="Enter Password" minlength="7" autocomplete="new-password" class="input_box background_color_light" required>
 
             <label for="psw-repeat"><b>Repeat Password</b></label>
-            <input name="psw-repeat" type="password" placeholder="Repeat Password" class="input_box background_color_light" required>
+            <input name="psw-repeat" type="password" placeholder="Repeat Password" minlength="7" autocomplete="new-password" class="input_box background_color_light" required>
             <hr>
 
             <p>By creating an account you agree to our <a href="#" id="myBtn" class="text_underline">Terms & Privacy</a>.</p>

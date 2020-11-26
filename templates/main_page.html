@@ -5,7 +5,7 @@
 <head>
     <meta charset = "utf-8"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
     <title>Free chat</title>
 </head>
 <body>
@@ -16,6 +16,9 @@
             <a href="{{ url_for('register')}}">Sign up</a>
         </div>
         <!-- LOGIN -->
+        {% if err %}
+            <p><strong>Error:</strong> {{ err }}</p>
+        {% endif %}
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="main_page_login_form">
             <div class="container">
                 <input name="uname" type="text" placeholder="Username" class="main_page_resize" {% if form  %} value="{{ form['uname'] }}"{% endif %} required>
