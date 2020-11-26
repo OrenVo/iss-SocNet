@@ -71,9 +71,9 @@ def register():
     password = request.form['psw']
     repeat = request.form['psw-repeat']
     if not db.check_username(login):
-        return render_template("registration_page.html")  # TODO add message what was wrong
+        return render_template("registration_page.html", form=request.form)  # TODO add message what was wrong
     if password != repeat:
-        return render_template("registration_page.html")  # TODO add message what was wrong & keep the username
+        return render_template("registration_page.html", form=request.form)  # TODO add message what was wrong & keep the username
     db.insert_new_user(login, password)
     return redirect(url_for("welcome"))  # TODO add message that it was succesful
 
