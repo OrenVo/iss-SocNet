@@ -34,7 +34,7 @@
             <hr>
 
             <label for="login"><b>Login</b></label>
-            <input name="login" type="text" placeholder="Enter Login" class="input_box background_color_light" required>
+            <input name="login" type="text" placeholder="Enter Login" class="input_box background_color_light" {% if form  %} value="{{ form['login'] }}"{% endif %} required>
 
             <label for="psw"><b>Password</b></label>
             <input name="psw" type="password" placeholder="Enter Password" class="input_box background_color_light" required>
