@@ -149,9 +149,8 @@ def user_img(name):
     private = user.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome"))
-    image = user.Image  # Load blob
-    file_object = io.BytesIO(image)  # create file in memory
-    return send_file(file_object, mimetype='image/JPEG')  # sends file to path
+    file_object = io.BytesIO(user.Image)  # create file in memory
+    return send_file(file_object, mimetype=user.Mimetype)  # sends file to path
 
 
 @app.route("/profile_image")        # Sends current_user profile image to this path
