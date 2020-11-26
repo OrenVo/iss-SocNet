@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `Group` (
     Mode         TINYINT DEFAULT 0,
     Description               NVARCHAR(2000),
     Image               MEDIUMBLOB,
-
+    Mimetype VARCHAR(20),
     User_ID         INT NOT NULL,
     CONSTRAINT FK_user_group FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE CASCADE     -- vlastní
 
