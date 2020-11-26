@@ -34,6 +34,7 @@ Dano's file
 # App initialization #
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'a4abb8b8384bcf305ecdf1c61156cee1'
+app.app_context().push() # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
 login_manager = LoginManager()
@@ -110,7 +111,7 @@ def guest():
 def test():
     return render_template("test.html")
 
-# It worked, before recreating database
+# It works, needed to push app context
 @app.route("/receive_image", methods=['POST'])  # just example of uploading image
 @login_required
 def receive_image():
@@ -321,8 +322,8 @@ def ask_mod(name):
 @app.route("/groups/<group>/<thread>/<message>/delete/")
 @login_required
 def delete(group, thread, message):
-    group = Group.query.filter_by(Name=name).first()
-    if group is None:
+    group_instance = Group.query.filter_by(Name=group).first()
+    if group_instance is None:
         return redirect(url_for("lost"))
     # TODO
     pass
@@ -332,11 +333,11 @@ def delete(group, thread, message):
 @app.route("/kick/groups/<group>/<name>/")
 @login_required
 def kick(group, name):
-    group = Group.query.filter_by(Name=name).first()
-    if group is None:
+    group_instance = Group.query.filter_by(Name=name).first()
+    if group_instance is None:
         return redirect(url_for("lost"))
     admin = current_user.Mode & 2
-    owner = current_user.ID == group.User_ID
+    owner = current_user.ID == group_instance.User_ID
     moderator = True  # TODO moderator
     if not admin and not owner and not moderator:
         return render_template("tresspassing_page.html")
@@ -379,7 +380,7 @@ def ban(name):
 # TODO WE don't know if it works
 @app.route('/search', methods=['GET'])
 def search():
-    return flask.render_template('search.html')
+    return render_template('search.html')
 
 
 # TODO WE don't know if it works

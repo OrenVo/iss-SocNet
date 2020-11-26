@@ -42,7 +42,6 @@ class DB:
         user.Image = blob
         user.Mimetype = mimetype
         self.db.session.commit()
-        eprint("here")
         return user
 
     def insert_new_user(self, username, password):
@@ -120,7 +119,7 @@ def init_db(app, fname='db.ini', sect='mysql'):
     app.config['SQLALCHEMY_POOL_RECYCLE'] = 30
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     global mysql
-    mysql = SQLAlchemy(app)
+    mysql.init_app(app)
     global Base
     Base.prepare(mysql.engine, reflect=True)
     global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
