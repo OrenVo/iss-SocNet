@@ -72,9 +72,10 @@ def register():
     repeat = request.form['psw-repeat']
     if not db.check_username(login):
         flash('Username already taken')  # Flash or error
-        return render_template("registration_page.html", form=request.form, error='Username already taken')  # Flash or error
+        return render_template("registration_page.html", form=request.form)
     if password != repeat:
-        return render_template("registration_page.html", form=request.form, error='Passwords do not match')  # Flash or error
+        flash('Passwords do not match')  # Flash or error
+        return render_template("registration_page.html", form=request.form)
     db.insert_new_user(login, password)
     flash('Your registration was succesful. You can now login.')  # TODO
     return redirect(url_for("welcome"))
