@@ -169,6 +169,23 @@ hr {
     background-color: #001624;
 }
 
+footer{
+    width: 100%;
+
+    padding: 20px;
+    color: white;
+    text-align: center;
+    background-color: rgba(0,0,0,0.8);
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.cursor_pointer {
+    cursor: pointer;
+}
+
 /* Registration */
 #reg_page_background {
     height: 100%;
@@ -201,6 +218,26 @@ hr {
     width: 100%;
     opacity: 0.9;
   }
+
+.flash_modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.flash_modal_content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
 /***********************/
 
 /* ------- Home page ------- */
@@ -470,7 +507,7 @@ hr {
 .close {
   color: #aaaaaa;
   float: right;
-  font-size: 28px;
+  font-size: 18px;
   font-weight: bold;
 }
 
