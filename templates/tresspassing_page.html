@@ -1,3 +1,16 @@
-You are tresspasing!
-This page currently isn't accessible to you.
-Maybe login?
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style_4_err.css') }}" type="text/css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
+        <title>Free chat</title>
+    </head>
+    <body>
+        <div class="middle">
+            You are tresspassing! <br>
+            <img src="{{ url_for('static', filename='pictures/trespassing.png') }}" alt="Tresspassing"> <br>
+            Did you get lost? Go <a href='/home/'><b>home</b></a> <br>
+        </div>        
+    </body>
+</html>

@@ -8,11 +8,30 @@
     <title>Free chat</title>
 </head>
 <body>
+
+    <!-- FLASH WAY -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <!-- The Modal for Settings -->
+        <div id="myFlashModal" class="flash_modal">
+           <!-- Modal content for Settings-->
+           <div class="flash_modal_content">
+               <span class="close flash_close">&times;</span>
+               <ul class=flashes>
+                {% for message in messages %}
+                    <li id="flash">{{ message }}</li>
+                {% endfor %}
+                </ul>
+           </div>
+        </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- HEADER -->
     <div id="main_page_header">
         <!-- LOGIN -->
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="login_form">
-            <div class="container">
+            <div class="container">                
                 <input name="uname" type="text" placeholder="Username" autocomplete="nickname" required>
                 <input name="psw" type="password" placeholder="Password" minlength="7" autocomplete="current-password" required>
                 <button type="submit">Login</button>
@@ -30,23 +49,11 @@
     <!-- REGISTRATION -->
     <div id="reg_page_background">
         <form action="{{ url_for('register') }}" method="POST" autocomplete="on" id="registration_form">
-            <h1 class="text_center">Register</h1>
+            <h1 class="text_center">Registration</h1>
             <hr>
 
             <label for="login"><b>Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box" {% if form  %} value="{{ form['login'] }}"{% endif %} required>
-
-
-            <!-- FLASH WAY ale posielam aj error tak nepotrebne vymaz -->
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <ul class=flashes>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
 
             <label for="psw"><b>Password, at least 7 characters</b></label>
             <input name="psw" type="password" placeholder="Enter Password" minlength="7" autocomplete="new-password" class="input_box" required>
@@ -92,6 +99,26 @@
         modal.style.display = "none";
       }
     });
+
+    // Get the modal
+    var modal_flash = document.getElementById("myFlashModal");
+
+    // Get the <span> element that closes the modal
+    var span_flash = document.getElementsByClassName("flash_close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span_flash.onclick = function() {
+      modal_flash.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal_flash) {
+        modal_flash.style.display = "none";
+      }
+    } 
+
+
 </script>
 
 </html>
