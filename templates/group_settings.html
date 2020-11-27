@@ -1,3 +1,5 @@
+<!-- TODO tlacidlo odstranit skupinu -->
+<!-- Moderator iba vyamze clenov skupiny a odstrani prispevky -->
 <!doctype html>
 <html>
 <head>
@@ -17,7 +19,7 @@
                     <!-- TODO url fotky profilu -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description" class="text_orange">
+                <div id="profile_container_description">
                     <h2>{{ username }}</h2>
                     <p>{{ rights }}</p>
                 </div>
@@ -49,7 +51,7 @@
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
             <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
-                <div class="group_container background_color_dark_grey text_white">
+                <div class="group_container background_color_dark_grey">
                     <div class="left_panel_group_picture_container">
                         <!-- TODO url fotky skupiny -->
                         <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">

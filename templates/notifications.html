@@ -6,18 +6,18 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
-<body class="background_color_light_grey">
+<body>
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
-        <div id="home_page_profile" class="background_color_dark_grey">
+        <div id="home_page_profile"">
             <!-- TODO prejst z home page na profil -->
             <a href="{{ url_for('profile') }}">
                 <div id="profile_container_image">
                     <!-- TODO url fotky profilu -->
                     <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description" class="text_orange">
+                <div id="profile_container_description">
                     <h2>{{ username }}</h2>
                     <p>{{ rights }}</p>
                 </div>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- SEARCH -->
-        <div id="search_bar_box" class="background_color_dark_grey">
+        <div id="search_bar_box">
             <!-- TODO searchbar -->
             <form action="{{ url_for('') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
@@ -49,7 +49,7 @@
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
             <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
-                <div class="group_container background_color_dark_grey text_white">
+                <div class="group_container">
                     <div class="left_panel_group_picture_container">
                         <!-- TODO url fotky skupiny -->
                         <img src="{{ url_for('static', filename='pictures/profile_picture.jpeg') }}" alt="Group icon" class="left_panel_group_picture">
@@ -67,12 +67,12 @@
             <!-- TODO pridat url na profil a skupinu -->
             {% for notfication in mem_notifications %}
                 <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
-                    <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
+                    <br><br><button>Accept</button> <button>Reject</button>
                 </div>
             {% endfor %}
             {% for notification in mod_notifications %}
                 <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
-                    <br><br><button class="background_color_green">Accept</button> <button class="background_color_green">Reject</button>
+                    <br><br><button>Accept</button> <button>Reject</button>
                 </div>
             {% endfor %}
         </div>

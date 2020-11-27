@@ -9,13 +9,13 @@
 </head>
 
 <!-- BODY -->
-<body class="background_color_light_grey">
+<body>
     <!-- HEADER - search + home -->
-    <header class="background_color_dark">
+    <header>
         <!-- GO HOME -->
         <div class="go_home_boy">
             <!-- TODO go home -->
-            <a href="home_page.html"><h2 class="text_orange">Home</h2></a>
+            <a href="home_page.html"><h2>Home</h2></a>
         </div>
         <!-- SEARCH -->
         <div class="search_bar_box_profile">
@@ -37,7 +37,7 @@
 
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
-            <h1 class="text_orange"> {{ user.Login }}</h1><br>
+            <h1> {{ user.Login }}</h1><br>
             <p>{{ user.description }}</p>
             <br><b>Groups:</b><br>
             <ol>
@@ -45,23 +45,23 @@
                 <li>{{ groupname }}</li>
                 {% endfor %}
             </ol>
-            <br><button type="button" class="background_color_green" onclick="show_settings()">Settings</button>
+            <br><button type="button" onclick="show_settings()">Settings</button>
         </div>
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
         <form action="{{ url_for('profile_settings') }}" method="POST">
-            <h1 class="text_orange">Settings</h2><br>
+            <h1>Settings</h2><br>
 
             <label for="login"><b>Change Login</b></label>
-            <input name="login" type="text" placeholder="Enter Login" class="input_box background_color_light">
+            <input name="login" type="text" placeholder="Enter Login" class="input_box">
 
             <label for="password1"><b>Change Password</b></label>
-            <input name="password1" type="text" placeholder="Enter Password" autocomplete="new-password" class="input_box background_color_light">
+            <input name="password1" type="text" placeholder="Enter Password" autocomplete="new-password" class="input_box">
 
             <label for="password2"><b>Repeat Password</b></label>
-            <input name="password2" type="text" placeholder="Repeat Password" class="input_box background_color_light">
+            <input name="password2" type="text" placeholder="Repeat Password" class="input_box">
 
             <br>
             <label for="group_privacy"><b>Visibility for:</b></label><br>
@@ -76,9 +76,9 @@
             <input name="profile_photo" type="image" placeholder="Profile pricture" required="" capture><br><br>
 
             <label for="current_password"><b>Enter current password</b></label>
-            <input name="current_password" type="text" placeholder="Enter current password" class="input_box background_color_light" required>
+            <input name="current_password" type="text" placeholder="Enter current password" class="input_box" required>
 
-            <button type="submit" class="background_color_green">Save changes</button> <button type="button" class="background_color_green" onclick="show_profile_info()">Go Back</button>
+            <button type="submit">Save changes</button> <button type="button" onclick="show_profile_info()">Go Back</button>
         </form>
     </div>
 </body>

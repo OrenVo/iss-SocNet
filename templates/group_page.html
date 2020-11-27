@@ -9,24 +9,24 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
     <title>Free chat</title>
 </head>
-<body class="background_color_light_grey">
+<body>
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
-        <div id="home_page_profile" class="background_color_dark_grey">
+        <div id="home_page_profile">
             <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
-                    <img src="{{url_for('profile_image'}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description" class="text_orange">
-                    <h2>{{ user.username }}</h2>
-                    <p>{{ user.rights }}</p>
+                <div id="profile_container_description">
+                    <h2>{{ user.Login }}</h2>
+                    <p>{{ rights }}</p>
                 </div>
             </a>
         </div>
 
         <!-- SEARCH -->
-        <div id="search_bar_box" class="background_color_dark_grey">
+        <div id="search_bar_box">
             <!-- TODO searchbar -->
             <form action="{{ url_for('') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
@@ -45,7 +45,7 @@
             <!-- GROUPS -->
             {% for group in groups %}
             <a href="{{ url_for('see_threads', groupname=group.name) }}">
-                <div class="group_container background_color_dark_grey text_white">
+                <div class="group_container">
                     <div class="left_panel_group_picture_container">
                         <img src="{{ url_for('group_image') }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
@@ -64,10 +64,10 @@
                 <form action="{{ url_for('create_group') }}" method="POST">
                     <h2>Create new group</h2>
                     <label for="group_name"><b>Group name</b></label>
-                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box background_color_light" required>
+                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box" required>
 
                     <label for="description"><b>Description</b></label>
-                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box background_color_light" required>
+                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box" required>
 
                     <label for="group_image"><b>Group picture</b></label>
                     <input name="group_image" type="file" placeholder="Group pricture" required="" capture><br><br>
@@ -81,8 +81,8 @@
                     <label for="visibility3">Members of this group</label><br>
 
                     <br>
-                    <button type="submit" id="create_group_button" class="background_color_green">Create group</button>
-                    <button type="button" class="background_color_green" onclick="create_new_group_hide()">Hide</button>
+                    <button type="submit" id="create_group_button">Create group</button>
+                    <button type="button" onclick="create_new_group_hide()">Hide</button>
                 </form>
             </div>
             <!-- CREATING NEW THREAD -->
@@ -92,11 +92,11 @@
                     <br>
 
                     <label for="thread_subject"><b>Subject</b></label>
-                    <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box background_color_light" required>
+                    <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box" required>
 
                     <br>
-                    <button type="submit" id="create_thread_button" class="background_color_green">Create thread</button>
-                    <button type="button" class="background_color_green" onclick="create_new_thread_hide()">Hide</button>
+                    <button type="submit" id="create_thread_button">Create thread</button>
+                    <button type="button" onclick="create_new_thread_hide()">Hide</button>
                 </form>
             </div>
 
@@ -111,11 +111,11 @@
                 {% if !member %}
                 <!-- TODO -->
                 <a href="">
-                    <input type="button" value="Join group" class="join_group text_white background_color_green" />
+                    <input type="button" value="Join group" class="join_group" />
                 </a>
                 {% else %}
                 <a href="">
-                    <input type="button" value="Leave group" class="leave_group text_white background_color_green" />
+                    <input type="button" value="Leave group" class="leave_group" />
                 </a>
                 {% endif %}
 
@@ -123,7 +123,7 @@
                 {% if member and !mod %}
                 <!-- TODO -->
                 <a href="">
-                    <input type="button" value="Request mod" class="join_group text_white background_color_green" />
+                    <input type="button" value="Request mod" class="join_group" />
                 </a>
                 {% endif %}
 
@@ -131,7 +131,7 @@
                 {% if member %}
                 <!-- TODO -->
                 <a href="">
-                    <input type="button" value="Members" class="join_group text_white background_color_green" />
+                    <input type="button" value="Members" class="join_group" />
                 </a>
                 {% endif %}
 
@@ -139,7 +139,7 @@
                 {% if mod %}
                 <!-- TODO -->
                 <a href="">
-                    <input type="button" value="Settings" class="join_group text_white background_color_green" />
+                    <input type="button" value="Settings" class="join_group" />
                 </a>
                 {% endif %}
 
@@ -150,7 +150,7 @@
 
 
                 <!-- NOTIFICATIONS -->
-                <a href="{{ url_for('notifications', groupname=groupname) }}">
+                <a href="{{ 'notifications/group/' + 'groupname') }}">
                     <div class="dropdown">
                         <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                     </div>
@@ -159,7 +159,7 @@
                 {% for thread in threads %}
                 <!-- TODO -->
                 <a href="{{ url_for('see_posts', groupname=groupname, threadsubject=thread.subject) }}">
-                    <div class="thread_container text_white background_color_dark_grey">
+                    <div class="thread_container">
                         <h3>{{ thread.subject }}</h3>
                         <p>Author: {{ thread.username }}</p>
                     </div>
