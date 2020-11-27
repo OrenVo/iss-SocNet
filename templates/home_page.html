@@ -60,7 +60,7 @@
             </a>
             {% endfor %}
         </div>
-        
+
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -128,7 +128,7 @@
 
 
                 <!-- NOTIFICATIONS -->
-                <a href="{{ url_for('notifications', groupname=groupname) }}">
+                <a href="{{ '/notifications/group/' + "groupname" }}">
                     <div class="dropdown">
                         <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
                     </div>
@@ -160,4 +160,3 @@
 </script>
 </html>
 </doctype>
-

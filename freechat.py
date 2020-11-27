@@ -194,7 +194,7 @@ def profile(name):
     # Priezviko
     # Práva ?
     # Fotka
-    return render_template("profile_page.html", username=name)
+    return render_template("profile_page.html", user=user)
 
 
 @app.route("/settings/")

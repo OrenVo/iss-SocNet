@@ -32,12 +32,12 @@
     <div id="profile">
         <!-- PROFILE PICTURE CONTAINTER -->
         <div class="picture_container">
-            <img src="{{ url_for('profile_image') }}" alt="Profile picture" class="profile_picture">
+            <img src="{{ '/' + user.Login + '/profile_image' }}" alt="Profile picture" class="profile_picture">
         </div>
 
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
-            <h1 class="text_orange"> {{ user.username }}</h1><br>
+            <h1 class="text_orange"> {{ user.Login }}</h1><br>
             <p>{{ user.description }}</p>
             <br><b>Groups:</b><br>
             <ol>
