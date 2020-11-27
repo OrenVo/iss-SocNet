@@ -39,13 +39,13 @@
 
             <!-- FLASH WAY ale posielam aj error tak nepotrebne vymaz -->
             {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-            {% endif %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             {% endwith %}
 
             <!-- ERROR WAY -->

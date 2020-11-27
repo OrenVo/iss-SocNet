@@ -139,7 +139,7 @@ hr {
     height: 100%;
     width: 100%;
 
-    background-image: url('../pictures/main_page_background.jpg');
+    background-image: url('../pictures/main_background.jpg');
     background-attachment: fixed;
     background-size: 100% 100%;
 
@@ -331,11 +331,7 @@ hr {
 
 /* Dropdown */
 .dropbtn_notifications {
-<<<<<<< HEAD:static/css/style.css
-    background-image: url('../pictures/bell2.png');
-=======
     background-image: url('pictures/bell2.png');
->>>>>>> main:style.css
     background-repeat: no-repeat;
     background-size: 40%;
     background-position-x: 50%;
@@ -750,8 +746,6 @@ hr {
     #home_page_logo {
         padding-left: 0 20px;
     }
-    #profile_container_description {
-    }
     h2 {
         font-size: large;
     }
@@ -785,7 +779,7 @@ hr {
     #registration_form {
         margin: 0;
         width: 100%;
-        background-image: url('../pictures/main_page_background.jpg');
+        background-image: url('../pictures/main_background.jpg');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         color: white;
