@@ -115,5 +115,5 @@ CREATE TABLE IF NOT EXISTS Ranking (
     CONSTRAINT FK_thread_ranking FOREIGN KEY (Message, Thread_name, ID_group) REFERENCES Messages (ID, Thread_name, ID_group) ON DELETE CASCADE
 );
 
-INSERT INTO Users (ID, Name, Surname, Mode, Password, Login, Last_group) VALUES (0,'Ad', 'Min', 2, '','Admin',0);
-INSERT INTO `Group` (ID, Name, Mode, Description, User_ID) VALUES (0,'Server info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
+INSERT INTO Users (ID, Name, Surname, Mode, Password, Login, Last_group) VALUES (0,'Ad', 'Min', 2, '','Admin',1);
+INSERT INTO `Group` (Name, Mode, Description, User_ID) VALUES ('Server info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
