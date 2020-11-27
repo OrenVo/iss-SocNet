@@ -76,6 +76,26 @@ class DB:
         instance = self.db.session.query(User).filter_by(Login=username).first()
         return instance
 
+    def getuserrights(self, username: str, group: int) -> dict:
+        result = {
+            'admin': None,
+            'owner': None,
+            'moderator': None,
+            'member': None,
+            'user': None
+        }
+        user = self.db.session.query(User).filter_by(Login=username).first()
+        group = self.db.session.query(Group).filter_by(ID=group).first()
+        if user.Mode & 2:
+            result['admin'] = True
+        if user.ID == group.User_ID:
+            result['owner'] = True
+        if self.db.session.query(Moderate).filter_by(User=user.ID, Group=group.ID).first():
+            result['moderator'] = True
+        if self.db.session.query(Is_member).filter_by(User=user.ID, Group=group.ID).first():
+            result['member'] = True
+        result['user'] = True
+        return result
 
 mysql = SQLAlchemy()
 Base = automap_base(mysql.Model)

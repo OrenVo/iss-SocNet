@@ -28,8 +28,10 @@ CREATE TABLE IF NOT EXISTS Users
 	Password CHAR(97) NOT NULL,
 	Image MEDIUMBLOB,
 	Mimetype VARCHAR(20),
-	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8_bin
-
+	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
+	-- FK
+	Last_group INT DEFAULT NULL
+    -- CONSTRAINT FK_group_users FOREIGN KEY (Last_group) REFERENCES `Group` (ID) ON DELETE CASCADE    -- Last Group visited
 );
 
 CREATE UNIQUE INDEX User_Login_uindex
@@ -39,15 +41,18 @@ CREATE UNIQUE INDEX User_Login_uindex
 
 CREATE TABLE IF NOT EXISTS `Group` (
     ID                  INT PRIMARY KEY AUTO_INCREMENT,
-    Name               NVARCHAR(30) NOT NULL,
-    Mode         TINYINT DEFAULT 0,
-    Description               NVARCHAR(2000),
+    Name                VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
+    Mode                TINYINT DEFAULT 0,
+    Description         NVARCHAR(2000),
     Image               MEDIUMBLOB,
-    Mimetype VARCHAR(20),
-    User_ID         INT NOT NULL,
+    Mimetype            VARCHAR(20),
+    -- FK
+    User_ID             INT NOT NULL,
     CONSTRAINT FK_user_group FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE CASCADE     -- vlastní
-
 );
+
+CREATE UNIQUE INDEX Group_name_uindex
+	ON iis_soc_net.Group (Name);
 
 CREATE TABLE IF NOT EXISTS Moderate (   -- Vazba <uživatel moderuje skupinu>
     ID      INT NOT NULL UNIQUE AUTO_INCREMENT, -- for easier mapping to sql alchemy orm
@@ -68,9 +73,9 @@ CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
 );
 
 CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o členství/ práva moderátora>
-    User    INT NOT NULL,
-    `Group`     INT NOT NULL,
-    Date_time   TIMESTAMP,
+    User          INT NOT NULL,
+    `Group`       INT NOT NULL,
+    Date_time     TIMESTAMP,
     Membership    BOOL DEFAULT TRUE,
     CONSTRAINT PK_application PRIMARY KEY (User, `Group`,Membership),
     CONSTRAINT FK_user_application FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
@@ -78,22 +83,22 @@ CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o člen
 );
 CREATE TABLE IF NOT EXISTS Thread (
     Name               NVARCHAR(30) NOT NULL,
-    Description               NVARCHAR(2000),
+    Description        NVARCHAR(2000),
 
-    Group_ID          INT NOT NULL,   -- CK
+    Group_ID           INT NOT NULL,   -- CK
     CONSTRAINT PK_thread PRIMARY KEY (Group_ID, Name),
     CONSTRAINT FK_group_thread FOREIGN KEY (Group_ID) REFERENCES `Group` (ID) ON DELETE CASCADE    -- má
 );
 
 CREATE TABLE IF NOT EXISTS Messages (
-    ID              INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Content           NVARCHAR(2000),
-    `Rank`          INT DEFAULT 0,
-    Date_time       TIMESTAMP DEFAULT NOW(),
+    ID             INT NOT NULL UNIQUE AUTO_INCREMENT,
+    Content        NVARCHAR(2000),
+    `Rank`         INT DEFAULT 0,
+    Date_time      TIMESTAMP DEFAULT NOW(),
 
-    User_ID     INT,  -- ck
+    User_ID        INT,  -- ck
     Thread_name    NVARCHAR(30) NOT NULL,
-    ID_group      INT NOT NULL,
+    ID_group       INT NOT NULL,
     CONSTRAINT Pk_messages PRIMARY KEY (ID, Thread_name, ID_group),
     CONSTRAINT FK_user_messages FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE SET NULL,
     CONSTRAINT FK_thread_messages FOREIGN KEY (ID_group, Thread_name) REFERENCES Thread (Group_ID, Name) ON DELETE CASCADE
@@ -109,3 +114,6 @@ CREATE TABLE IF NOT EXISTS Ranking (
     CONSTRAINT FK_user_ranking FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
     CONSTRAINT FK_thread_ranking FOREIGN KEY (Message, Thread_name, ID_group) REFERENCES Messages (ID, Thread_name, ID_group) ON DELETE CASCADE
 );
+
+INSERT INTO Users (ID, Name, Surname, Mode, Password, Login, Last_group) VALUES (0,'Ad', 'Min', 2, '','Admin',0);
+INSERT INTO `Group` (ID, Name, Mode, Description, User_ID) VALUES (0,'Server info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
