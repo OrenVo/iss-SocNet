@@ -12,9 +12,11 @@
     <!-- HEADER -->
     <div id="main_page_header">
         <!-- SIGN UP -->
-        <div id="main_page_signup" class="">
-            <a href="{{ url_for('register')}}">Sign up</a>
-        </div>
+        <a href="{{ url_for('register')}}">
+            <div id="main_page_signup" class="">
+                Sign up
+            </div>
+        </a>
         <!-- LOGIN -->
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="login_form">
             <div class="container">
@@ -36,7 +38,7 @@
     <div id="main_page_background" class="text_center">
         <span class="center">
             <h1>Free chat</h1>
-            <div id="main_page_visitor"><a href="{{ url_for('guest')}}">Continue as a visitor</a></div>
+            <a href="{{ url_for('guest')}}"><div id="main_page_visitor">Continue as a visitor</div></a>
         </span>
     </div>
 </body>
