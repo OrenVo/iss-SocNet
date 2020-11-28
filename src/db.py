@@ -130,7 +130,19 @@ class DB:
             moderator = [x for x in Moderator if x.Group == mem.Group]
             if moderator:
                 Member.delete(mem)
-        return {'gowner': Ownership, 'gmoderator': Moderator, 'gmember': Member}
+        gowner = list()
+        gmoderator = list()
+        gmember = list()
+        for own in Ownership:
+            path = f'/image/group/{own.Name}/' if own.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            gowner.append((own, path))
+        for mod in Moderator:
+            path = f'/image/group/{mod.Name}/' if mod.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            gmoderator.append((mod, path))
+        for mem in Member:
+            path = f'/image/group/{mem.Name}/' if mem.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            gmember.append((mem, path))
+        return {'gowner': gowner, 'gmoderator': gmoderator, 'gmember': gmember}
 
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
