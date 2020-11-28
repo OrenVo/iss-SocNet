@@ -578,12 +578,13 @@ footer{
 }
 
 .img_center {
-    display: block;
-    width: 50%;
-    max-height: 100px;
+    height: 100px;
+    max-width: 30%;
+
     margin-top: 10px;
     margin-right: 20px;
     float: right;
+    display: block;
 }
 
 .rp_gn {

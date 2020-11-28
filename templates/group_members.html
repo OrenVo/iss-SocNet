@@ -55,22 +55,62 @@
     <article>
         <!-- LEFT PANEL -->
         <div id="left_panel">
+            
             <!-- GROUPS -->
-            {% for group in groups %}
-            <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads', group=group.Name, name=username) }}">
-                <div class="group_container">
-                    <div class="left_panel_group_picture_container">
-                        <!-- TODO url fotky skupiny -->
-                        <img src="{{ group.img_src }}" alt="Group icon" class="left_panel_group_picture">
+            <div class="lp_gn">GROUPS</div>
+
+            <!-- OWNER -->
+            {% if gowner %}
+                <div class="lp_gt">Owner</div>
+                {% for group in gowner %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                        </div>
                     </div>
-                    <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                </a>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- MODERATOR -->
+            {% if gmoderator %}
+                <div class="lp_gt">Moderator</div>
+                {% for group in gmoderator %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                        </div>
                     </div>
-                </div>
-            </a>
-            {% endfor %}
+                </a>
+                {% endfor %}
+            {% endif %}
+
+            <!-- MEMBER -->
+            {% if gmember %}
+                <div class="lp_gt">Member</div>
+                {% for group in gmember %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endif %}
         </div>
+
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
