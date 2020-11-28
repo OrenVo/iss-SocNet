@@ -13,7 +13,7 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile">
-            <a href="{{ url_for('profile', username=username) }}">
+            <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
                     <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
@@ -56,7 +56,7 @@
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
+            <a href="{{ url_for('see_threads', groupname=group.Name, name=username) }}">
                 <div class="group_container background_color_dark_grey">
                     <div class="left_panel_group_picture_container">
                         <!-- TODO url fotky skupiny -->
@@ -99,9 +99,7 @@
                         <input name="visibility" type="radio" id="visibility3" value="100">
                         <label for="visibility3">Members of this group</label><br>
 
-                        {% if admin or owner %}
-                        <button formaction="">Delete group</button>
-                        {% endif %}
+                        <button formaction="/delete_group/">Delete group</button>
 
                         <button type="submit" class="background_color_green">Save changes</button>
                     </form>

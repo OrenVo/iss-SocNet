@@ -12,7 +12,7 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile">
-            <a href="{{ url_for('profile', username=username) }}">
+            <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
                     <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
@@ -55,7 +55,7 @@
             <!-- GROUPS -->
             {% for group in groups %}
             <!-- TODO kliknutie na skupinu, zobrazi sa skupina -->
-            <a href="{{ url_for('see_threads') + ?group_name=group.name + ?username=username }}">
+            <a href="{{ url_for('see_threads', groupname=group.Name, name=username) }}">
                 <div class="group_container">
                     <div class="left_panel_group_picture_container">
                         <!-- TODO url fotky skupiny -->

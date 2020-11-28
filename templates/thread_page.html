@@ -11,7 +11,7 @@
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile">
-            <a href="{{ url_for('profile', username=username) }}">
+            <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
                     <img src="{{url_for('profile_image')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
@@ -54,7 +54,7 @@
                 {% for post in posts %}
                 <div class="post">
                     <div class="post_text">
-                        <a href="{{ url_for('profile', username=post.username) }}">
+                        <a href="{{ url_for('profile', name=post.username) }}">
                             <h4>{{ post.username }}</h4>
                         </a><br>
                         <p>{{ post.content }}</p>
