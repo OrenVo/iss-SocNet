@@ -139,7 +139,7 @@ def profile(name):
 
     if current_user.is_authenticated:
         admin = current_user.Mode & 2
-        owner = (current_user.Login == user.Login) | admin  # TODO podla toho ci Dano chce robit admin or owner alebo len if owner
+        owner = current_user.Login == user.Login
     else:
         admin = False
         owner = False
@@ -185,8 +185,8 @@ def profile_settings():
 @login_required
 def user_settings(name):
     admin = current_user.Mode & 2
-    owner = (current_user.Login == user.Login) | admin  # TODO podla toho ci Dano chce robit admin or owner alebo len if owner
-    if not owner:
+    owner = current_user.Login == user.Login
+    if not admin and not owner:
         return redirect(url_for("tresspass"))
     # TODO return settings_page.html
     return name + " settings page."
