@@ -15,9 +15,21 @@
                 <div id="profile_container_image">
                     <img src="{{url_for('profile_image')}}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description" class="text_orange">
-                    <h2>{{ username }}</h2>
-                    <p>{{ rights }}</p>
+                <div id="profile_container_description">
+                    <h2>{{ user.Login }}</h2>
+                    {% if admin %}
+                    <p>Admin</p>
+                    {% elif owner %} 
+                    <p>Ownder</p>
+                    {% elif moderator %}
+                    <p>Moderator</p> 
+                    {% elif member %} 
+                    <p>Member</p>
+                    {% elif user %} 
+                    <p>User</p>
+                    {% else %} 
+                    <p>Visitor</p>
+                    {% endif %}                    
                 </div>
             </a>
         </div>
