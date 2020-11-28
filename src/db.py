@@ -46,7 +46,7 @@ class DB:
 
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
-        new_user = User(Login=username, Password=psw, Last_group=1, )
+        new_user = User(Login=username, Password=psw, Last_group=1)
         instance = self.db.session.query(User).filter_by(Login=username).first()
         if instance is None:
             self.db.session.add(new_user)
@@ -115,19 +115,19 @@ class User(Base, UserMixin):
         return text_type(self.ID)
 
 class Group(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'group'
 class Thread(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'thread'
 class Messages(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'messages'
 class Moderate(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'moderate'
 class Is_member(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'is_member'
 class Applications(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'applications'
 class Ranking(Base):
-    __tablename__ = 'users'
+    __tablename__ = 'ranking'
 
 
 # Note this function must be called before others functions that works with database!!!
@@ -150,6 +150,11 @@ def init_db(app, fname='db.ini', sect='mysql'):
     global Base
     Base.prepare(mysql.engine, reflect=True)
     global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
+    from sqlalchemy import MetaData
+    meta = MetaData()
+    from sqlalchemy import Table
+    group = Table('group', meta, autoload=True,autoload_with=mysql.engine)
+    eprint([c.name for c in group.columns])
     # User = Base.classes.users
     # Group = Base.classes.group
     # Thread = Base.classes.thread
