@@ -12,23 +12,26 @@
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
-        <div id="home_page_profile" class="background_color_dark_grey">
-            <!-- TODO prejst z home page na profil -->
-            <a href="{{ url_for('profile') }}">
+        <div id="home_page_profile">
+            <a href="{{ url_for('profile', username=username) }}">
                 <div id="profile_container_image">
-                    <!-- TODO url fotky profilu -->
-                    <img src="{{url_for('static', filename='pictures/profile_picture2.jpg')}}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description">
-                    <h2>{{ username }}</h2>
-                    <p>{{ rights }}</p>
-                </div>
-            </a>
-            <!-- Notifications dropdown menu -->
-            <!-- TODO -->
-            <a href="">
-                <div class="dropdown">
-                    <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
+                    <h2>{{ user.Login }}</h2>
+                    {% if admin %}
+                    <p>Admin</p>
+                    {% elseif owner %} 
+                    <p>Ownder</p>
+                    {% elseif moderator %}
+                    <p>Moderator</p> 
+                    {% elseif member %} 
+                    <p>Member</p>
+                    {% elseif user %} 
+                    <p>User</p>
+                    {% else %} 
+                    <p>Visitor</p>
+                    {% endif %}                    
                 </div>
             </a>
         </div>
@@ -93,7 +96,11 @@
                         <input name="visibility" type="radio" id="visibility3" value="100">
                         <label for="visibility3">Members of this group</label><br>
 
-                        <button type="submit" class="background_color_green">Submit</button>
+                        {% if admin or owner %}
+                        <button formaction="">Delete group</button>
+                        {% endif %}
+
+                        <button type="submit" class="background_color_green">Save changes</button>
                     </form>
                 </div>
             </div>

@@ -20,12 +20,18 @@
                 </div>
                 <div id="profile_container_description">
                     <h2>{{ user.Login }}</h2>
-                    {% if rights == 0 %} admin
-                    {% elseif rights == 1 %} owner
-                    {% elseif rights == 2 %} moderator
-                    {% elseif rights == 3 %} member
-                    {% elseif rights == 4 %} user
-                    {% else %} visitor
+                    {% if admin %}
+                    <p>Admin</p>
+                    {% elseif owner %} 
+                    <p>Ownder</p>
+                    {% elseif moderator %}
+                    <p>Moderator</p> 
+                    {% elseif member %} 
+                    <p>Member</p>
+                    {% elseif user %} 
+                    <p>User</p>
+                    {% else %} 
+                    <p>Visitor</p>
                     {% endif %}                    
                 </div>
             </a>
@@ -106,64 +112,70 @@
                 </form>
             </div>
 
-            <!-- GROUP THREADS -->
-            <div id="group_threads">
+            <!-- GROUP HEADER -->
+            <div class="group_header">
+                <h2>{{ groupname }}</h2>
+                <img src="group_src" alt="Group Image">
+                <h3>Owner: {{ groupowner }}</h3>
+                <p>{{ groupdescription }}</p>
 
                 <!-- JOIN GROUP -->
-                {% if !member %}
-                <!-- TODO -->
-                <a href="">
+                {% if user or visitor %}
+                <a href="/joingroup/">
                     <input type="button" value="Join group" class="join_group" />
                 </a>
-                {% else %}
-                <a href="">
+                {% endif %}
+
+                <!-- LEAVE GROUP -->
+                {% if moderator or member %}
+                <a href="/leavegroup/">
                     <input type="button" value="Leave group" class="leave_group" />
                 </a>
                 {% endif %}
 
                 <!-- REQUEST MOD -->
-                {% if member and !mod %}
-                <!-- TODO -->
-                <a href="">
+                {% if member %}
+                <a href="/request_mod/">
                     <input type="button" value="Request mod" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- SEE MEMBERS -->
-                {% if member %}
-                <!-- TODO -->
-                <a href="">
+                {% if admin or owner or moderator or member %}
+                <a href="/see_members/">
                     <input type="button" value="Members" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- SETTINGS -->
-                {% if mod %}
-                <!-- TODO -->
-                <a href="">
+                {% if admin or owner %}
+                <a href="/group_settings/">
                     <input type="button" value="Settings" class="join_group" />
                 </a>
                 {% endif %}
 
-                <!-- CREATE NEW THREAD -->
-                {% if member %}
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
+                <!-- NOTIFICATIONS -->
+                {% if admin or owner or moderator %}
+                <a href="{{ 'notifications/group/' + 'groupname' }}">
+                    <div class="notifications"></div>
+                </a>
                 {% endif %}
 
+            </div>
 
-                <!-- NOTIFICATIONS -->
-                <a href="{{ 'notifications/group/' + 'groupname') }}">
-                    <div class="dropdown">
-                        <button onclick="dropdownFunction()" class="dropbtn dropbtn_notifications"></button>
-                    </div>
-                </a>
+            <!-- GROUP THREADS -->
+            <div id="group_threads">
+
+                <!-- CREATE NEW THREAD -->
+                {% if admin or owner or moderator or member %}
+                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
+                {% endif %}              
 
                 {% for thread in threads %}
-                <!-- TODO -->
                 <a href="{{ url_for('see_posts', groupname=groupname, threadsubject=thread.subject) }}">
                     <div class="thread_container">
-                        <h3>{{ thread.subject }}</h3>
-                        <p>Author: {{ thread.username }}</p>
+                        <h3>{{ thread.Subject }}</h3>
+                        <p>Author: {{ thread.Username }}</p>
                     </div>
                 </a>
                 {% endfor %}

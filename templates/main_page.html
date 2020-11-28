@@ -62,28 +62,28 @@
 
     <footer id="hide"> We are using cookies, by proceeding or pressing <span onclick="hide_footer()" class="cursor_pointer"><b>OK</b></span> you agree</footer>
 </body>
+
 <script>
     function hide_footer(){
         document.getElementById("hide").style.display = 'none'; 
     }
 
     // Get the modal
-var modal = document.getElementById("myFlashModal");
+    var modal = document.getElementById("myFlashModal");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-} 
-
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    } 
 </script>
 </html>

@@ -1,4 +1,3 @@
-<!-- TODO pridat button pre odstranenie uzivatela z db pre admina a vymazanie uctu ownera -->
 <!doctype html>
 <html>
 <head>
@@ -14,8 +13,7 @@
     <header>
         <!-- GO HOME -->
         <div class="go_home_boy">
-            <!-- TODO go home -->
-            <a href="home_page.html"><h2>Home</h2></a>
+            <a href="/home/"><h2>Home</h2></a>
         </div>
         <!-- SEARCH -->
         <div class="search_bar_box_profile">
@@ -23,7 +21,7 @@
             <form action="/action_page.php" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <!--<button type="submit"><i class="fa fa-search"></i></button> -->
-                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
+                <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
     </header>
@@ -32,36 +30,44 @@
     <div id="profile">
         <!-- PROFILE PICTURE CONTAINTER -->
         <div class="picture_container">
-            <img src="{{ '/' + user.Login + '/profile_image' }}" alt="Profile picture" class="profile_picture">
+            <img src="{{ img_src }}" alt="Profile picture" class="profile_picture">
         </div>
 
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
-            <h1> {{ user.Login }}</h1><br>
-            <p>{{ user.description }}</p>
-            <br><b>Groups:</b><br>
-            <ol>
-                {% for groupname in groups %}
-                <li>{{ groupname }}</li>
-                {% endfor %}
-            </ol>
-            <br><button type="button" onclick="show_settings()">Settings</button>
+            <h1>{{ username }}</h1><br>
+            <p>{{ name }}</p>
+            <p>{{ surname}}</p>
+            <p>{{ description }}</p>
+            <br>
+            {% if admin or owner %}
+            <button type="button" onclick="show_settings()">Settings</button>
+            {% endif %}
         </div>
     </div>
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
         <form action="{{ url_for('profile_settings') }}" method="POST">
-            <h1>Settings</h2><br>
+            <h1>Settings</h1><br>
 
             <label for="login"><b>Change Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box">
 
+            <label for="fname"><b>Change first name</b></label>
+            <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box">
+
+            <label for="lname"><b>Change last name</b></label>
+            <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box">
+
             <label for="password1"><b>Change Password</b></label>
-            <input name="password1" type="text" placeholder="Enter Password" autocomplete="new-password" class="input_box">
+            <input name="password1" type="password" placeholder="Enter Password" autocomplete="new-password" class="input_box">
 
             <label for="password2"><b>Repeat Password</b></label>
-            <input name="password2" type="text" placeholder="Repeat Password" class="input_box">
+            <input name="password2" type="password" placeholder="Repeat Password" autocomplete="new-password" class="input_box">
+
+            <label for="group_picture"><b>Profile picture</b></label>
+            <input name="profile_photo" type="image" placeholder="Profile pricture" capture><br><br>
 
             <br>
             <label for="group_privacy"><b>Visibility for:</b></label><br>
@@ -70,15 +76,20 @@
             <input name="visibility" type="radio" id="visibility2" value="60">
             <label for="visibility2">Registered users</label><br>
             <input name="visibility" type="radio" id="visibility3" value="100">
-            <label for="visibility3">Members of your groups</label><br><br>
-
-            <label for="group_picture"><b>Profile picture</b></label>
-            <input name="profile_photo" type="image" placeholder="Profile pricture" required="" capture><br><br>
+            <label for="visibility3">Members of your groups</label><br><br>    
+            
+            <label for="description"><b>Description</b></label>
+            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box"><br>
 
             <label for="current_password"><b>Enter current password</b></label>
-            <input name="current_password" type="text" placeholder="Enter current password" class="input_box" required>
+            <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
+
+            <!-- TODO -->
+            {% if admin or owner %}
+            <button formaction="">Delete profile</button>
 
             <button type="submit">Save changes</button> <button type="button" onclick="show_profile_info()">Go Back</button>
+            {% endif %}
         </form>
     </div>
 </body>
@@ -93,7 +104,6 @@
         document.getElementById("settings_container").style.display= 'none';
         document.getElementById("profile").style.display= 'block';
     }
-
 </script>
 </html>
 </doctype>

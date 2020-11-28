@@ -7,8 +7,10 @@
         <title>Free chat</title>
     </head>
     <body>
-        <div class="middle style">
-            <img src="{{ url_for('static', filename='pictures/lost.png') }}" alt="Lost">
+        <div class="middle">
+            <span>You got lost...</span><br><br>
+            <img src="{{ url_for('static', filename='pictures/lost.png') }}" alt="Lost"/><br><br>
+            <span>Let us take you back <a href="/welcome/"><b>home</b></a></span>
         </div>        
     </body>
 </html>

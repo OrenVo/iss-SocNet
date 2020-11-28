@@ -34,6 +34,8 @@ header {
     float: left;
     padding: 0;
     margin: 0;
+
+    background-color: #f2f1ec;
 }
 
 a { /* Hyperlinks will have inherited color and no decoration */
@@ -41,12 +43,30 @@ a { /* Hyperlinks will have inherited color and no decoration */
     text-decoration: none;
 }
 
+a:hover {
+    color: #00c14c;
+}
+
+label {
+    font-weight: bold;
+}
 
 input {
     border: none;
     font-weight: bold;
     height: 40px;
 }
+
+/* Code from https://www.digitalocean.com/community/tutorials/css-styling-form-input-validity */
+input:required:focus:valid {
+    background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;
+    background-size: 25px;
+}
+input:focus:invalid {
+    background: url("https://assets.digitalocean.com/labs/icons/exclamation-triangle-fill.svg") no-repeat 95% 50% lightsalmon;
+    background-size: 25px;
+}
+
 
 button, input[type=button] { /* Set a style for all buttons */
     height: 40px;
@@ -695,7 +715,7 @@ footer{
     left: 50%;
     transform: translate(-50%, -50%);
     float: left;
-    background-color: inherit;
+    background-color: red;
 }
 /*************************/
 
@@ -709,7 +729,7 @@ footer{
 
     float: left;
     display: none;
-    background-color: inherit;
+    background-color: brown;
 }
 /**********************/
 
@@ -766,7 +786,6 @@ footer{
 
 .input_box {
     width: 100%;
-    padding: 15px;
     margin: 5px 0 22px 0;
     display: inline-block;
     border: none;
