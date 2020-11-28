@@ -22,14 +22,14 @@ DROP TABLE IF EXISTS Ranking;
 CREATE TABLE IF NOT EXISTS Users
 (
 	ID INT PRIMARY KEY AUTO_INCREMENT,
+	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
 	Name NVARCHAR(20),
-	Description NVARCHAR(2000),
 	Surname NVARCHAR(20),
+	Description NVARCHAR(2000),
 	Mode TINYINT DEFAULT 0,
 	Password CHAR(97) NOT NULL,
 	Image MEDIUMBLOB,
 	Mimetype VARCHAR(20),
-	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
 	-- FK
 	Last_group INT DEFAULT NULL
     -- CONSTRAINT FK_group_users FOREIGN KEY (Last_group) REFERENCES `Group` (ID) ON DELETE CASCADE    -- Last Group visited
@@ -120,5 +120,5 @@ CREATE TABLE IF NOT EXISTS Ranking (
     CONSTRAINT FK_thread_ranking FOREIGN KEY (Message, Thread_name, ID_group) REFERENCES Messages (ID, Thread_name, ID_group) ON DELETE CASCADE
 );
 
-INSERT INTO Users (Name, Surname, Mode, Password, Login, Last_group) VALUES ('Ad', 'Min', 2, '','Admin',1);
+INSERT INTO Users (Name, Surname, Mode, Password, Login, Last_group) VALUES ('Ad', 'Min', 2, '0ac7e8c8a32bb18f6bd759c8492797cb88b23196d2cc4b9cf858599e88932382$66828464eb8187b380cee0bb6203b62f','Admin',1);
 INSERT INTO `Group` (Name, Mode, Description, User_ID) VALUES ('Server_info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));

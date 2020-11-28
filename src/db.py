@@ -19,7 +19,6 @@ Base = automap_base(mysql.Model)
 class User(Base, UserMixin):
     __tablename__ = 'users'
 
-    @property
     def get_id(self):
         return text_type(self.ID)
 
@@ -135,6 +134,12 @@ class DB:
 
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
+
+    def send_message(self, user, group, thread_name, message):
+        ...  # TODO send_message
+
+    def update_user(self, ID: int, login: str, name: str, surname: str, description: str, mode: int, image: tuple, password: str, last_group_id: int, ):
+        ...  # TODO update_user
 
     def getuserrights(self, user, group) -> dict:
         result = {
