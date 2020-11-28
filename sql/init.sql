@@ -23,8 +23,9 @@ CREATE TABLE IF NOT EXISTS Users
 (
 	ID INT PRIMARY KEY AUTO_INCREMENT,
 	Name NVARCHAR(20),
+	Description NVARCHAR(2000),
 	Surname NVARCHAR(20),
-	Mode TINYINT DEFAULT 0 ,
+	Mode TINYINT DEFAULT 0,
 	Password CHAR(97) NOT NULL,
 	Image MEDIUMBLOB,
 	Mimetype VARCHAR(20),
@@ -116,4 +117,4 @@ CREATE TABLE IF NOT EXISTS Ranking (
 );
 
 INSERT INTO Users (Name, Surname, Mode, Password, Login, Last_group) VALUES ('Ad', 'Min', 2, '','Admin',1);
-INSERT INTO `Group` (Name, Mode, Description, User_ID) VALUES ('Server info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
+INSERT INTO `Group` (Name, Mode, Description, User_ID) VALUES ('Server_info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
