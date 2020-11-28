@@ -9,13 +9,31 @@
     <title>Free chat</title>
 </head>
 <body>
+    <!-- FLASH WAY -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <!-- The Modal for Settings -->
+        <div id="myFlashModal" class="flash_modal">
+           <!-- Modal content for Settings-->
+           <div class="flash_modal_content">
+               <span class="close flash_close">&times;</span>
+               <ul class=flashes>
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+                </ul>
+           </div>
+        </div>
+    {% endif %}
+    {% endwith %}     
+
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
         <div id="home_page_profile">
             <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
-                    <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description">
                     <h2>{{ user.Login }}</h2>
@@ -39,14 +57,14 @@
         <!-- SEARCH -->
         <div id="search_bar_box">
             <!-- TODO searchbar -->
-            <form action="{{ url_for('') }}" id="search_bar_form" >
+            <form action="{{ url_for('search') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
 
         <!-- LOGOUT -->
-        <button formaction="/logout/">Logout</button>
+        <button formaction="{{ url_for('logout') }}">Logout</button>
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -58,13 +76,13 @@
 
             <!-- GROUPS -->
             {% for group in groups %}
-            <a href="{{ url_for('see_threads', groupname=group.name) }}">
+            <a href="{{ url_for('group', name=group.Name) }}">
                 <div class="group_container">
                     <div class="left_panel_group_picture_container">
-                        <img src="{{ url_for('group_image') }}" alt="Group icon" class="left_panel_group_picture">
+                        <img src="{{ # }}" alt="Group icon" class="left_panel_group_picture">
                     </div>
                     <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">{{ group.name }}</h3>
+                        <h3 class="left_panel_group_title">{{ group.Name }}</h3>
                     </div>
                 </div>
             </a>
@@ -101,7 +119,7 @@
             </div>
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
-                <form action="{{ url_for('create_thread', groupname=groupname)}}" method="POST">
+                <form action="{{ url_for('create_thread', group=groupname)}}" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
@@ -123,42 +141,42 @@
 
                 <!-- JOIN GROUP -->
                 {% if user or visitor %}
-                <a href="/joingroup/">
+                <a href="{{ url_for('ask_mem', group=groupname) }}">
                     <input type="button" value="Join group" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- LEAVE GROUP -->
                 {% if moderator or member %}
-                <a href="/leavegroup/">
+                <a href="{ url_for('leave_group', group=groupname) }}">
                     <input type="button" value="Leave group" class="leave_group" />
                 </a>
                 {% endif %}
 
                 <!-- REQUEST MOD -->
                 {% if member %}
-                <a href="/request_mod/">
+                <a href="{ url_for('ask_mod', group=groupname) }}">
                     <input type="button" value="Request mod" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- SEE MEMBERS -->
                 {% if admin or owner or moderator or member %}
-                <a href="/see_members/">
+                <a href="{ url_for('members', group=groupname) }}">
                     <input type="button" value="Members" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- SETTINGS -->
                 {% if admin or owner %}
-                <a href="/group_settings/">
+                <a href="{ url_for('group_settings', group=groupname) }}">
                     <input type="button" value="Settings" class="join_group" />
                 </a>
                 {% endif %}
 
                 <!-- NOTIFICATIONS -->
                 {% if admin or owner or moderator %}
-                <a href="{{ 'notifications/group/' + 'groupname' }}">
+                <a href="{{ url_for('group_notifications', group=groupname) }}">
                     <div class="notifications"></div>
                 </a>
                 {% endif %}
@@ -174,7 +192,7 @@
                 {% endif %}              
 
                 {% for thread in threads %}
-                <a href="{{ url_for('see_posts', groupname=groupname, threadsubject=thread.subject) }}">
+                <a href="{{ url_for('thread', group=groupname, thread=thread.Subject) }}">
                     <div class="thread_container">
                         <h3>{{ thread.Subject }}</h3>
                         <p>{{ thread.Description}}</p>
@@ -204,6 +222,24 @@
         document.getElementById("create_new_thread_button").style.display = 'block';
         document.getElementById("creating_new_thread").style.display = 'none';
     }    
+
+    // Get the modal
+    var modal = document.getElementById("myFlashModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    } 
 </script>
 </html>
 </doctype>
