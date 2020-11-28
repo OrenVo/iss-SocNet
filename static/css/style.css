@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    font-size: 16px;
 }
 
 /* 001624 009a94 f2f1ec*/
@@ -17,6 +19,27 @@ h1, h2, h3 {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     color: #001624;
+}
+
+h1 {
+    font-size: 23px;
+}
+h1:hover {
+    color: inherit;
+}
+
+h2 {
+    font-size: 20px;
+}
+h2:hover {
+    color: inherit;
+}
+
+h3 {
+    font-size: 18px;
+}
+h3:hover {
+    color: inherit;
 }
 
 article {
@@ -268,6 +291,10 @@ footer{
     float: left;
 }
 
+#profile_container:hover {
+    color: red;
+}
+
 #profile_container_image {
     height: 100%;
     width: 20%;
@@ -399,10 +426,6 @@ footer{
     float: left;
 }
 
-.left_panel_group_text:hover {
-    background-color: grey;
-}
-
 .left_panel_group_title {
     height: 50%;
     width: 100%;
@@ -430,94 +453,8 @@ footer{
     margin-left: 25%;
 }
 
-/* Dropdown */
-.dropbtn_notifications {
-    background-image: url('pictures/bell2.png');
-    background-repeat: no-repeat;
-    background-size: 40%;
-    background-position-x: 50%;
-    background-position-y: 50%;
-}
-
-.dropbtn {
-    height: 100%;
-    width: 100%;
-
-    background-color: inherit;
-    border: none;
-    cursor: pointer;
-}
-
-  .dropdown {
-    position: relative;
-    display: inline-block;
-
-    width: 20%;
-    height: 100%;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown_button {
-    width: 100%;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown_button:hover {background-color: #3e8e41}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-  }
-
-/* Click Dropdown Content (Hidden by Default) */
-.click_dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-  /* Links inside the dropdown */
-  .click_dropdown-content div {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    box-shadow: gray 1px 1px 1px;
-  }
-
-  .myDropdown {
-      width: 400px;
-  }
-
-  /* Change color of dropdown links on hover */
-  .click_dropdown-content a:hover {background-color: #ddd}
-
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-  .show {display:block;}
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
 
 /***********************/
 
@@ -631,8 +568,6 @@ footer{
 .group_header {
     height: auto;
     width: 100%;
-
-    background-color: brown;
 }
 
 .rp_gi {
@@ -722,10 +657,6 @@ footer{
 
     text-align: center;
 }
-
-.thread_container:hover {
-    background-color: grey;
-}
 /*********/
 
 /* Posts */
@@ -739,8 +670,6 @@ footer{
 .post {
     height: auto;
     width: 100%;
-
-    color: white;
 }
 
 .post_text {
@@ -784,7 +713,6 @@ footer{
     left: 50%;
     transform: translate(-50%, -50%);
     float: left;
-    background-color: red;
 }
 /*************************/
 
@@ -798,7 +726,6 @@ footer{
 
     float: left;
     display: none;
-    background-color: brown;
 }
 /**********************/
 
