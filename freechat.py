@@ -19,6 +19,7 @@ from datetime import timedelta
 from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, send_from_directory, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
 import io
+import re
 
 """
 TODO List:
@@ -72,6 +73,9 @@ def register():
     login = request.form["login"]
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
+    if not login.isascii():
+        flash("Invalid username. Please use only lower & upper case, numbers.")
+        return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
         flash("Username is already taken.")
         return render_template("registration_page.html", form=request.form)
@@ -124,6 +128,8 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
+    name = Group.query.filter_by(ID=current_user.Last_group).first().Name
+    eprint("NAME:   ----------------------------- " + name)  # TODO NOW
     return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
 
 
@@ -145,8 +151,9 @@ def profile(name):
     else:
         admin = False
         owner = False
-
-    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src="/" + user.Login + "/profile_image", admin=admin, owner=owner)
+    # TODO member = get_membership(current_user)
+    member = None
+    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src="/" + user.Login + "/profile_image", admin=admin, owner=owner, groups=member)
 
 
 @app.route("/profile_image/")
@@ -226,28 +233,31 @@ def group(name):
     if group is None:
         return redirect(url_for("lost"))
     private = group.Mode & 1
+    closed = group.Mode & 2
+    if closed:
+        private = True
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
-
     if current_user.is_anonymous:
         username = "Visitor"
         profile_pic = default_pictures_path + default_profile_picture
     else:
         username = current_user.Login
         profile_pic = "/" + current_user.Login + "/profile_image"
-
     rights = db.getuserrights(current_user, group)
-
-    closed = group.Mode & 2
-    if closed and (rights["user"] or rights["visitor"]):
-        # TODO redirect(url_for("join", name=group.Name)) return joingroup.html
-        return redirect(url_for("tresspass"))
+    # TODO member = get_membership(current_user)
+    member = None
 
     group_pic = "/image/groups/" + group.Name
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
-    return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groupname=group.Name, groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed)
+    if closed and (rights["user"] or rights["visitor"]):
+        threads = None
+    else:
+        # TODO threads = get_threads(group)
+        threads = None
+    return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groups=member, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
 
 
 @app.route("/settings/group/<name>/")
@@ -313,7 +323,7 @@ def thread(group, thread):
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
     # TODO co potrebuje threadpage
-    return render_template("thread_page.html", groupname=group, threadname=thread)
+    return render_template("thread_page.html", groupname=group.replace("_", " "), threadname=thread)
 
 
 ################################################################################
@@ -331,6 +341,7 @@ def create_group():
     # Ikona (Optional)
     # Owner (current_user)
     # TODO
+    Name = replace_whitespace(Name)
     pass
 
 
@@ -342,6 +353,7 @@ def create_thread(group):
     # Názov
     # Popis (optional)
     # TODO
+    Name = replace_whitespace(Name)
     pass
 
 
@@ -439,10 +451,12 @@ def egg():
     return render_template("egg_page.html")
 
 
+@app.route("/tresspass/")
 def tresspass():
     return render_template("tresspassing_page.html")
 
 
+@app.route("/lost/")
 def lost():
     return render_template("lost_page.html")
 
@@ -495,10 +509,9 @@ def receive_image():
     return status_code
 
 
-# TODO Remove
-@app.route("/test/")
-def test():
-    return render_template("test.html")
+def replace_whitespace(input):
+    output = re.sub(r'\s', "_", input)
+    return output
 
 
 if __name__ == "__main__":
