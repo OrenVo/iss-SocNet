@@ -61,7 +61,9 @@
             <h1>Settings</h1><br>
 
             <label for="login"><b>Change Login</b></label>
-            <input name="login" type="text" placeholder="Enter Login" class="input_box">
+            <input name="login" type="text" placeholder="Enter Login" class="input_box" 
+            {% if form  %} value="{{ form['login'] }}"{% endif %}
+            pattern="^([\x00-\x7F])\S+$" title="ASCII characters only, no white spaces">
 
             <label for="fname"><b>Change first name</b></label>
             <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box">

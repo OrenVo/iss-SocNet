@@ -90,7 +90,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
                         </div>
                     </div>
                 </a>
@@ -107,7 +107,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
                         </div>
                     </div>
                 </a>
@@ -124,7 +124,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
                         </div>
                     </div>
                 </a>
@@ -139,7 +139,10 @@
                 <form action="{{ url_for('create_group') }}" method="POST">
                     <h2>Create new group</h2>
                     <label for="group_name"><b>Group name</b></label>
-                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name" class="input_box" required>
+                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name"
+                    {% if form  %} value="{{ form['groupname'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
+                    title="ASCII characters only, no white spaces"
+                    class="input_box" required>
 
                     <label for="description"><b>Description</b></label>
                     <input name="description" type="text" placeholder="Enter description" id="description" class="input_box" required>
