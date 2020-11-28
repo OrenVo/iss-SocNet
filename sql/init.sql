@@ -64,6 +64,8 @@ CREATE TABLE IF NOT EXISTS Moderate (   -- Vazba <uživatel moderuje skupinu>
     CONSTRAINT FK_group_moderate FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
 
+CREATE INDEX Moderate_user_index ON iis_soc_net.Moderate (User);
+
 CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
     ID      INT NOT NULL UNIQUE AUTO_INCREMENT, -- for easier mapping to sql alchemy orm
     User    INT NOT NULL,
@@ -72,6 +74,8 @@ CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
     CONSTRAINT FK_user_is_member FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
     CONSTRAINT FK_group_is_member FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
+
+CREATE INDEX Is_member_user_index ON iis_soc_net.Is_member (User);
 
 CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o členství/ práva moderátora>
     User          INT NOT NULL,
