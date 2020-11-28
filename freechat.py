@@ -16,7 +16,7 @@ from src.db import Applications, Group, Is_member, Messages, Moderate, Ranking, 
 from src.error import eprint
 from collections import namedtuple  # TODO necessary?
 from datetime import timedelta
-from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, session, url_for, send_from_directory
+from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, send_from_directory, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
 import io
 
@@ -43,6 +43,7 @@ default_group = Group.query.filter_by(ID=1).first()
 default_pictures_path = '/static/pictures/defaults/'
 default_profile_picture = "default_profile_picture.png"
 default_group_picture = "default_group_picture.jpg"
+
 
 ################################################################################
 # Visitors
@@ -123,7 +124,7 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    return redirect(url_for("group", name=current_user.Last_group.Name))
+    return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
 
 
 @app.route("/profile/<name>/")
@@ -160,11 +161,13 @@ def profile_img():
 @app.route("/profiles/<name>/profile_image/")
 def user_img(name):
     user = User.query.filter_by(Login=name).first()
+    '''
     if user is None:
-        return redirect(url_for("lost")) # V této funkci nesmíme redirectnout.
+        return redirect(url_for("lost"))  # TODO TOP V této funkci nesmíme redirectnout.
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome", next=request.url)) # Redirect
+        return redirect(url_for("welcome", next=request.url))  # TODO TOP Redirect
+    '''
 
     if user.Image is None:
         return send_from_directory('/static/pictures/defaults/', default_profile_picture, mimetype="image/png")
@@ -204,8 +207,9 @@ def logout():
 # Groups
 ################################################################################
 
-@app.route("/group/<name>/image")
-@app.route("/groups/<name>/image")
+# TODO TOP
+@app.route("/image/group/<name>/")
+@app.route("/image/groups/<name>/")
 def group_img(name):
     group = Group.query.filter_by(Name=name).first()
     if group.Image:
@@ -227,7 +231,7 @@ def group(name):
 
     if current_user.is_anonymous:
         username = "Visitor"
-        profile_pic = default_profile_picture
+        profile_pic = default_pictures_path + default_profile_picture
     else:
         username = current_user.Login
         profile_pic = "/" + current_user.Login + "/profile_image"
@@ -239,9 +243,7 @@ def group(name):
         # TODO redirect(url_for("join", name=group.Name)) return joingroup.html
         return redirect(url_for("tresspass"))
 
-    if group.Image is None:
-        group_pic = default_group_picture
-
+    group_pic = "/image/groups/" + group.Name
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
