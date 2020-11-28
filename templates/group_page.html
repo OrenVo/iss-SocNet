@@ -1,6 +1,5 @@
 <!-- TODO pridat settings a members button -->
 <!-- TODO nacitat nove prispevky -->
-<!-- TODO logout button -->
 <!doctype html>
 <html>
 <head>
@@ -45,6 +44,9 @@
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
+
+        <!-- LOGOUT -->
+        <button formaction="/logout/">Logout</button>
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -175,7 +177,7 @@
                 <a href="{{ url_for('see_posts', groupname=groupname, threadsubject=thread.subject) }}">
                     <div class="thread_container">
                         <h3>{{ thread.Subject }}</h3>
-                        <p>Author: {{ thread.Username }}</p>
+                        <p>{{ thread.Description}}</p>
                     </div>
                 </a>
                 {% endfor %}
