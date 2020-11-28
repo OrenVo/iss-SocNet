@@ -1,4 +1,3 @@
-<!-- TODO zmenit default picture pre profil aj group -->
 <!doctype html>
 <html>
 <head>
@@ -18,7 +17,7 @@
         </div>
 
         <!-- SEARCH -->
-        <div class="search_bar_box_profile">
+        <div class="search_bar_box">
             <!-- TODO search -->
             <form action="#" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
@@ -28,7 +27,11 @@
         </div>
 
         <!-- LOGOUT -->
-        <button formaction="{{ url_for('logout') }}">Logout</button>
+        <div class="logout_container">            
+            <a href="{{ url_for('logout') }}">
+                <button>Logout</button>
+            </a>
+        </div>
     </header>
 
     <!-- PROFILE -->

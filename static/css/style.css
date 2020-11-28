@@ -47,10 +47,6 @@ a:hover {
     color: #00c14c;
 }
 
-label {
-    font-weight: bold;
-}
-
 input {
     border: none;
     font-weight: bold;
@@ -265,7 +261,7 @@ footer{
 
 /* Profile */
 
-#home_page_profile{
+#profile_container{
     height: 100%;
     width: 30%;
 
@@ -307,15 +303,14 @@ footer{
 /* Search */
 #search_bar_box {
     height: 100%;
-    width: 70%;
+    width: 40%;
 
     float: left;
     padding-top: 15px;
-    padding-left: 28%;
 }
 
 #search_bar_form {
-    float: left;
+    margin-left: 25%;
 }
 
 #search_bar_input {
@@ -332,6 +327,17 @@ footer{
 }
 /***********************/
 
+/* Logout */
+.logout_container {
+    height: 100%;
+    width: 30%;
+
+    float: left;
+    padding: 15px 0px;
+    text-align: center;
+}
+/***********/
+
 /* Left panel*/
 #left_panel {
     height: auto;
@@ -344,6 +350,23 @@ footer{
 #create_new_group {
     height: 50px;
     width: 100%;
+}
+
+.lp_gn {
+    width: 100%;
+
+    padding: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #001624;
+}
+
+.lp_gt {
+    width: 100%;
+    
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
 }
 
 /***********************/
@@ -604,6 +627,60 @@ footer{
 }
 /***********************/
 
+/*  GROUP HEADER */
+.group_header {
+    height: auto;
+    width: 100%;
+
+    background-color: brown;
+}
+
+.rp_gi {
+    height: 120px;
+    width: 50%;
+
+    float: left;
+}
+
+.img_center {
+    display: block;
+    width: 50%;
+    max-height: 100px;
+    margin-top: 10px;
+    margin-right: 20px;
+    float: right;
+}
+
+.rp_gn {
+    height: 120px;
+    width: 50%;
+
+
+    text-align: left;
+    padding: 30px 20px;
+
+    float: left;
+}
+
+.rp_gd {
+    height: auto;
+    width: 100%;
+
+    float: left;
+    padding: 15px;
+    text-align: center;
+}
+
+.rp_gb {
+    height: auto;
+    width: 100%;
+
+    float: left;
+    padding: 15px;
+}
+
+/*****************/
+
 .join_group {
     height: 50px;
     width: 100px;
@@ -695,15 +772,6 @@ footer{
     float: left;
     padding: 25px 0px;
     text-align: center;
-}
-
-.search_bar_box_profile {
-    height: 100%;
-    width: 70%;
-
-    float: left;
-    padding-top: 15px;
-    padding-left: 28%;
 }
 
 /***********************/
