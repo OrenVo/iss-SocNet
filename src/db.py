@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 from configparser import ConfigParser
 import os.path
-from flask._compat import text_type
 from sqlalchemy.orm import defer, undefer
 import secrets
 from sqlalchemy.ext.automap import automap_base
@@ -20,6 +19,7 @@ class User(Base, UserMixin):
     __tablename__ = 'users'
 
     def get_id(self):
+        from flask._compat import text_type
         return text_type(self.ID)
 
 
@@ -130,7 +130,7 @@ class DB:
             moderator = [x for x in Moderator if x.Group == mem.Group]
             if moderator:
                 Member.delete(mem)
-        return {'owner': Ownership, 'moderator': Moderator, 'member': Member}
+        return {'gowner': Ownership, 'gmoderator': Moderator, 'gmember': Member}
 
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
@@ -138,8 +138,27 @@ class DB:
     def send_message(self, user, group, thread_name, message):
         ...  # TODO send_message
 
-    def update_user(self, ID: int, login: str, name: str, surname: str, description: str, mode: int, image: tuple, password: str, last_group_id: int, ):
-        ...  # TODO update_user
+    def insert_to_user(self, ID: int = None, login: str = None, name: str = None, surname: str = None, description: str = None, mode: int = None, image: tuple = None, password: str = None, last_group_id: int = None):
+        if ID is None:   # user doesn't exist create new
+            ...
+        else:  # user should exist just update him
+            ...
+        if login:
+            ...
+        if name:
+            ...
+        if surname:
+            ...
+        if description:
+            ...
+        if mode:
+            ...
+        if image:
+            ...
+        if password:
+            ...
+        if last_group_id:
+            ...
 
     def getuserrights(self, user, group) -> dict:
         result = {
