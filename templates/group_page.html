@@ -1,4 +1,3 @@
-<!-- TODO pridat settings a members button -->
 <!-- TODO nacitat nove prispevky -->
 <!doctype html>
 <html>
@@ -88,10 +87,10 @@
                 <a href="{{ url_for('group', name=group.Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
-                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
                         </div>
                     </div>
                 </a>
@@ -105,10 +104,10 @@
                 <a href="{{ url_for('group', name=group.Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
-                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
                         </div>
                     </div>
                 </a>
@@ -122,10 +121,10 @@
                 <a href="{{ url_for('group', name=group.Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
-                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                            <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                            <h3 class="left_panel_group_title">{{ group[0].Name }}</h3>
                         </div>
                     </div>
                 </a>
@@ -237,7 +236,6 @@
 
             <!-- GROUP THREADS -->
             <div id="group_threads">
-
                 <!-- CREATE NEW THREAD -->
                 {% if admin or owner or moderator or member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
