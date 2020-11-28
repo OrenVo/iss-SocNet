@@ -9,23 +9,24 @@
 </head>
 <body>
 
-    <!-- FLASH WAY -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <!-- The Modal for Settings -->
-        <div id="myFlashModal" class="flash_modal">
-           <!-- Modal content for Settings-->
-           <div class="flash_modal_content">
-               <span class="close flash_close">&times;</span>
-               <ul class=flashes>
-                {% for message in messages %}
-                    <li id="flash">{{ message }}</li>
-                {% endfor %}
-                </ul>
-           </div>
-        </div>
-    {% endif %}
-    {% endwith %}
+      <!-- FLASH WAY -->
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          <!-- The Modal for Settings -->
+          <div id="myFlashModal" class="flash_modal">
+             <!-- Modal content for Settings-->
+             <div class="flash_modal_content">
+                 <span class="close flash_close">&times;</span>
+                 <ul class=flashes>
+                  {% for message in messages %}
+                      {{ message }}
+                  {% endfor %}
+                  </ul>
+             </div>
+          </div>
+      {% endif %}
+      {% endwith %}     
+  
 
     <!-- HEADER -->
     <div id="main_page_header">
