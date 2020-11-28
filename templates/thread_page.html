@@ -37,14 +37,14 @@
         <!-- SEARCH -->
         <div id="search_bar_box">
             <!-- TODO -->
-            <form action="{{ url_for('') }}" id="search_bar_form" >
+            <form action="#" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
 
         <!-- LOGOUT -->
-        <button formaction="/logout/">Logout</button>
+        <button formaction="{{ url_for('logout') }}">Logout</button>
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
