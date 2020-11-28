@@ -12,6 +12,33 @@ import secrets
 from sqlalchemy.ext.automap import automap_base
 
 
+mysql = SQLAlchemy()
+Base = automap_base(mysql.Model)
+
+
+class User(Base, UserMixin):
+    __tablename__ = 'users'
+
+    def get_id(self):
+        from flask._compat import text_type
+        return text_type(self.ID)
+
+class Group(Base):
+    __tablename__ = 'group'
+class Thread(Base):
+    __tablename__ = 'thread'
+class Messages(Base):
+    __tablename__ = 'messages'
+class Moderate(Base):
+    __tablename__ = 'moderate'
+class Is_member(Base):
+    __tablename__ = 'is_member'
+class Applications(Base):
+    __tablename__ = 'applications'
+class Ranking(Base):
+    __tablename__ = 'ranking'
+
+
 def load_db_config(fname='db.ini', sect='mysql'):
     """Load config file with information to connect to DB
        :returns dictionary of parameters loaded from file fname section sect
@@ -55,12 +82,18 @@ class DB:
         else:
             return None
 
-    def check_password(self, password: str, username: str):
+    def check_password(self, password: str, username: str) -> bool:
         user = self.db.session.query(User).filter_by(Login=username).first()
         if user is None: return False
         p_s = user.Password.split('$')
         hash_alg = hashlib.sha256((p_s[1] + password).encode())
         return p_s[0] == hash_alg.hexdigest()
+
+    def change_password(self, login: str, new_psw: str) -> None:
+        user = self.db.session.query(User).filter_by(Login=login)
+        new_hash = self.create_password(new_psw)
+        user.Password = new_hash
+        self.db.session.commit()
 
     @staticmethod
     def create_password(password: str):
@@ -75,6 +108,19 @@ class DB:
     def get_user(self, username):
         instance = self.db.session.query(User).filter_by(Login=username).first()
         return instance
+
+    def get_membership(self, user: User) -> dict:
+        Ownership = self.db.session.query(Group).filter_by(User_ID=User.ID).all()
+        Moderator = self.db.session.query(Moderate).filter_by(User=User.ID).all()
+        Member = self.db.session.query(Is_member).filter_by(User=User.ID).all()
+        for mem in Member:
+            moderator = [x for x in Moderator if x.Group == mem.Group]
+            if moderator:
+                Member.delete(mem)
+        return {'owner': Ownership, 'moderator': Moderator, 'member': Member}
+
+    def get_threads(self, group: Group) -> list:
+        return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
 
     def getuserrights(self, user, group) -> dict:
         result = {
@@ -103,31 +149,8 @@ class DB:
 
         return result
 
-mysql = SQLAlchemy()
-Base = automap_base(mysql.Model)
 
-# CHECK ME
-class User(Base, UserMixin):
-    __tablename__ = 'users'
 
-    def get_id(self):
-        from flask._compat import text_type
-        return text_type(self.ID)
-
-class Group(Base):
-    __tablename__ = 'group'
-class Thread(Base):
-    __tablename__ = 'thread'
-class Messages(Base):
-    __tablename__ = 'messages'
-class Moderate(Base):
-    __tablename__ = 'moderate'
-class Is_member(Base):
-    __tablename__ = 'is_member'
-class Applications(Base):
-    __tablename__ = 'applications'
-class Ranking(Base):
-    __tablename__ = 'ranking'
 
 
 # Note this function must be called before others functions that works with database!!!
@@ -149,12 +172,7 @@ def init_db(app, fname='db.ini', sect='mysql'):
     mysql.init_app(app)
     global Base
     Base.prepare(mysql.engine, reflect=True)
-    global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
-    from sqlalchemy import MetaData
-    meta = MetaData()
-    from sqlalchemy import Table
-    group = Table('group', meta, autoload=True,autoload_with=mysql.engine)
-    eprint([c.name for c in group.columns])
+    #global User, Group, Thread, Messages, Moderate, Is_member, Applications, Ranking
     # User = Base.classes.users
     # Group = Base.classes.group
     # Thread = Base.classes.thread
