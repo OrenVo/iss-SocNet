@@ -16,7 +16,7 @@ from src.db import Applications, Group, Is_member, Messages, Moderate, Ranking, 
 from src.error import eprint
 from collections import namedtuple  # TODO necessary?
 from datetime import timedelta
-from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, session, url_for
+from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, session, url_for, send_from_directory
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
 import io
 
@@ -40,8 +40,9 @@ login_manager.login_view = "welcome"
 login_manager.login_message = "You will need to log in to gain access this page."
 
 default_group = Group.query.filter_by(ID=1).first()
-default_profile_picture = "/static/pictures/defaults/default_profile_picture.png"
-default_group_picture = "/static/pictures/defaults/default_group_picture.jpg"
+default_pictures_path = '/static/pictures/defaults/'
+default_profile_picture = "default_profile_picture.png"
+default_group_picture = "default_group_picture.jpg"
 
 ################################################################################
 # Visitors
@@ -160,13 +161,13 @@ def profile_img():
 def user_img(name):
     user = User.query.filter_by(Login=name).first()
     if user is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("lost")) # V této funkci nesmíme redirectnout.
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome", next=request.url)) # Redirect
 
     if user.Image is None:
-        return default_profile_picture
+        return send_from_directory('/static/pictures/defaults/', default_profile_picture, mimetype="image/png")
     else:
         file_object = io.BytesIO(user.Image)  # Creates file in memory
         return send_file(file_object, mimetype=user.Mimetype)  # Sends file to path
@@ -185,7 +186,7 @@ def profile_settings():
 @login_required
 def user_settings(name):
     admin = current_user.Mode & 2
-    owner = current_user.Login == user.Login
+    owner = current_user.Login == name
     if not admin and not owner:
         return redirect(url_for("tresspass"))
     # TODO return settings_page.html
@@ -202,6 +203,16 @@ def logout():
 ################################################################################
 # Groups
 ################################################################################
+
+@app.route("/group/<name>/image")
+@app.route("/groups/<name>/image")
+def group_img(name):
+    group = Group.query.filter_by(Name=name).first()
+    if group.Image:
+        file_object = io.BytesIO(group.Image)
+        return send_file(file_object, mimetype=group.Mimetype)
+    else:
+        return send_from_directory(default_pictures_path, default_group_picture, mimetype='image/png')
 
 
 @app.route("/group/<name>/")
@@ -230,14 +241,11 @@ def group(name):
 
     if group.Image is None:
         group_pic = default_group_picture
-    else:
-        file_object = io.BytesIO(group.Image)
-        group_pic = send_file(file_object, mimetype=group.Mimetype)
 
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
-    return render_template("group_page.html", username=user.Login, img_src=profile_pic, **rights, groupname=group.Name, groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed)
+    return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groupname=group.Name, groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed)
 
 
 @app.route("/settings/group/<name>/")
@@ -293,7 +301,7 @@ def ask_mod(name):
 @app.route("/group/<group>/<thread>/")
 @app.route("/groups/<group>/<thread>/")
 def thread(group, thread):
-    group = Group.query.filter_by(Name=name).first()
+    group = Group.query.filter_by(Name=group).first()
     if group is None:
         return redirect(url_for("lost"))
     thread = Thread.query.filter_by(Group_ID=group.ID, Name=thread).first()
