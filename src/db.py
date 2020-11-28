@@ -87,7 +87,9 @@ class DB:
         }
         if user.is_authenticated:
             result['user'] = True
-        else: result['visitor'] = True
+        else:
+            result['visitor'] = True
+            return result  # TODO visitor nema ine ako vstavane funkcie takze by to padlo #Roman
         # user = self.db.session.query(User).filter_by(Login=username).first()
         # group = self.db.session.query(Group).filter_by(ID=group).first()
         if user.Mode & 2:
