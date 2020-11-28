@@ -43,7 +43,7 @@ login_manager.login_message = "You will need to log in to gain access to this pa
 default_group = Group.query.filter_by(ID=1).first()
 default_pictures_path = '/static/pictures/defaults/'
 default_profile_picture = "default_profile_picture.png"
-default_group_picture = "default_group_picture.jpg"
+default_group_picture = "default_group_picture.png"
 
 
 ################################################################################
@@ -251,7 +251,6 @@ def group(name):
         group_pic = default_pictures_path + default_group_picture
     else:
         group_pic = "/image/groups/" + group.Name
-
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
@@ -267,14 +266,12 @@ def group(name):
 @app.route("/image/groups/<name>/")
 def group_img(name):
     group = Group.query.filter_by(Name=name).first()
-    '''
     # TODO test redirect
     if group is None:
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
-    '''
 
     file_object = io.BytesIO(group.Image)  # Creates file in memory
     return send_file(file_object, mimetype=group.Mimetype)  # Sends file to path
@@ -532,7 +529,6 @@ def receive_image():
     if file:
         blob = file.read()
         mimetype = file.mimetype
-        eprint(current_user.Login, mimetype, blob, sep="\n")  # TODO remove
         db.db = database
         if db.insert_image(current_user.Login, blob, mimetype) is None:
             status_code = Response(status=404)
