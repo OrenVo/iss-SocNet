@@ -20,6 +20,14 @@ from flask import flash, Flask, jsonify, redirect, render_template, request, Res
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
 import io
 
+"""
+TODO List:
+All TODOs in the file
+https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
+Login redirect from welcome
+Input link escaping?
+"""
+
 # App initialization #
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
@@ -282,6 +290,116 @@ def ask_mod(name):
     pass
 
 
+@app.route("/group/<group>/<thread>/")
+@app.route("/groups/<group>/<thread>/")
+def thread(group, thread):
+    group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, Name=thread).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+    private = group.Mode & 1
+    if private and current_user.is_anonymous:
+        return redirect(url_for("welcome"), next=request.url)
+    # TODO co potrebuje threadpage
+    return render_template("thread_page.html", groupname=group, threadname=thread)
+
+
+################################################################################
+# Create
+################################################################################
+
+@app.route("/create/group/new/", methods=["GET", "POST"])
+@app.route("/create/groups/new/", methods=["GET", "POST"])
+@login_required
+def create_group():
+    # Get ma dostane na tvoriacu stranku
+    # Názov
+    # Práva na čítanie
+    # Popis (optional)
+    # Ikona (Optional)
+    # Owner (current_user)
+    # TODO
+    pass
+
+
+@app.route("/create/<group>/thread/new/", methods=["GET", "POST"])
+@app.route("/create/<group>/threads/new/", methods=["GET", "POST"])
+@login_required
+def create_thread(group):
+    # Get ma dostane na tvoriacu stranku
+    # Názov
+    # Popis (optional)
+    # TODO
+    pass
+
+
+@app.route("/group/<group>/<thread>/new/", methods=["POST"])
+@app.route("/groups/<group>/<thread>/new/", methods=["POST"])
+@login_required
+def send_message(group, thread):
+    # Obsah
+    # TODO
+    pass
+
+
+@app.route("/group/<group>/<thread>/<message>/inc/")
+@app.route("/groups/<group>/<thread>/<message>/inc/")
+@login_required
+def increment(group, thread, message):
+    # TODO
+    pass
+
+
+@app.route("/group/<group>/<thread>/<message>/dec/")
+@app.route("/groups/<group>/<thread>/<message>/dec/")
+@login_required
+def decrement(group, thread, message):
+    # TODO
+    pass
+
+
+################################################################################
+# Moderation
+################################################################################
+
+@app.route("/group/<group>/<thread>/<message>/delete/")
+@app.route("/groups/<group>/<thread>/<message>/delete/")
+@login_required
+def delete(group, thread, message):
+    # TODO
+    pass
+
+
+@app.route("/kick/group/<group>/<name>/")
+@app.route("/kick/groups/<group>/<name>/")
+@login_required
+def kick(group, name):
+    # TODO
+    pass
+
+
+@app.route("/profile/<name>/ban/")
+@app.route("/user/<name>/ban/")
+@app.route("/users/<name>/ban/")
+@app.route("/profiles/<name>/ban/")
+@login_required
+def ban(name):
+    # TODO
+    pass
+
+
+@app.route("/profile/<name>/delete/")
+@app.route("/user/<name>/delete/")
+@app.route("/users/<name>/delete/")
+@app.route("/profiles/<name>/delete/")
+@login_required
+def delete_account(name):
+    # TODO
+    pass
+
+
 ################################################################################
 # Other
 ################################################################################
@@ -352,11 +470,11 @@ def load_user(user_id):
 @app.route("/receive_image/", methods=["POST"])
 @login_required
 def receive_image():
-    file = request.files["img"]  # change img to id in template that upload profile images
+    file = request.files["img"]  # Change img to id in template that upload profile images
     if file:
         blob = file.read()
         mimetype = file.mimetype
-        eprint(current_user.Login, mimetype, blob, sep="\n")
+        eprint(current_user.Login, mimetype, blob, sep="\n")  # TODO remove
         db.db = database
         if db.insert_image(current_user.Login, blob, mimetype) is None:
             status_code = Response(status=404)
@@ -375,152 +493,3 @@ def test():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-# TODO too tired to check
-'''
-"""
-TODO List
-Redirect if login required from welcome
-Profile picture
-Escape links & other input to prevent crashes and hijacking
-
-Povinne & nepovinne udaje, oznacit povinne
-https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
-Dano"s file
-"""
-
-
-
-@app.route("/group/<group>/<thread>/")
-@app.route("/groups/<group>/<thread>/")
-def see_posts(group, thread):
-    group = Group.query.filter_by(Name=group).first()
-    if group is None:
-        return redirect(url_for("lost"))
-    private = group.Mode & 1
-    if private and current_user.is_anonymous:
-        return redirect(url_for("welcome"))
-    return render_template("thread_page.html", groupname=group, threadname=thread)
-
-
-
-
-
-
-@app.route("/create/group/", methods=["POST"])
-@app.route("/create/groups/", methods=["POST"])
-@login_required
-def create_group():
-    # Názov
-    # Práva na čítanie
-    # Popis (optional)
-    # Ikona (Optional)
-    # odkaz na vytvorenie v template
-    pass
-
-
-# @app.route("/create/group/<group>/newthread/")
-# @app.route("/create/groups/<group>/newthread/")
-@app.route("/create/<group>/thread/", methods=["POST"])
-@login_required
-def create_thread(group):
-    # Názov
-    # Skupina ?
-    # Popis (optional)
-    pass
-
-@app.route("/create/<group>/thread/", methods=["GET"])
-@login_required
-def render_create_thread():
-    # Názov
-    # Skupina ?
-    # Popis (optional)
-    pass
-
-
-@app.route("/group/<group>/<thread>/new/", methods=["POST"])
-@app.route("/groups/<group>/<thread>/new/", methods=["POST"])
-@login_required
-def send_message(group, thread):
-    # TODO
-    pass
-    return render_template("group_page.html", group=group, user=user, rights=rights, img_src=picture)
-
-
-@app.route("/group/<group>/<thread>/<message>/inc/")
-@app.route("/groups/<group>/<thread>/<message>/inc/")
-@login_required
-def increment(group, thread, message):
-    # TODO
-    pass
-
-
-@app.route("/group/<group>/<thread>/<message>/dec/")
-@app.route("/groups/<group>/<thread>/<message>/dec/")
-@login_required
-def decrement(group, thread, message):
-    # TODO
-    pass
-
-
-
-# Moderation #
-
-@app.route("/group/<group>/<thread>/<message>/delete/")
-@app.route("/groups/<group>/<thread>/<message>/delete/")
-@login_required
-def delete(group, thread, message):
-    group_instance = Group.query.filter_by(Name=group).first()
-    if group_instance is None:
-        return redirect(url_for("lost"))
-    # TODO
-    pass
-
-
-@app.route("/kick/group/<group>/<name>/")
-@app.route("/kick/groups/<group>/<name>/")
-@login_required
-def kick(group, name):
-    group_instance = Group.query.filter_by(Name=name).first()
-    if group_instance is None:
-        return redirect(url_for("lost"))
-    admin = current_user.Mode & 2
-    owner = current_user.ID == group_instance.User_ID
-    moderator = True  # TODO moderator
-    if not admin and not owner and not moderator:
-        return render_template("tresspassing_page.html")
-    # Kick user
-    pass
-
-
-@app.route("/profile/<name>/remove/")
-@app.route("/user/<name>/remove/")
-@app.route("/users/<name>/remove/")
-@app.route("/profiles/<name>/remove/")
-@login_required
-def remove(name):
-    admin = current_user.Mode & 2
-    owner = current_user.Login == name
-    if not admin and not owner:
-        return render_template("tresspassing_page.html")
-    if owner:
-        logout_user()
-    # TODO remove user from database
-    if owner:
-        return redirect(url_for("welcome"))
-    pass
-
-
-@app.route("/profile/<name>/ban/")
-@app.route("/user/<name>/ban/")
-@app.route("/users/<name>/ban/")
-@app.route("/profiles/<name>/ban/")
-@login_required
-def ban(name):
-    admin = current_user.Mode & 2
-    if not admin:
-        return render_template("tresspassing_page.html")
-    # TODO Ban user
-    pass
-'''
