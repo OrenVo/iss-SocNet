@@ -25,7 +25,7 @@
            </div>
         </div>
     {% endif %}
-    {% endwith %}     
+    {% endwith %}
 
     <!-- HEADER - profile + search + logo -->
     <header>
@@ -39,17 +39,17 @@
                     <h2>{{ user.Login }}</h2>
                     {% if admin %}
                     <p>Admin</p>
-                    {% elif owner %} 
+                    {% elif owner %}
                     <p>Ownder</p>
                     {% elif moderator %}
-                    <p>Moderator</p> 
-                    {% elif member %} 
+                    <p>Moderator</p>
+                    {% elif member %}
                     <p>Member</p>
-                    {% elif user %} 
+                    {% elif user %}
                     <p>User</p>
-                    {% else %} 
+                    {% else %}
                     <p>Visitor</p>
-                    {% endif %}                    
+                    {% endif %}
                 </div>
             </a>
         </div>
@@ -75,20 +75,22 @@
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
 
             <!-- GROUPS -->
-            {% for group in groups %}
-            <a href="{{ url_for('group', name=group.Name) }}">
-                <div class="group_container">
-                    <div class="left_panel_group_picture_container">
-                        <img src="{{ # }}" alt="Group icon" class="left_panel_group_picture">
-                    </div>
-                    <div class="left_panel_group_text">
-                        <h3 class="left_panel_group_title">{{ group.Name }}</h3>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
+            {% if groups %}
+              {% for group in groups %}
+              <a href="{{ url_for('group', name=group.Name) }}">
+                  <div class="group_container">
+                      <div class="left_panel_group_picture_container">
+                          <img src="#" alt="Group icon" class="left_panel_group_picture">
+                      </div>
+                      <div class="left_panel_group_text">
+                          <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                      </div>
+                  </div>
+              </a>
+              {% endfor %}
+            {% endif %}
         </div>
-        
+
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
@@ -189,16 +191,18 @@
                 <!-- CREATE NEW THREAD -->
                 {% if admin or owner or moderator or member %}
                 <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
-                {% endif %}              
+                {% endif %}
 
-                {% for thread in threads %}
-                <a href="{{ url_for('thread', group=groupname, thread=thread.Subject) }}">
-                    <div class="thread_container">
-                        <h3>{{ thread.Subject }}</h3>
-                        <p>{{ thread.Description}}</p>
-                    </div>
-                </a>
-                {% endfor %}
+                {% if threads %}
+                  {% for thread in threads %}
+                  <a href="{{ url_for('thread', group=groupname, thread=thread.Subject) }}">
+                      <div class="thread_container">
+                          <h3>{{ thread.Subject }}</h3>
+                          <p>{{ thread.Description}}</p>
+                      </div>
+                  </a>
+                  {% endfor %}
+                {% endif %}
             </div>
         </div>
     </article>
@@ -221,7 +225,7 @@
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
         document.getElementById("creating_new_thread").style.display = 'none';
-    }    
+    }
 
     // Get the modal
     var modal = document.getElementById("myFlashModal");
@@ -239,8 +243,7 @@
       if (event.target == modal) {
         modal.style.display = "none";
       }
-    } 
+    }
 </script>
 </html>
 </doctype>
-

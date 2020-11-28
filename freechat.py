@@ -30,7 +30,7 @@ Input link escaping?
 """
 
 # App initialization #
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
 app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
@@ -49,6 +49,13 @@ default_group_picture = "default_group_picture.jpg"
 ################################################################################
 # Visitors
 ################################################################################
+
+# TODO Remove
+@app.route("/aaaa/")
+@app.route("/test/")
+def test():
+    return render_template("test.html")
+
 
 @app.route("/")
 @app.route("/index/")
@@ -74,7 +81,8 @@ def register():
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
     if not login.isascii():
-        flash("Invalid username. Please use only lower & upper case, numbers.")
+        # " " TODO
+        flash("Invalid username. Please use only lower & upper case, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
         flash("Username is already taken.")
@@ -129,7 +137,6 @@ def guest():
 @login_required
 def home():
     name = Group.query.filter_by(ID=current_user.Last_group).first().Name
-    eprint("NAME:   ----------------------------- " + name)  # TODO NOW
     return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
 
 
@@ -152,8 +159,14 @@ def profile(name):
         admin = False
         owner = False
     # TODO member = get_membership(current_user)
+
+    if user.Image is None:
+        picture = default_pictures_path + default_profile_picture
+    else:
+        picture = "/profiles/" + user.Login + "/profile_image"
+
     member = None
-    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src="/" + user.Login + "/profile_image", admin=admin, owner=owner, groups=member)
+    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=picture, admin=admin, owner=owner, groups=member)
 
 
 @app.route("/profile_image/")
@@ -177,7 +190,9 @@ def user_img(name):
     '''
 
     if user.Image is None:
-        return send_from_directory('/static/pictures/defaults/', default_profile_picture, mimetype="image/png")
+        eprint("HEEEERE: " + default_pictures_path + default_profile_picture)
+        return send_from_directory(default_pictures_path, default_profile_picture, mimetype="image/png")
+        # return send_file(default_pictures_path + default_profile_picture, mimetype="image/png")
     else:
         file_object = io.BytesIO(user.Image)  # Creates file in memory
         return send_file(file_object, mimetype=user.Mimetype)  # Sends file to path
@@ -223,7 +238,7 @@ def group_img(name):
         file_object = io.BytesIO(group.Image)
         return send_file(file_object, mimetype=group.Mimetype)
     else:
-        return send_from_directory(default_pictures_path, default_group_picture, mimetype='image/png')
+        return send_from_directory(default_pictures_path, default_group_picture, mimetype='image/jpg')
 
 
 @app.route("/group/<name>/")
@@ -238,12 +253,14 @@ def group(name):
         private = True
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
-    if current_user.is_anonymous:
-        username = "Visitor"
-        profile_pic = default_pictures_path + default_profile_picture
-    else:
+
+
+    username = "Visitor"
+    profile_pic = default_pictures_path + default_profile_picture
+    if current_user.is_authenticated:
         username = current_user.Login
-        profile_pic = "/" + current_user.Login + "/profile_image"
+        if current_user.Image is not None:
+            profile_pic = "/profiles/" + current_user.Login + "/profile_image"
     rights = db.getuserrights(current_user, group)
     # TODO member = get_membership(current_user)
     member = None
@@ -260,10 +277,10 @@ def group(name):
     return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groups=member, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
 
 
-@app.route("/settings/group/<name>/")
-@app.route("/settings/groups/<name>/")
+@app.route("/settings/group/<group>/")
+@app.route("/settings/groups/<group>/")
 @login_required
-def group_settings(name):
+def group_settings(group):
     group = Group.query.filter_by(Name=name).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -276,10 +293,10 @@ def group_settings(name):
     return name + " settings page."
 
 
-@app.route("/notifications/group/<name>/")
-@app.route("/notifications/groups/<name>/")
+@app.route("/notifications/group/<group>/")
+@app.route("/notifications/groups/<group>/")
 @login_required
-def group_notifications(name):
+def group_notifications(group):
     group = Group.query.filter_by(Name=name).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -293,18 +310,18 @@ def group_notifications(name):
     return name + " notifications page."
 
 
-@app.route("/apply/member/group/<name>/")
-@app.route("/apply/member/groups/<name>/")
+@app.route("/apply/member/group/<group>/")
+@app.route("/apply/member/groups/<group>/")
 @login_required
-def ask_mem(name):
+def ask_mem(group):
     # TODO
     pass
 
 
-@app.route("/apply/moderator/group/<name>/")
-@app.route("/apply/moderator/groups/<name>/")
+@app.route("/apply/moderator/group/<group>/")
+@app.route("/apply/moderator/groups/<group>/")
 @login_required
-def ask_mod(name):
+def ask_mod(group):
     # TODO if not member: tresspass
     # TODO
     pass
@@ -353,6 +370,7 @@ def create_thread(group):
     # Názov
     # Popis (optional)
     # TODO
+    flash("Invalid username. Please use only lower & upper case, numbers.")
     Name = replace_whitespace(Name)
     pass
 
@@ -491,7 +509,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@app.route("/receive_image/", methods=["POST"])
+@app.route("/receive_image", methods=["POST"])
 @login_required
 def receive_image():
     file = request.files["img"]  # Change img to id in template that upload profile images
@@ -516,3 +534,26 @@ def replace_whitespace(input):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
+
+@app.route("/delete/<name>/")
+def delete_profile(name):
+    pass
+
+
+@app.route("/join/<group>/")
+def join_group(group):
+    pass
+
+@app.route("/leave/<group>/")
+def leave_group(group):
+    pass
+
+@app.route("/members/<group>/")
+def members(group):
+    pass

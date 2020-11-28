@@ -15,23 +15,23 @@
         <div id="home_page_profile">
             <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
-                    <img src="{{'/' + user.Login + '/profile_image' }}" alt="Profile picture" id="profile_picture_center"/>
+                    <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description">
                     <h2>{{ user.Login }}</h2>
                     {% if admin %}
                     <p>Admin</p>
-                    {% elif owner %} 
+                    {% elif owner %}
                     <p>Ownder</p>
                     {% elif moderator %}
-                    <p>Moderator</p> 
-                    {% elif member %} 
+                    <p>Moderator</p>
+                    {% elif member %}
                     <p>Member</p>
-                    {% elif user %} 
+                    {% elif user %}
                     <p>User</p>
-                    {% else %} 
+                    {% else %}
                     <p>Visitor</p>
-                    {% endif %}                    
+                    {% endif %}
                 </div>
             </a>
         </div>
