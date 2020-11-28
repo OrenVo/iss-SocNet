@@ -25,20 +25,20 @@ import re
 TODO List:
 All TODOs in the file
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
-Login redirect from welcome
+Welcome next parameter
 Input link escaping?
 """
 
 # App initialization #
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__)
 app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
-app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
+app.app_context().push()  # TODO Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "welcome"
-login_manager.login_message = "You will need to log in to gain access this page."
+login_manager.login_message = "You will need to log in to gain access to this page."
 
 default_group = Group.query.filter_by(ID=1).first()
 default_pictures_path = '/static/pictures/defaults/'
@@ -51,7 +51,6 @@ default_group_picture = "default_group_picture.jpg"
 ################################################################################
 
 # TODO Remove
-@app.route("/aaaa/")
 @app.route("/test/")
 def test():
     return render_template("test.html")
@@ -80,9 +79,8 @@ def register():
     login = request.form["login"]
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
-    if not login.isascii():
-        # " " TODO
-        flash("Invalid username. Please use only lower & upper case, numbers & symbols.")
+    if not login.isascii() or (login.find(" ") != -1):
+        flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
         flash("Username is already taken.")
@@ -136,7 +134,6 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    name = Group.query.filter_by(ID=current_user.Last_group).first().Name
     return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
 
 
@@ -158,15 +155,15 @@ def profile(name):
     else:
         admin = False
         owner = False
-    # TODO member = get_membership(current_user)
+
+    member = db.get_membership(user)
 
     if user.Image is None:
         picture = default_pictures_path + default_profile_picture
     else:
         picture = "/profiles/" + user.Login + "/profile_image"
 
-    member = None
-    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=picture, admin=admin, owner=owner, groups=member)
+    return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=picture, **member, admin=admin, owner=owner)
 
 
 @app.route("/profile_image/")
@@ -181,21 +178,14 @@ def profile_img():
 @app.route("/profiles/<name>/profile_image/")
 def user_img(name):
     user = User.query.filter_by(Login=name).first()
-    '''
-    if user is None:
-        return redirect(url_for("lost"))  # TODO TOP V této funkci nesmíme redirectnout.
+    if user is None:                        # TODO test redirect
+        return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome", next=request.url))  # TODO TOP Redirect
-    '''
+        return redirect(url_for("welcome", next=request.url))
 
-    if user.Image is None:
-        eprint("HEEEERE: " + default_pictures_path + default_profile_picture)
-        return send_from_directory(default_pictures_path, default_profile_picture, mimetype="image/png")
-        # return send_file(default_pictures_path + default_profile_picture, mimetype="image/png")
-    else:
-        file_object = io.BytesIO(user.Image)  # Creates file in memory
-        return send_file(file_object, mimetype=user.Mimetype)  # Sends file to path
+    file_object = io.BytesIO(user.Image)  # Creates file in memory
+    return send_file(file_object, mimetype=user.Mimetype)  # Sends file to path
 
 
 @app.route("/settings/")
@@ -229,17 +219,6 @@ def logout():
 # Groups
 ################################################################################
 
-# TODO TOP
-@app.route("/image/group/<name>/")
-@app.route("/image/groups/<name>/")
-def group_img(name):
-    group = Group.query.filter_by(Name=name).first()
-    if group.Image:
-        file_object = io.BytesIO(group.Image)
-        return send_file(file_object, mimetype=group.Mimetype)
-    else:
-        return send_from_directory(default_pictures_path, default_group_picture, mimetype='image/jpg')
-
 
 @app.route("/group/<name>/")
 @app.route("/groups/<name>/")
@@ -254,18 +233,25 @@ def group(name):
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
-
-    username = "Visitor"
-    profile_pic = default_pictures_path + default_profile_picture
-    if current_user.is_authenticated:
+    if current_user.is_anonymous:
+        username = "Visitor"
+        profile_pic = default_pictures_path + default_profile_picture
+    else:
         username = current_user.Login
-        if current_user.Image is not None:
+        if current_user.Image is None:
+            profile_pic = default_pictures_path + default_profile_picture
+        else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
+
     rights = db.getuserrights(current_user, group)
     # TODO member = get_membership(current_user)
     member = None
 
-    group_pic = "/image/groups/" + group.Name
+    if group.Image is None:
+        group_pic = default_pictures_path + default_group_picture
+    else:
+        group_pic = "/image/groups/" + group.Name
+
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
@@ -275,6 +261,23 @@ def group(name):
         # TODO threads = get_threads(group)
         threads = None
     return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groups=member, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
+
+
+@app.route("/image/group/<name>/")
+@app.route("/image/groups/<name>/")
+def group_img(name):
+    group = Group.query.filter_by(Name=name).first()
+    '''
+    # TODO test redirect
+    if group is None:
+        return redirect(url_for("lost"))
+    private = group.Mode & 1
+    if private and current_user.is_anonymous:
+        return redirect(url_for("welcome", next=request.url))
+    '''
+
+    file_object = io.BytesIO(group.Image)  # Creates file in memory
+    return send_file(file_object, mimetype=group.Mimetype)  # Sends file to path
 
 
 @app.route("/settings/group/<group>/")
@@ -310,6 +313,13 @@ def group_notifications(group):
     return name + " notifications page."
 
 
+@app.route("/members/group/<group>/")
+@app.route("/members/groups/<group>/")
+def members(group):
+    # TODO
+    pass
+
+
 @app.route("/apply/member/group/<group>/")
 @app.route("/apply/member/groups/<group>/")
 @login_required
@@ -322,7 +332,13 @@ def ask_mem(group):
 @app.route("/apply/moderator/groups/<group>/")
 @login_required
 def ask_mod(group):
-    # TODO if not member: tresspass
+    # if not member: tresspass
+    # TODO
+    pass
+
+
+@app.route("/leave/<group>/")
+def leave_group(group):
     # TODO
     pass
 
@@ -534,26 +550,3 @@ def replace_whitespace(input):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-
-@app.route("/delete/<name>/")
-def delete_profile(name):
-    pass
-
-
-@app.route("/join/<group>/")
-def join_group(group):
-    pass
-
-@app.route("/leave/<group>/")
-def leave_group(group):
-    pass
-
-@app.route("/members/<group>/")
-def members(group):
-    pass

@@ -30,7 +30,7 @@
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
-        <div id="home_page_profile">
+        <div id="profile_container">
             <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
                     <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
@@ -38,17 +38,17 @@
                 <div id="profile_container_description">
                     <h2>{{ user.Login }}</h2>
                     {% if admin %}
-                    <p>Admin</p>
+                    <h2>Admin</h2>
                     {% elif owner %}
-                    <p>Ownder</p>
+                    <h2>Ownder</h2>
                     {% elif moderator %}
-                    <p>Moderator</p>
+                    <h2>Moderator</h2>
                     {% elif member %}
-                    <p>Member</p>
+                    <h2>Member</h2>
                     {% elif user %}
-                    <p>User</p>
+                    <h2>User</h2>
                     {% else %}
-                    <p>Visitor</p>
+                    <h2>Visitor</h2>
                     {% endif %}
                 </div>
             </a>
@@ -59,12 +59,16 @@
             <!-- TODO searchbar -->
             <form action="{{ url_for('search') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <img src="{{url_for('static', filename='pictures/search_bar2.png')}}" alt="Search bar" id="search_bar_icon"/>
+                <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
 
         <!-- LOGOUT -->
-        <button formaction="{{ url_for('logout') }}">Logout</button>
+        <div class="logout_container">            
+            <a href="{{ url_for('logout') }}">
+                <button>Logout</button>
+            </a>
+        </div>
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -75,19 +79,57 @@
             <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
 
             <!-- GROUPS -->
-            {% if groups %}
-              {% for group in groups %}
-              <a href="{{ url_for('group', name=group.Name) }}">
-                  <div class="group_container">
-                      <div class="left_panel_group_picture_container">
-                          <img src="#" alt="Group icon" class="left_panel_group_picture">
-                      </div>
-                      <div class="left_panel_group_text">
-                          <h3 class="left_panel_group_title">{{ group.Name }}</h3>
-                      </div>
-                  </div>
-              </a>
-              {% endfor %}
+            <div class="lp_gn">GROUPS</div>
+
+            <!-- OWNER -->
+            {% if gowner %}
+                <div class="lp_gt">Owner</div>
+                {% for group in gowner %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- MODERATOR -->
+            {% if gmoderator %}
+                <div class="lp_gt">Moderator</div>
+                {% for group in gmoderator %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            {% endif %}
+
+            <!-- MEMBER -->
+            {% if gmember %}
+                <div class="lp_gt">Member</div>
+                {% for group in gmember %}
+                <a href="{{ url_for('group', name=group.Name) }}">
+                    <div class="group_container">
+                        <div class="left_panel_group_picture_container">
+                            <img src="#" alt="Group icon" class="left_panel_group_picture">
+                        </div>
+                        <div class="left_panel_group_text">
+                            <h3 class="left_panel_group_title">{{ group.Name }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
             {% endif %}
         </div>
 
@@ -119,6 +161,7 @@
                     <button type="button" onclick="create_new_group_hide()">Hide</button>
                 </form>
             </div>
+
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
                 <form action="{{ url_for('create_thread', group=groupname)}}" method="POST">
@@ -135,54 +178,61 @@
             </div>
 
             <!-- GROUP HEADER -->
-            <div class="group_header">
-                <h2>{{ groupname }}</h2>
-                <img src="group_src" alt="Group Image">
-                <h3>Owner: {{ groupowner }}</h3>
-                <p>{{ groupdescription }}</p>
+            <div class="group_header">             
+                <div class="rp_gi">
+                    <img src="{{ group_src }}" alt="Group Image" class="img_center">
+                </div>   
+                <div class="rp_gn">
+                    <h2>{{ groupname }}</h2>
+                    <h3>Owner: {{ groupowner }}</h3>
+                </div>                
+                <div class="rp_gd">
+                    {{ groupdescription }}
+                </div>
 
-                <!-- JOIN GROUP -->
-                {% if user or visitor %}
-                <a href="{{ url_for('ask_mem', group=groupname) }}">
-                    <input type="button" value="Join group" class="join_group" />
-                </a>
-                {% endif %}
+                <div class="rp_gb">
+                    <!-- JOIN GROUP -->
+                    {% if user or visitor %}
+                    <a href="{{ url_for('ask_mem', group=groupname) }}">
+                        <button>Join group</button>       
+                    </a>                                     
+                    {% endif %}
 
-                <!-- LEAVE GROUP -->
-                {% if moderator or member %}
-                <a href="{ url_for('leave_group', group=groupname) }}">
-                    <input type="button" value="Leave group" class="leave_group" />
-                </a>
-                {% endif %}
+                    <!-- LEAVE GROUP -->
+                    {% if moderator or member %}
+                    <a href="{ url_for('leave_group', group=groupname) }}">
+                        <button>Leave group</button>
+                    </a>
+                    {% endif %}
 
-                <!-- REQUEST MOD -->
-                {% if member %}
-                <a href="{ url_for('ask_mod', group=groupname) }}">
-                    <input type="button" value="Request mod" class="join_group" />
-                </a>
-                {% endif %}
+                    <!-- REQUEST MOD -->
+                    {% if member %}
+                    <a href="{ url_for('ask_mod', group=groupname) }}">
+                        <button>Request mod</button>
+                    </a>
+                    {% endif %}
 
-                <!-- SEE MEMBERS -->
-                {% if admin or owner or moderator or member %}
-                <a href="{ url_for('members', group=groupname) }}">
-                    <input type="button" value="Members" class="join_group" />
-                </a>
-                {% endif %}
+                    <!-- SEE MEMBERS -->
+                    {% if admin or owner or moderator or member %}
+                    <a href="{ url_for('members', group=groupname) }}">
+                        <button>Members</button>
+                    </a>
+                    {% endif %}
 
-                <!-- SETTINGS -->
-                {% if admin or owner %}
-                <a href="{ url_for('group_settings', group=groupname) }}">
-                    <input type="button" value="Settings" class="join_group" />
-                </a>
-                {% endif %}
+                    <!-- SETTINGS -->
+                    {% if admin or owner %}
+                    <a href="{ url_for('group_settings', group=groupname) }}">
+                        <button>Settings</button>
+                    </a>
+                    {% endif %}
 
-                <!-- NOTIFICATIONS -->
-                {% if admin or owner or moderator %}
-                <a href="{{ url_for('group_notifications', group=groupname) }}">
-                    <div class="notifications"></div>
-                </a>
-                {% endif %}
-
+                    <!-- NOTIFICATIONS -->
+                    {% if admin or owner or moderator %}
+                    <a href="{{ url_for('group_notifications', group=groupname) }}">
+                        <div class="notifications"></div>
+                    </a>
+                    {% endif %}
+                </div>                
             </div>
 
             <!-- GROUP THREADS -->

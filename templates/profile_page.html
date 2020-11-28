@@ -1,4 +1,3 @@
-<!-- TODO zmenit default picture pre profil aj group -->
 <!doctype html>
 <html>
 <head>
@@ -14,21 +13,26 @@
     <header>
         <!-- GO HOME -->
         <div class="go_home_boy">
-            <a href="{{ url_for('home') }}"><h2>Home</h2></a>
+            <a href="{{ url_for('home') }}">
+                <h2>Home</h2>
+            </a>
         </div>
 
         <!-- SEARCH -->
-        <div class="search_bar_box_profile">
-            <!-- TODO search -->
-            <form action="#" id="search_bar_form" >
+        <div id="search_bar_box">
+            <!-- TODO searchbar -->
+            <form action="{{ url_for('search') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <!--<button type="submit"><i class="fa fa-search"></i></button> -->
                 <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
             </form>
         </div>
 
         <!-- LOGOUT -->
-        <button formaction="{{ url_for('logout') }}">Logout</button>
+        <div class="logout_container">            
+            <a href="{{ url_for('logout') }}">
+                <button>Logout</button>
+            </a>
+        </div>
     </header>
 
     <!-- PROFILE -->
