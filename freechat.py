@@ -93,12 +93,12 @@ def login():
     password = request.form["psw"]
     if not db.check_password(password, login):
         flash("Your credentials were incorrect. Please try again.")
-        return redirect(url_for("welcome"), form=request.form)
+        return redirect(url_for("welcome", form=request.form))
 
     user = User.query.filter_by(Login=login).first()
     if not user:
         flash("Something went wrong. Please try again.")
-        return redirect(url_for("welcome"), form=request.form)
+        return redirect(url_for("welcome", form=request.form))
 
     login_user(user)
     return redirect(url_for("home"))
@@ -112,7 +112,7 @@ def guest():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     else:
-        return redirect(url_for("group"), group=default_group)
+        return redirect(url_for("group", name=default_group.Name))
 
 
 ################################################################################
@@ -122,7 +122,7 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    return redirect(url_for("group"), group=current_user.Last_group)
+    return redirect(url_for("group", name=current_user.Last_group.Name))
 
 
 @app.route("/profile/<name>/")
@@ -135,7 +135,7 @@ def profile(name):
         return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome"), next=request.url)
+        return redirect(url_for("welcome", next=request.url))
 
     if current_user.is_authenticated:
         admin = current_user.Mode & 2
@@ -150,7 +150,7 @@ def profile(name):
 @app.route("/profile_image/")
 @login_required
 def profile_img():
-    return redirect(url_for("user_img"), name=current_user.Login)
+    return redirect(url_for("user_img", name=current_user.Login))
 
 
 @app.route("/profile/<name>/profile_image/")
@@ -163,7 +163,7 @@ def user_img(name):
         return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome"), next=request.url)
+        return redirect(url_for("welcome", next=request.url))
 
     if user.Image is None:
         return default_profile_picture
@@ -175,7 +175,7 @@ def user_img(name):
 @app.route("/settings/")
 @login_required
 def profile_settings():
-    return redirect(url_for("user_settings"), name=current_user.Login)
+    return redirect(url_for("user_settings", name=current_user.Login))
 
 
 @app.route("/profile/<name>/settings/")
@@ -212,7 +212,7 @@ def group(name):
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome"), next=request.url)
+        return redirect(url_for("welcome", next=request.url))
 
     if current_user.is_anonymous:
         username = "Visitor"
@@ -225,7 +225,7 @@ def group(name):
 
     closed = group.Mode & 2
     if closed and (rights["user"] or rights["visitor"]):
-        # TODO redirect(url_for("join"), name=group.Name) return joingroup.html
+        # TODO redirect(url_for("join", name=group.Name)) return joingroup.html
         return redirect(url_for("tresspass"))
 
     if group.Image is None:
@@ -301,7 +301,7 @@ def thread(group, thread):
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
-        return redirect(url_for("welcome"), next=request.url)
+        return redirect(url_for("welcome", next=request.url))
     # TODO co potrebuje threadpage
     return render_template("thread_page.html", groupname=group, threadname=thread)
 
