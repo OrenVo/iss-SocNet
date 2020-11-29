@@ -7,7 +7,7 @@
     font-size: 16px;
 }
 
-/* 001624 009a94 f2f1ec 00c14c */
+/* colors: 001624 009a94 f2f1ec 00c14c */
 
 /**** Build-in tags ****/
 html {
@@ -25,24 +25,15 @@ h1, h2, h3 {
 }
 
 h1 {
-    font-size: 23px;
-}
-h1:hover {
-    color: inherit;
+    font-size: 26px;
 }
 
 h2 {
-    font-size: 20px;
-}
-h2:hover {
-    color: inherit;
+    font-size: 22px;
 }
 
 h3 {
     font-size: 18px;
-}
-h3:hover {
-    color: inherit;
 }
 
 article {
@@ -112,6 +103,11 @@ input[type=text], input[type=password] { /* Full-width inputs */
     padding: 12px 20px;
     display: inline-block;
     border: 1px solid #001624;
+  }
+
+  input[type=radio] {
+      line-height: 20px;
+      background-color: lawngreen;
   }
 
 input[type=text]:focus, input[type=password]:focus,
@@ -200,8 +196,7 @@ hr {
 
 #main_page_visitor {
     padding: 5px;
-
-    text-shadow: none;
+    padding-top: 4px;
     color: #001624;
     border: 2px solid #009a94;
 }
@@ -217,12 +212,24 @@ footer{
 
     padding: 20px;
     color: white;
-    text-align: center;
+    text-align: center;    
+}
+
+.footer_cookie {
     background-color: rgba(0,0,0,0.8);
 
     position: fixed;
     left: 0;
     bottom: 0;
+}
+
+.footer_copy {
+    padding: 4px 20px;
+    float: left;
+
+    font-size: 12px;
+    color: white;
+    background-color: black;
 }
 
 .cursor_pointer {
@@ -531,9 +538,13 @@ footer{
 /****************************/
 
 /* Table Members */
-.members_title {
+.group_rc {
+    height: auto;
+    width: 100%;
+
     text-align: center;
 }
+
 .table_members {
     width: 100%;
 }
@@ -701,21 +712,48 @@ footer{
 
 .post {
     height: auto;
+    width: 50%;
+
+    margin-top: 15px;
+    margin-left: 25%;
+
+    border: 1px solid black;
+}
+
+.post_header {
     width: 100%;
+
+    float: left;
+    padding: 3px 20px;
+
+    font-size: 14px;
+    color: #009a94;
+    background-color: #001624;    
 }
 
 .post_text {
     height: auto;
     width: 100%;
 
+    float: left;
     padding: 20px;
 }
 
-.ranking {
-    height: auto;
+.post_ranking {
     width: 100%;
 
-    padding: 10px 20px;
+    float: left;
+    padding: 3px 20px;
+
+    font-size: 14px;
+}
+
+.inc_trans {
+    transform: rotate(270deg);
+}
+
+.dec_trans {
+    transform: rotate(90deg);
 }
 
 .hr_for_posts {

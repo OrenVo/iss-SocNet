@@ -114,29 +114,33 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- The Modal for Members -->
-            <div class="modal">
-                <!-- Modal content for Members-->
-                <div class="modal-content">
-                    <span class="close close_members">&times;</span>
-                    <h2 class="members_title">Members</h2>
-                    <table class="table_members">
-                        <tr>
-                            <th>Picture</th>
-                            <th>Login</th>
-                            <th></th>
-                        </tr>
-                        {% for member in members %}
-                        <tr>
-                            <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
-                            <td><a href="{{ url_for('') }}">{{ member.username }}</a></td>
-                            {% if admin or owner or moderator %}
-                            <td><button>Remove</button></td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+            <!-- MEMBERS -->
+            <div class="group_rc">
+                <!-- Go back -->
+                <a href="#">
+                    <button>
+                        &#10094; Back
+                    </button>
+                </a>
+                
+                <!-- Title + table-->
+                <br><h1>Members</h1><br><hr>
+                <table class="table_members">
+                    <tr>
+                        <th><h2>Picture</h2></th>
+                        <th><h2>Login</h2></th>
+                        <th></th>
+                    </tr>
+                    {% for member in members %}
+                    <tr>
+                        <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
+                        <td><a href="{{ url_for('') }}">{{ member.username }}</a></td>
+                        {% if admin or owner or moderator %}
+                        <td><button>Remove</button></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>          
         </div>
     </article>

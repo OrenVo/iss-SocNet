@@ -50,37 +50,50 @@
             </a>
         </div>
     </header>
-    
-    <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
+
+    <!-- ARTICLE -->
     <article>
             <!-- POSTS -->
             <div id="thread_posts">
                 {% for post in posts %}
-                <div class="post">
-                    <div class="post_text">
-                        <a href="{{ url_for('profile', name=post.username) }}">
-                            <h4>{{ post.username }}</h4>
-                        </a><br>
-                        <p>{{ post.content }}</p>
-                    </div>
-                    {% if mod %}
-                    <button formaction="{{url_for('remove_post')}}">Remove post</button>
-                    {% endif %}
-                    <div class="ranking">
-                        <p>{{ post.rank }} 
-                            <!-- TODO tlacidla na increment decrement -->
-                        {% if is_logged %}
-                            <a href="{{ url_for('increment', postid=post.ID) }}">
-                                <b>increment</b>
+                    <div class="post">
+                        <!-- Post header -->
+                        <div class="post_header">
+                            <a href="{{ url_for('profile', name=post.username) }}">
+                                <h3>{{ post.Username }}</h3>
                             </a>
-                            <a href="{{ url_for('decrement', postid=post.ID) }}">
-                                <b>decrement</b>
-                            </a>                         
+                        </div>
+
+                        <!-- Post text -->
+                        <div class="post_text">                        
+                            <p>{{ post.content }}</p>
+                        </div>
+
+                        <!-- Remove button -->
+                        {% if admin or owner or moderator or mypost %}
+                        <a href="{{ url_for('delete_post') }}">
+                            <button>Delete post</button>
+                        </a>                    
                         {% endif %}
-                        </p>
+
+                        <!-- Post Ranking -->
+                        <div class="post_ranking">
+                            <p>{{ post.rank }} 
+                            <!-- TODO tlacidla na increment decrement -->
+                            {% if is_logged and %}
+                                <a href="{{ url_for('increment', postid=post.ID) }}">
+                                    <span class="inc_trans">&#10095;</span>
+                                </a>
+                                <a href="{{ url_for('decrement', postid=post.ID) }}">
+                                    <span class="dec_trans">&#10095;</span>
+                                </a>                         
+                            {% endif %}
+                            </p>
+                        </div>
+
+                        <!-- hr -->
+                        <hr class="hr_for_posts">
                     </div>
-                    <hr class="hr_for_posts">
-                </div>
                 {% endfor %}
 
                 <!-- TODO vytvorit pridanie postu -->

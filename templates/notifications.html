@@ -115,17 +115,28 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- TODO pridat url na profil a skupinu -->
-            {% for notfication in mem_notifications %}
-                <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
-                    <br><br><button>Accept</button> <button>Reject</button>
-                </div>
-            {% endfor %}
-            {% for notification in mod_notifications %}
-                <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
-                    <br><br><button>Accept</button> <button>Reject</button>
-                </div>
-            {% endfor %}
+            <!-- Notifications -->
+            <div class="group_rc">            
+                <!-- Go back -->
+                <a href="#">
+                    <button>
+                        &#10094; Back
+                    </button>
+                </a>
+                 
+                <br><h1>Members</h1><br><hr>
+                <!-- TODO pridat url na profil a skupinu -->
+                {% for notfication in mem_notifications %}
+                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
+                        <br><br><button>Accept</button> <button>Reject</button>
+                    </div>
+                {% endfor %}
+                {% for notification in mod_notifications %}
+                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
+                        <br><br><button>Accept</button> <button>Reject</button>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </article>
 </body>
