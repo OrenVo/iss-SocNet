@@ -800,7 +800,12 @@ footer{
     padding: 25px 0px;
     text-align: center;
 
+    font-weight: bold;
     color: #009a94;
+}
+
+.go_home_boy_text {
+    font-size: 22px;
 }
 
 /***********************/
@@ -831,6 +836,10 @@ footer{
 /**********************/
 
 /**** ---Classes--- ****/
+
+#rm_img {
+    display: none;
+}
 
 .remove_img_form {
     cursor: pointer;

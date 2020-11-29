@@ -61,55 +61,55 @@
 
     <!-- ARTICLE -->
     <article>
-            <!-- POSTS -->
-            <div id="thread_posts">
-                {% for post in posts %}
-                    <div class="post">
-                        <!-- Post header -->
-                        <div class="post_header">
-                            <a href="{{ url_for('profile', name=post.username) }}">
-                                <h3>{{ post.Username }}</h3>
-                            </a>
-                        </div>
+        <div>
 
-                        <!-- Post text -->
-                        <div class="post_text">                        
-                            <p>{{ post.content }}</p>
-                        </div>
-
-                        <!-- Remove button -->
-                        {% if admin or owner or moderator or mypost %}
-                        <a href="{{ url_for('delete_post') }}">
-                            <button>Delete post</button>
-                        </a>                    
-                        {% endif %}
-
-                        <!-- Post Ranking -->
-                        <div class="post_ranking">
-                            <p>{{ post.rank }} 
-                            <!-- TODO tlacidla na increment decrement -->
-                            {% if is_logged and %}
-                                <a href="{{ url_for('increment', postid=post.ID) }}">
-                                    <span class="inc_trans">&#10095;</span>
-                                </a>
-                                <a href="{{ url_for('decrement', postid=post.ID) }}">
-                                    <span class="dec_trans">&#10095;</span>
-                                </a>                         
-                            {% endif %}
-                            </p>
-                        </div>
-
-                        <!-- hr -->
-                        <hr class="hr_for_posts">
+        </div>
+        <!-- POSTS -->
+        <div id="thread_posts">
+            {% if posts %}
+            {% for post in posts %}
+                <div class="post">
+                    <!-- Post header -->
+                    <div class="post_header">
+                        <a href="{{ url_for('profile', name=post.username) }}">
+                            <h3>{{ post.Username }}</h3>
+                        </a>
                     </div>
-                {% endfor %}
-
-                <!-- TODO vytvorit pridanie postu -->
-                <form action="{{ url_for('send_message'), threadname=threadname}}" method="POST">
-                    <input type="text">
-                    <input type="button" value="Post">
-                </form>
-            </div>
+                    <!-- Post text -->
+                    <div class="post_text">                        
+                        <p>{{ post.Content }}</p>
+                    </div>
+                    <!-- Remove button -->
+                    {% if admin or owner or moderator or post.Mypost %}
+                    <a href="{{ url_for('delete_post') }}">
+                        <button>Delete post</button>
+                    </a>                    
+                    {% endif %}
+                    <!-- Post Ranking -->
+                    <div class="post_ranking">
+                        <p>{{ post.Rank }}
+                        <!-- TODO tlacidla na increment decrement -->
+                        {% if is_logged %}
+                            <a href="{{ url_for('increment', postid=post.ID) }}">
+                                <span class="inc_trans">&#10095;</span>
+                            </a>
+                            <a href="{{ url_for('decrement', postid=post.ID) }}">
+                                <span class="dec_trans">&#10095;</span>
+                            </a>                         
+                        {% endif %}
+                        </p>
+                    </div>
+                    <!-- hr -->
+                    <hr class="hr_for_posts">
+                </div>
+            {% endfor %}
+            {% endif %}
+            <!-- TODO vytvorit pridanie postu -->
+            <form action="{{ url_for('send_message'), threadname=threadname}}" method="POST">
+                <input type="text">
+                <input type="button" value="Post">
+            </form>
+        </div>
     </article>
 </body>
 </html>
