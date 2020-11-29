@@ -12,7 +12,7 @@
 <header>
     <!-- PROFILE -->
     <!-- If user is logged in -->
-    {% if current_user.is_authenitficated %}
+    {% if not member %}
         <div id="profile_container">
             <a href="{{ url_for('profile', name=username) }}">
                 <div id="profile_container_image">
@@ -23,7 +23,7 @@
                     {% if admin %}
                     Admin
                     {% elif owner %}
-                    Ownder
+                    Owner
                     {% elif moderator %}
                     Moderator
                     {% elif member %}

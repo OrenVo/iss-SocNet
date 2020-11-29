@@ -1,3 +1,4 @@
+<!-- TODO modal opytat sa ci si je isty napr odist zo skupiny -->
 <!-- TODO nacitat nove prispevky -->
 <!doctype html>
 <html>
@@ -162,8 +163,7 @@
 
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" 
-                    placeholder="Requiered Group pricture" accept="image/*" capture>
-                    <button onclick="reset($('#img_file'))">Reset image</button><br><br>
+                    placeholder="Requiered Group pricture" accept="image/*" capture><br><br>
 
 
                     <label for="visibility"><h3>Visibility for:</h3></label>
@@ -285,7 +285,7 @@
 
 
 <!-- JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+<script>
 
     /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
@@ -328,11 +328,6 @@
         modal.style.display = "none";
       }
     }
-
-    // Delete image from form
-    window.reset = function(e) {
-    e.wrap('<form>').closest('form').get(0).reset();
-    e.unwrap();}
 </script>
 </html>
 </doctype>
