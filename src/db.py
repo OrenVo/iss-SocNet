@@ -362,8 +362,8 @@ class DB:
         else:
             return True
 
-    def delete_group(self, group: Group):
-        self.db.session.delete(group)
+    def delete_from_db(self, obj):
+        self.db.session.delete(obj)
         try:
             self.db.session.commit()
         except Exception as e:
@@ -371,6 +371,11 @@ class DB:
             self.db.session.rollback()
             self.db.session.flush()
 
+    def get_messages(self, thread: Thread, limit: int = 200) -> list:  # TODO learn how to sort it
+        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Thread_name, ID_group=thread.ID_group).limit(limit)
+        if not retval:
+            retval = list()
+        return retval
     def getuserrights(self, user, group) -> dict:
         result = {
             'admin': None,
