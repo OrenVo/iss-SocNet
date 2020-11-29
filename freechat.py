@@ -20,6 +20,7 @@ from flask import flash, Flask, jsonify, redirect, render_template, request, Res
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
 import io
 import re
+import json
 
 """
 TODO List:
@@ -286,11 +287,9 @@ def group(name):
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
         db.insert_to_users(id=current_user.ID, last_group_id=group.ID)
 
-    if request.args.get('form'):
-        form = request.args['form']
-    else:
-        form = None
-
+    form =  request.args.get('form')
+    if form:
+        form = json.loads(form)
     return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads, form=form)
 
 
@@ -503,23 +502,23 @@ def create_group():
     name = replace_whitespace(name)
     if len(name) > 30:
         flash("Groupname is too long. Maximum is 30 characters.")
-        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=json.dumps(request.form)))
     if not db.check_groupname(name):
         flash("Group is already taken. Please use different one.")
-        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=json.dumps(request.form)))
     rights = int(request.form['visibility'])
     description = request.form["description"]
     if not description:
         description = None
     elif len(description) > 2000:
         flash("Description is too long. Maximum is 2000 characters.")
-        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=json.dumps(request.form)))
     image = request.files["group_image"]  # Change img to id in template that upload profile images
     if image:
         blob = image.read()
         if get_blob_size(blob) > 2:
             flash("Image is too big, maximum allowed size is 2MB.")
-            return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
+            return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=json.dumps(request.form)))
         mimetype = image.mimetype
         image = (blob, mimetype)
     else:

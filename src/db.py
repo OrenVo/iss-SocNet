@@ -263,7 +263,7 @@ class DB:
         else:
             return True
 
-    def insert_to_thread(self, group_id: int, thread_name: str = None, description: str = None):
+    def insert_to_thread(self, group_id: int, thread_name: str = None, description: str = None) -> bool:
         """
         Creates or update thread defined by group_id and thread_name
         :param group_id: Group to which thread belongs
@@ -276,15 +276,18 @@ class DB:
         :rtype: bool
         :raise ValueError on bad parameters
         """
-        thread = None
+        group = self.db.session.query(Group).filter_by(ID=group_id).first()
+        if group is None:
+            raise ValueError(f'Unknown parameter group_id: {group_id}')
+        if thread_name is None:
+            raise ValueError(f'Unknown parameter thread_name: {thread_name}')
         add = False
         if thread_name is not None:
             thread = self.db.session.query(Thread).filter_by(Group_ID=group_id, Name=thread_name).first()
             if thread is None:
-                raise ValueError(f'Unknown parameter group_id: {group_id} of thread_name {thread_name}')
-        else:
-            thread = Thread(Group_ID=group_id, Name=thread_name)
-            add = True
+                thread = Thread(Group_ID=group_id, Name=thread_name)
+                add = True
+
         if description:
             thread.Description = description
         if add:
