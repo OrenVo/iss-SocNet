@@ -172,7 +172,8 @@
 
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value="{{ form['group_image'] }}" {% endif %}
-                    placeholder="Requiered Group pricture" accept="image/*" capture> 
+                    placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+                    <p id="size"></p>
                     <span class="remove_img_form" onclick="remove_img()">Remove image</span>
                     <br><br>
 
@@ -326,6 +327,27 @@
     function remove_img(){
         document.getElementById("group_image").value = "";
     }
+
+    /* Validating file size */
+    Filevalidation = () => { 
+        const fi = document.getElementById('file'); 
+        // Check if any file is selected. 
+        if (fi.files.length > 0) { 
+            for (const i = 0; i <= fi.files.length - 1; i++) { 
+  
+                const fsize = fi.files.item(i).size; 
+                const file = Math.round((fsize / 1024)); 
+                // The size of the file. 
+                if (file >= 2048) { 
+                    alert( 
+                      "File too Big, please select a file less than 2mb"); 
+                } else { 
+                    document.getElementById('size').innerHTML = '<b>'
+                    + file + '</b> KB'; 
+                } 
+            } 
+        } 
+    } 
 
     // Get the modal
     var modal = document.getElementById("myFlashModal");
