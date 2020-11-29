@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
     <title>Free chat</title>
 </head>
-<body>
+<body id="height">
     <!-- FLASH WAY -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -250,19 +250,19 @@
                     </a>
                     {% endif %}
 
+                    <!-- NOTIFICATIONS -->
+                    {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
+                    <a href="{{ url_for('group_notifications', group=groupname) }}">
+                        <button>Notifications</button>
+                    </a>
+                    {% endif %}
+
                     <!-- SETTINGS -->
                     {% if admin or owner %}
                     <a href="{ url_for('group_settings', group=groupname) }}">
                         <button>Settings</button>
                     </a>
-                    {% endif %}
-
-                    <!-- NOTIFICATIONS -->
-                    {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
-                    <a href="{{ url_for('group_notifications', group=groupname) }}">
-                        <div class="notifications"></div>
-                    </a>
-                    {% endif %}
+                    {% endif %}                    
                 </div>
             </div>
 
@@ -289,7 +289,7 @@
         </div>
     </article>
 
-    <footer class="footer_copy">&#169; 2020 All rights reserved. Contact: da.andrasko@gmail.com</footer>
+    <footer id="footer_copy">&#169; 2020 All rights reserved. Contact: da.andrasko@gmail.com</footer>
 </body>
 
 

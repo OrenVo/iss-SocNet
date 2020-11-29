@@ -231,7 +231,7 @@ footer{
     bottom: 0;
 }
 
-.footer_copy {
+#footer_copy {
     padding: 4px 20px;
     float: left;
 
@@ -368,7 +368,7 @@ footer{
 }
 
 #search_bar_input:hover, #search_bar_input:focus{
-    background-color: #00c14c;
+    background-color: #d6d6d5;
 }
 
 #search_bar_icon {
@@ -677,6 +677,7 @@ footer{
 
     float: left;
     padding: 15px;
+    text-align: center;
 }
 
 /*****************/
