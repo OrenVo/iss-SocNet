@@ -172,7 +172,9 @@
 
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" 
-                    placeholder="Requiered Group pricture" accept="image/*" capture><br><br>
+                    placeholder="Requiered Group pricture" accept="image/*" capture> 
+                    <button onclick="remove_img()">Remove image</button>
+                    <br><br>
 
 
                     <label for="visibility"><h3>Visibility for:</h3></label>
@@ -318,6 +320,11 @@
         document.getElementById("creating_new_thread").style.display = 'none';
         ocument.getElementById("group_header").style.display = 'block';
         document.getElementById("group_threads").style.display ='block';
+    }
+
+    /* Remove image from form */
+    function remove_img(){
+        document.getElementById("group_image").value = "";
     }
 
     // Get the modal
