@@ -121,6 +121,14 @@ class DB:
         user = self.db.session.query(User).filter_by(Login=username).first()
         return user is None
 
+    def check_groupname(self, groupname: str):
+        group = self.db.session.query(Group).filter_by(Name=groupname).first()
+        return group is None
+
+    def check_threadname(self, group: Group, threadname: str):
+        thread = self.db.session.query(Thread).filter_by(Group_ID=group.ID, Name=threadname).first()
+        return thread is None
+
     def get_user(self, username):
         instance = self.db.session.query(User).filter_by(Login=username).first()
         return instance
@@ -166,6 +174,28 @@ class DB:
                 users.append(user)
             else:
                 eprint(f'[Error] Database inconsistency error. User in is_member table with id: {mem.User} doesn\'t exist.')
+        return users
+
+    def get_moderators(self, group: Group) -> list:
+        moderators = self.db.session.query(Moderate).filter_by(Group_ID=group.ID).all()
+        users = list()
+        for mod in moderators:
+            user = self.db.session.query(User).filter_by(ID=mod.User).first()
+            if user:
+                users.append(user)
+            else:
+                eprint(f'[Error] Database inconsistency error. User in moderate table with id: {mod.User} doesn\'t exist.')
+        return users
+
+    def get_applicants(self, group: Group) -> list:
+        applicants = self.db.session.query(Applications).filter_by(Group_ID=group.ID).all()
+        users = list()
+        for applicant in applicants:
+            user = self.db.session.query(User).filter_by(ID=applicant.User).first()
+            if user:
+                users.append(user)
+            else:
+                eprint(f'[Error] Database inconsistency error. User in is_member table with id: {applicant.User} doesn\'t exist.')
         return users
 
     def insert_to_group(self, id: int = None, name: str = None, mode: int = None, description: str = None,
@@ -281,7 +311,7 @@ class DB:
         add = False
         if id is None:  # user doesn't exist create new
             if login is not None and password is not None:
-                user = User(Login=login, Password=self.create_password(password))
+                user = User(Login=login, Password=self.create_password(password), Last_group=last_group_id)
             else:
                 raise ValueError("When id is None login and password must be provided.")
             add = True

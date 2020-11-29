@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS Users
 (
 	ID INT PRIMARY KEY AUTO_INCREMENT,
 	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
-	Name NVARCHAR(20),
-	Surname NVARCHAR(20),
-	Description NVARCHAR(2000),
+	Name VARCHAR(20),
+	Surname VARCHAR(20),
+	Description VARCHAR(2000),
 	Mode TINYINT DEFAULT 0,
 	Password CHAR(97) NOT NULL,
 	Image MEDIUMBLOB,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `Group` (
     ID                  INT PRIMARY KEY AUTO_INCREMENT,
     Name                VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
     Mode                TINYINT DEFAULT 0,
-    Description         NVARCHAR(2000),
+    Description         VARCHAR(2000),
     Image               MEDIUMBLOB,
     Mimetype            VARCHAR(20),
     -- FK
@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o člen
 );
 
 CREATE TABLE IF NOT EXISTS Thread (
-    Name               NVARCHAR(30) NOT NULL,
-    Description        NVARCHAR(2000),
+    Name               VARCHAR(30) NOT NULL,
+    Description        VARCHAR(2000),
 
     Group_ID           INT NOT NULL,   -- CK
     CONSTRAINT PK_thread PRIMARY KEY (Group_ID, Name),
@@ -98,12 +98,12 @@ CREATE TABLE IF NOT EXISTS Thread (
 
 CREATE TABLE IF NOT EXISTS Messages (
     ID             INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Content        NVARCHAR(2000),
+    Content        VARCHAR(2000),
     `Rank`         INT DEFAULT 0,
     Date_time      TIMESTAMP DEFAULT NOW(),
 
     User_ID        INT,  -- ck
-    Thread_name    NVARCHAR(30) NOT NULL,
+    Thread_name    VARCHAR(30) NOT NULL,
     ID_group       INT NOT NULL,
     CONSTRAINT Pk_messages PRIMARY KEY (ID, Thread_name, ID_group),
     CONSTRAINT FK_user_messages FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE SET NULL,
@@ -114,12 +114,12 @@ CREATE TABLE IF NOT EXISTS Ranking (
     User     INT NOT NULL,
     Message       INT NOT NULL,
     Message_author INT NOT NULL,
-    Thread_name    NVARCHAR(30) NOT NULL,
+    Thread_name    VARCHAR(30) NOT NULL,
     ID_group      INT NOT NULL,
     CONSTRAINT PK_ranking PRIMARY KEY (User, Message, Thread_name,ID_group),
     CONSTRAINT FK_user_ranking FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
     CONSTRAINT FK_thread_ranking FOREIGN KEY (Message, Thread_name, ID_group) REFERENCES Messages (ID, Thread_name, ID_group) ON DELETE CASCADE
 );
 
-INSERT INTO Users (Name, Surname, Mode, Password, Login, Last_group) VALUES ('Ad', 'Min', 2, '0ac7e8c8a32bb18f6bd759c8492797cb88b23196d2cc4b9cf858599e88932382$66828464eb8187b380cee0bb6203b62f','Admin',1);
+INSERT INTO Users (Name, Surname, Mode, Password, Login, Last_group) VALUES ('Ad', 'Min', 2, 'de29fefe1ec0ad7d92bae83d1026f5ad4b34763287861f0582ce12edce818a9e$7079bce6d49d3229153a15761cad36b3','Admin',1);
 INSERT INTO `Group` (Name, Mode, Description, User_ID) VALUES ('Server_info', 0, 'Server info', (SELECT ID FROM Users WHERE Login = 'Admin'));
