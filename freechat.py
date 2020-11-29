@@ -25,7 +25,11 @@ import re
 TODO List:
 All TODOs in the file
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
+Spracovanie flashu aj na grouppage zmena settingov a podobne
+DELETE GROUP button
+DELETE THREAD button
 Welcome next parameter
+Are you sure? Leve group, delete account, delete/ban user
 Input link escaping?
 """
 
@@ -79,7 +83,8 @@ def register():
     login = request.form["login"]
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
-    if not login.isascii() or (login.find(" ") != -1):
+
+    if not re.search(r"\s", login):
         flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
@@ -149,19 +154,19 @@ def profile(name):
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
+    if user.Image is None:
+        picture = default_pictures_path + default_profile_picture
+    else:
+        picture = "/profiles/" + user.Login + "/profile_image"
+
+    member = db.get_membership(user)
+
     if current_user.is_authenticated:
         admin = current_user.Mode & 2
         owner = current_user.Login == user.Login
     else:
         admin = False
         owner = False
-
-    member = db.get_membership(user)
-
-    if user.Image is None:
-        picture = default_pictures_path + default_profile_picture
-    else:
-        picture = "/profiles/" + user.Login + "/profile_image"
 
     return render_template("profile_page.html", username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=picture, **member, admin=admin, owner=owner)
 
@@ -178,7 +183,7 @@ def profile_img():
 @app.route("/profiles/<name>/profile_image/")
 def user_img(name):
     user = User.query.filter_by(Login=name).first()
-    if user is None:                        # TODO test redirect
+    if user is None:
         return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
@@ -204,7 +209,8 @@ def user_settings(name):
     owner = current_user.Login == name
     if not admin and not owner:
         return redirect(url_for("tresspass"))
-    # TODO return settings_page.html
+    # TODO return settings_page.html || GET & POST podla formulara zistit co urobit
+    flash("Your changes have been applied.")
     return name + " settings page."
 
 
@@ -226,12 +232,27 @@ def group(name):
     group = Group.query.filter_by(Name=name).first()
     if group is None:
         return redirect(url_for("lost"))
-    private = group.Mode & 1
     closed = group.Mode & 2
-    if closed:
-        private = True
+    private = (group.Mode & 1) | closed
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
+
+    if group.Image is None:
+        group_pic = default_pictures_path + default_group_picture
+    else:
+        group_pic = "/image/groups/" + group.Name
+
+    group_owner = User.query.filter_by(ID=group.User_ID).first()
+    if group_owner is None:
+        return redirect(url_for("lost"))
+
+    member = db.get_membership(current_user)
+
+    rights = db.getuserrights(current_user, group)
+    if closed and (rights["user"] or rights["visitor"]):
+        threads = None
+    else:
+        threads = db.get_threads(group)
 
     if current_user.is_anonymous:
         username = "Visitor"
@@ -243,30 +264,14 @@ def group(name):
         else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
 
-    rights = db.getuserrights(current_user, group)
-    # TODO member = get_membership(current_user)
-    member = None
-
-    if group.Image is None:
-        group_pic = default_pictures_path + default_group_picture
-    else:
-        group_pic = "/image/groups/" + group.Name
-    group_owner = User.query.filter_by(ID=group.User_ID).first()
-    if group_owner is None:
-        return redirect(url_for("lost"))
-    if closed and (rights["user"] or rights["visitor"]):
-        threads = None
-    else:
-        # TODO threads = get_threads(group)
-        threads = None
-    return render_template("group_page.html", username=username, img_src=profile_pic, **rights, groups=member, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
+    current_user.Last_group = group.ID
+    return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
 
 
 @app.route("/image/group/<name>/")
 @app.route("/image/groups/<name>/")
 def group_img(name):
     group = Group.query.filter_by(Name=name).first()
-    # TODO test redirect
     if group is None:
         return redirect(url_for("lost"))
     private = group.Mode & 1
@@ -281,7 +286,7 @@ def group_img(name):
 @app.route("/settings/groups/<group>/")
 @login_required
 def group_settings(group):
-    group = Group.query.filter_by(Name=name).first()
+    group = Group.query.filter_by(Name=group).first()
     if group is None:
         return redirect(url_for("lost"))
 
@@ -289,7 +294,8 @@ def group_settings(group):
     owner = current_user.ID == group.User_ID
     if not admin and not owner:
         return redirect(url_for("tresspass"))
-    # TODO return group_settings.html
+    # TODO return group_settings.html || GET & POST
+    flash("Your changes have been applied.")
     return name + " settings page."
 
 
@@ -297,7 +303,7 @@ def group_settings(group):
 @app.route("/notifications/groups/<group>/")
 @login_required
 def group_notifications(group):
-    group = Group.query.filter_by(Name=name).first()
+    group = Group.query.filter_by(Name=group).first()
     if group is None:
         return redirect(url_for("lost"))
 
@@ -306,15 +312,33 @@ def group_notifications(group):
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
     if not admin and not owner and not moderator:
         return redirect(url_for("tresspass"))
-    # TODO return group_settings.html
-    return name + " notifications page."
+    # TODO return group_notifications.html || GET & POST
+    return group + " notifications page."
 
 
 @app.route("/members/group/<group>/")
 @app.route("/members/groups/<group>/")
 def members(group):
-    # TODO
-    pass
+    group = Group.query.filter_by(Name=name).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    closed = group.Mode & 2
+    private = (group.Mode & 1) | closed
+    if private and current_user.is_anonymous:
+        return redirect(url_for("welcome", next=request.url))
+
+    admin = current_user.Mode & 2
+    owner = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+
+    '''
+    def get_members(self, group: Group) -> list:
+        return self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
+    '''
+
+    members = db.get_members(group)
+    # TODO return group_members.html || vedla mien aj gombiky na kick/ban/delete ak admin/owner/moderator
+    return group + " members page."
 
 
 @app.route("/apply/member/group/<group>/")
@@ -322,6 +346,8 @@ def members(group):
 @login_required
 def ask_mem(group):
     # TODO
+
+    flash("Your request has been sent for a review.")
     pass
 
 
@@ -329,7 +355,21 @@ def ask_mem(group):
 @app.route("/apply/moderator/groups/<group>/")
 @login_required
 def ask_mod(group):
-    # if not member: tresspass
+    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not member:
+        return redirect(url_for("tresspass"))
+
+    # TODO to iste co pri ask member
+    flash("Your request has been sent for a review.")
+    pass
+
+
+def accept_req():
+    # TODO
+    pass
+
+
+def reject_req():
     # TODO
     pass
 
@@ -337,6 +377,7 @@ def ask_mod(group):
 @app.route("/leave/<group>/")
 def leave_group(group):
     # TODO
+    flash("You have left the " + group + " group.")
     pass
 
 
@@ -356,12 +397,26 @@ def thread(group, thread):
     return render_template("thread_page.html", groupname=group.replace("_", " "), threadname=thread)
 
 
+@app.route("/delete/group/<group>/")
+@app.route("/delete/groups/<group>/")
+def delete_group(group):
+    # TODO
+    pass
+
+
+@app.route("/delete/group/<group>/<thread>/")
+@app.route("/delete/groups/<group>/<thread>/")
+def delete_thread(group, thread):
+    # TODO
+    pass
+
+
 ################################################################################
 # Create
 ################################################################################
 
-@app.route("/create/group/new/", methods=["GET", "POST"])
-@app.route("/create/groups/new/", methods=["GET", "POST"])
+@app.route("/create/group/new/", methods=["POST"])
+@app.route("/create/groups/new/", methods=["POST"])
 @login_required
 def create_group():
     # Get ma dostane na tvoriacu stranku
@@ -375,8 +430,8 @@ def create_group():
     pass
 
 
-@app.route("/create/<group>/thread/new/", methods=["GET", "POST"])
-@app.route("/create/<group>/threads/new/", methods=["GET", "POST"])
+@app.route("/create/<group>/thread/new/", methods=["POST"])
+@app.route("/create/<group>/threads/new/", methods=["POST"])
 @login_required
 def create_thread(group):
     # Get ma dostane na tvoriacu stranku
@@ -449,7 +504,7 @@ def ban(name):
 @app.route("/profiles/<name>/delete/")
 @login_required
 def delete_account(name):
-    # TODO
+    # TODO pri uzivatelovi ukryt do settings formulara a ak da heslo zmazat
     pass
 
 
@@ -514,7 +569,7 @@ def enforce_https():
 def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(hours=1)
-    session.modified = True  # TODO test, mam pocit že nefunguje
+    session.modified = True
 
 
 @login_manager.user_loader
@@ -540,7 +595,7 @@ def receive_image():
 
 
 def replace_whitespace(input):
-    output = re.sub(r'\s', "_", input)
+    output = re.sub(r"\s", "_", input)
     return output
 
 
