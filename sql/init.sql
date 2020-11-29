@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o člen
     CONSTRAINT FK_user_application FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
     CONSTRAINT FK_group_application FOREIGN KEY (`Group`) REFERENCES `Group` (ID) ON DELETE CASCADE
 );
+
 CREATE TABLE IF NOT EXISTS Thread (
     Name               NVARCHAR(30) NOT NULL,
     Description        NVARCHAR(2000),
