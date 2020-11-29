@@ -451,6 +451,12 @@ footer{
     float: left;
 }
 
+.group_container:hover {
+    background-color: #dad9d5;
+    color: #00c14c;
+}
+
+
 .left_panel_group_picture_container {
     height: 100%;
     width: 20%;
@@ -475,7 +481,9 @@ footer{
     height: 50%;
     width: 100%;
 
-    padding: 10px 0px;
+    padding: 25px 0px;
+    font-size: 18px;
+    font-weight: bold;
 
     display: inline-block;
     text-align: center;
@@ -685,6 +693,11 @@ footer{
 
 /* Create new thread */
 .create_new_thread {
+    height: 50px;
+    width: 100%;
+}
+
+#create_new_thread_button {
     height: 50px;
     width: 100%;
 }

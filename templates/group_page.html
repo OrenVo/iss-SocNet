@@ -1,5 +1,6 @@
 <!-- TODO modal opytat sa ci si je isty napr odist zo skupiny -->
 <!-- TODO nacitat nove prispevky -->
+<!-- TODO logout pre visitora na sign up -->
 <!doctype html>
 <html>
 <head>
@@ -76,12 +77,20 @@
             </form>
         </div>
 
-        <!-- LOGOUT -->
+        <!-- LOGOUT or LOGIN for visitor -->
+        {% if not visitor %}
         <div class="logout_container">
             <a href="{{ url_for('logout') }}">
                 <button>Logout</button>
             </a>
         </div>
+        {% else %}
+        <div class="logout_container">
+            <a href="{{ url_for('login') }}">
+                <button>Login</button>
+            </a>
+        </div>
+        {% endif %}
     </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -106,7 +115,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
@@ -123,7 +132,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
@@ -140,7 +149,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
@@ -262,7 +271,7 @@
                 <!-- CREATE NEW THREAD -->
                 {% if admin or owner or moderator or member %}
                 <button id="create_new_thread_button" onclick="create_new_thread_show()">
-                    <span style="font-size: 20px;">&#x2b;</span> Create New Thread
+                    &#x2b; Create New Thread
                 </button>
                 {% endif %}
 
