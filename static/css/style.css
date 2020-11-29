@@ -7,15 +7,19 @@
     font-size: 16px;
 }
 
-/* 001624 009a94 f2f1ec*/
+/* 001624 009a94 f2f1ec 00c14c */
 
 /**** Build-in tags ****/
 html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+body {
+    background-color: #f2f1ec;
+}
+
 h1, h2, h3 {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-weight: bold;
     color: #001624;
 }
@@ -57,7 +61,7 @@ header {
     padding: 0;
     margin: 0;
 
-    background-color: #f2f1ec;
+    background-color: #001624;
 }
 
 a { /* Hyperlinks will have inherited color and no decoration */
@@ -288,10 +292,8 @@ footer{
     width: 30%;
 
     float: left;
-}
-
-#profile_container:hover {
-    color: red;
+    font-weight: bold;
+    color: #009a94;
 }
 
 #profile_container_image {
@@ -342,6 +344,12 @@ footer{
 #search_bar_input {
     height: 35px;
     float: left;
+    color: #001624;
+    background-color: #f2f1ec;
+}
+
+#search_bar_input:hover, #search_bar_input:focus{
+    background-color: #00c14c;
 }
 
 #search_bar_icon {
@@ -351,6 +359,26 @@ footer{
     margin-top: 5px;
     margin-left: 5px;
 }
+
+.search_icon {
+    width: 32px;
+    height: 32px;
+
+    float: left;
+    margin-left: 2px;
+
+    background-image: url('../pictures/search.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+#search_bar_input:hover ~ a .search_icon, 
+#search_bar_input:focus ~ a .search_icon {
+    background-image: url('../pictures/hsearch.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
 /***********************/
 
 /* Logout */
@@ -384,7 +412,8 @@ footer{
     padding: 15px;
     font-weight: bold;
     text-align: center;
-    color: #001624;
+    color: #009a94;
+    background-color: #001624;
 }
 
 .lp_gt {
@@ -546,6 +575,7 @@ footer{
 
     float: right;
     padding: 5px;
+    text-align: center;
 
     display: none;
 }
@@ -564,7 +594,7 @@ footer{
 /***********************/
 
 /*  GROUP HEADER */
-.group_header {
+#group_header {
     height: auto;
     width: 100%;
 }

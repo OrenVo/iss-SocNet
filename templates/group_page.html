@@ -35,19 +35,19 @@
                     <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description">
-                    <h2>{{ user.Login }}</h2>
+                    {{ user.Login }}
                     {% if admin %}
-                    <h2>Admin</h2>
+                    Admin
                     {% elif owner %}
-                    <h2>Ownder</h2>
+                    Ownder
                     {% elif moderator %}
-                    <h2>Moderator</h2>
+                    Moderator
                     {% elif member %}
-                    <h2>Member</h2>
+                    Member
                     {% elif user %}
-                    <h2>User</h2>
+                    User
                     {% else %}
-                    <h2>Visitor</h2>
+                    Visitor
                     {% endif %}
                 </div>
             </a>
@@ -58,7 +58,9 @@
             <!-- TODO searchbar -->
             <form action="{{ url_for('search') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
+                <a href="#">
+                    <div class="search_icon"></div>
+                </a>                
             </form>
         </div>
 
@@ -75,7 +77,9 @@
         <!-- LEFT PANEL -->
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
-            <input type="button" value="Create New Group" id="create_new_group" onclick="create_new_group_show()">
+            <button id="create_new_group" onclick="create_new_group_show()">
+                <span style="font-size: 20px;">&#x2b;</span> Create New Group
+            </button>
 
             <!-- GROUPS -->
             <div class="lp_gn">GROUPS</div>
@@ -137,20 +141,21 @@
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
                 <form action="{{ url_for('create_group') }}" method="POST">
-                    <h2>Create new group</h2>
-                    <label for="group_name"><b>Group name</b></label>
-                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name"
+                    <h1>Create new group</h1> <hr>
+
+                    <label for="group_name"><h3>Group name</h3></label>
+                    <input name="group_name" type="text"  placeholder="Requiered Enter Group Name" id="group_name"
                     {% if form  %} value="{{ form['groupname'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
                     title="ASCII characters only, no white spaces"
                     class="input_box" required>
 
-                    <label for="description"><b>Description</b></label>
-                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box" required>
+                    <label for="description"><h3>Description</h3></label>
+                    <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box">
 
-                    <label for="group_image"><b>Group picture</b></label>
-                    <input name="group_image" type="file" placeholder="Group pricture" required="" capture><br><br>
+                    <label for="group_image"><h3>Group picture</h3></label>
+                    <input name="group_image" type="file" placeholder="Requiered Group pricture" capture><br><br>
 
-                    <label for="group_privacy"><b>Visibility for:</b></label><br>
+                    <label for="group_privacy"><h3>Visibility for:</h3></label><br>
                     <input id="visibility1" type="radio" name="visibility" value="30">
                     <label for="visibility1">All users</label><br>
                     <input id="visibility2" type="radio" name="visibility" value="60">
@@ -158,9 +163,11 @@
                     <input id="visibility3" type="radio" name="visibility" value="100">
                     <label for="visibility3">Members of this group</label><br>
 
-                    <br>
+                    <br> <hr>
                     <button type="submit" id="create_group_button">Create group</button>
-                    <button type="button" onclick="create_new_group_hide()">Hide</button>
+                    <button type="button" onclick="create_new_group_hide()">
+                        &#10094; Back
+                    </button>
                 </form>
             </div>
 
@@ -175,17 +182,17 @@
 
                     <br>
                     <button type="submit" id="create_thread_button">Create thread</button>
-                    <button type="button" onclick="create_new_thread_hide()">Hide</button>
+                    <button type="button" onclick="create_new_thread_hide()">&#10094; Back</button>
                 </form>
             </div>
 
             <!-- GROUP HEADER -->
-            <div class="group_header">             
+            <div id="group_header">             
                 <div class="rp_gi">
                     <img src="{{ group_src }}" alt="Group Image" class="img_center">
                 </div>   
                 <div class="rp_gn">
-                    <h2>{{ groupname }}</h2>
+                    <h1>{{ groupname }}</h2>
                     <h3>Owner: {{ groupowner }}</h3>
                 </div>                
                 <div class="rp_gd">
@@ -196,7 +203,7 @@
                     <!-- JOIN GROUP -->
                     {% if user or visitor %}
                     <a href="{{ url_for('ask_mem', group=groupname) }}">
-                        <button>Join group</button>       
+                        <button><span style="font-size: 16px;">&#x2b; Join group</span></button>       
                     </a>                                     
                     {% endif %}
 
@@ -241,7 +248,9 @@
             <div id="group_threads">
                 <!-- CREATE NEW THREAD -->
                 {% if admin or owner or moderator or member %}
-                <input type="button" value="Create New Thread" onclick="create_new_thread_show()" id="create_new_thread_button" class="create_new_thread">
+                <button id="create_new_thread_button" onclick="create_new_thread_show()">
+                    <span style="font-size: 20px;">&#x2b;</span> Create New Thread
+                </button>
                 {% endif %}
 
                 {% if threads %}
@@ -265,17 +274,25 @@
     /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
         document.getElementById("creating_new_group").style.display= 'block';
+        document.getElementById("group_header").style.display = 'none';
+        document.getElementById("group_threads").style.display ='none';
     }
     function create_new_group_hide(){
         document.getElementById("creating_new_group").style.display= 'none';
+        document.getElementById("group_header").style.display = 'block';
+        document.getElementById("group_threads").style.display = 'block';
     }
     function create_new_thread_show(){
         document.getElementById("create_new_thread_button").style.display = 'none';
         document.getElementById("creating_new_thread").style.display = 'block';
+        ocument.getElementById("group_header").style.display = 'none';
+        document.getElementById("group_threads").style.display ='none';
     }
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
         document.getElementById("creating_new_thread").style.display = 'none';
+        ocument.getElementById("group_header").style.display = 'block';
+        document.getElementById("group_threads").style.display ='block';
     }
 
     // Get the modal
