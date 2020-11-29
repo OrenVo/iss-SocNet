@@ -828,6 +828,16 @@ footer{
 /**********************/
 
 /**** ---Classes--- ****/
+
+.remove_img_form {
+    cursor: pointer;
+    color: #001624;
+}
+
+.remove_img_form:hover {
+    color: #009a94;
+}
+
 /* Text */
 .text_shadow_white {
     text-shadow: white 1px 1px 3px;
