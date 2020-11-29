@@ -363,6 +363,10 @@ class DB:
         self.db.session.delete(group)
         try:
             self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
 
     def getuserrights(self, user, group) -> dict:
         result = {
