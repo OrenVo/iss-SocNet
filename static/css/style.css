@@ -362,6 +362,7 @@ footer{
 
 #search_bar_input {
     height: 35px;
+    width: 60%;
     float: left;
     color: #001624;
     background-color: #f2f1ec;
@@ -729,6 +730,14 @@ footer{
     text-align: center;
 }
 /*********/
+
+.thread_header {
+    height: auto;
+    width: 100%;
+
+    float: left;
+    padding: 20px;
+}
 
 /* Posts */
 #thread_posts {

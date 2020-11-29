@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
     <title>Free chat</title>
 </head>
-<body id="height">
+<body>
     <!-- FLASH WAY -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -330,6 +330,7 @@
     /* Remove image from form */
     function remove_img(){
         document.getElementById("group_image").value = "";
+        document.getElementById("rm_img").style.display = "none";
     }
 
     /* Validating file size */
