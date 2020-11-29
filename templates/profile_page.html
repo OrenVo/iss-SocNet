@@ -70,14 +70,14 @@
 
             <label for="login"><b>Change Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box" 
-            {% if form  %} value="{{ form['login'] }}"{% endif %}
-            pattern="^([\x00-\x7F])\S+$" title="ASCII characters only, no white spaces">
+            {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$" 
+            title="ASCII characters only, no white spaces" maxlength="30">
 
             <label for="fname"><b>Change first name</b></label>
-            <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box">
+            <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box" maxlength="20">
 
             <label for="lname"><b>Change last name</b></label>
-            <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box">
+            <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box" maxlength="20">
 
             <label for="password1"><b>Change Password</b></label>
             <input name="password1" type="password" placeholder="Enter Password" autocomplete="new-password" class="input_box">
@@ -98,15 +98,16 @@
             <label for="visibility3">Members of your groups</label><br><br>    
             
             <label for="description"><b>Description</b></label>
-            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box"><br>
+            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
+            <br>
 
-            <label for="current_password"><b>Enter current password</b></label>
+            <label for="current_password"><b>Requiered Enter current password</b></label>
             <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
 
             {% if admin or owner %}
             <button formaction="{{ url_for('delete_profile', name=username) }}">Delete profile</button>
-
-            <button type="submit">Save changes</button> <button type="button" onclick="show_profile_info()">Go Back</button>
+            <button type="submit">Save changes</button>
+            <button type="button" onclick="show_profile_info()">&#10094; Back</button>
             {% endif %}
         </form>
     </div>

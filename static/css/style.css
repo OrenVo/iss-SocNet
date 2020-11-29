@@ -831,11 +831,10 @@ footer{
 
 .remove_img_form {
     cursor: pointer;
-    color: #001624;
 }
 
 .remove_img_form:hover {
-    color: #009a94;
+    color: #00c14c;
 }
 
 /* Text */

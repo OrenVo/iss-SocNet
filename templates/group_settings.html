@@ -1,5 +1,6 @@
 <!-- TODO tlacidlo odstranit skupinu -->
 <!-- Moderator iba vyamze clenov skupiny a odstrani prispevky -->
+<!-- meno skupiny max 30, descrip max 2 000, login max 30, meno 20 priezvisko 20, description 2 000 -->
 <!doctype html>
 <html>
 <head>
@@ -150,10 +151,11 @@
                     <input name="group_name" type="text" placeholder="Enter group name" id="group_name"
                     {% if form  %} value="{{ form['groupname'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
                     title="ASCII characters only, no white spaces"
-                    class="input_box">
+                    maxlength="30" class="input_box">
 
                     <label for="description"><b>Description</b></label>
-                    <input name="description" type="text" placeholder="Enter description" id="description" class="input_box">
+                    <input name="description" type="text" placeholder="Enter description" id="description"
+                    maxlength="2000" class="input_box">
                     
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" 
