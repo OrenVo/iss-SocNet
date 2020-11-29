@@ -147,8 +147,9 @@
 
                     <label for="description"><b>Description</b></label>
                     <input name="description" type="text" placeholder="Enter description" id="description" class="input_box">
+                    
                     <label for="group_picture"><b>Group picture</b></label>
-                    <input name="profile_photo" type="file" placeholder="Group pricture" capture>
+                    <input name="profile_photo" type="file" id="img_file" placeholder="Group pricture" capture><button onclick="reset($('#img_file'))">Reset image</button>
                     <br><br>
 
                     <label for="group_privacy"><b>Visibility for:</b></label><br>
@@ -166,5 +167,13 @@
         </div>
     </article>
 </body>
+
+<!-- JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    window.reset = function(e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();}
+</script>
+
 </html>
 </doctype>
