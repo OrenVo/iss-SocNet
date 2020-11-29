@@ -37,7 +37,7 @@
                         <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                     </div>
                     <div id="profile_container_description">
-                        {{ user.Login }}
+                        {{ username }}
                         {% if admin %}
                         Admin
                         {% elif owner %}
@@ -99,7 +99,7 @@
             {% if gowner %}
                 <div class="lp_gt">Owner</div>
                 {% for group in gowner %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
@@ -116,7 +116,7 @@
             {% if gmoderator %}
                 <div class="lp_gt">Moderator</div>
                 {% for group in gmoderator %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
@@ -133,7 +133,7 @@
             {% if gmember %}
                 <div class="lp_gt">Member</div>
                 {% for group in gmember %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">

@@ -280,7 +280,7 @@ def group(name):
             profile_pic = default_pictures_path + default_profile_picture
         else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
-        current_user.Last_group = group.ID
+        db.insert_to_users(id=current_user.ID, last_group_id=group.ID)
     return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
 
 
@@ -488,13 +488,11 @@ def delete_thread(group, thread):
 @app.route("/create/groups/new/", methods=["POST"])
 @login_required
 def create_group():
-    eprint("HERE ------------------------------------------------> ", request.files)
-
     name = request.form["group_name"]
     name = replace_whitespace(name)
     if not db.check_groupname(name):
         flash("Group is already taken. Please use different one.")
-        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name), form=request.form)
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
     rights = int(request.form['visibility'])
     description = request.form["description"]
     if not description:
