@@ -12,18 +12,20 @@
     <!-- HEADER - search + home -->
     <header>
         <!-- GO HOME -->
-        <a href="{{ url_for('home') }}">
-            <div class="go_home_boy">                
-                Home
-            </div>
-        </a>
+        <div class="go_home_boy">
+            <a href="{{ url_for('home') }}">
+                <span class="go_home_boy_text">Home</span>
+            </a>
+        </div>
 
         <!-- SEARCH -->
         <div id="search_bar_box">
             <!-- TODO searchbar -->
             <form action="{{ url_for('search') }}" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
+                <a href="#">
+                    <div class="search_icon"></div>
+                </a>
             </form>
         </div>
 
@@ -52,10 +54,11 @@
 
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
-            <h1>{{ username }}</h1><br>
-            <p>{{ name }}</p>
-            <p>{{ surname}}</p>
-            <p>{{ description }}</p>
+            <h1>Username: {{ username }}</h1><br>
+            <p><b>Name:</b> {{ name }}</p>
+            <p><b>Surname</b> {{ surname }}</p>
+            <p><b>Description:</b>
+            </p> {{ description }} </p>
             <br>
             {% if admin or owner %}
             <button type="button" onclick="show_settings()">Settings</button>
@@ -73,10 +76,10 @@
             {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$" 
             title="ASCII characters only, no white spaces" maxlength="30">
 
-            <label for="fname"><b>Change first name</b></label>
+            <label for="fname"><b>Change First Name</b></label>
             <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box" maxlength="20">
 
-            <label for="lname"><b>Change last name</b></label>
+            <label for="lname"><b>Change Last Name</b></label>
             <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box" maxlength="20">
 
             <label for="password1"><b>Change Password</b></label>
@@ -85,8 +88,12 @@
             <label for="password2"><b>Repeat Password</b></label>
             <input name="password2" type="password" placeholder="Repeat Password" autocomplete="new-password" class="input_box">
 
-            <label for="group_picture"><b>Profile picture</b></label>
-            <input name="profile_photo" type="image" placeholder="Profile pricture" capture><br><br>
+            <label for="group_image"><b>Profile Picture</b></label>
+            <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
+            placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+            <p id="size"></p>
+            <span id="rm_img" class="remove_img_form" onclick="remove_img()">Remove image</span>
+            <br><br>
 
             <br>
             <label for="group_privacy"><b>Visibility for:</b></label><br>
@@ -101,7 +108,7 @@
             <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
             <br>
 
-            <label for="current_password"><b>Requiered Enter current password</b></label>
+            <label for="current_password"><b>Requiered Enter Current Password</b></label>
             <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
 
             {% if admin or owner %}
@@ -123,6 +130,32 @@
         document.getElementById("settings_container").style.display= 'none';
         document.getElementById("profile").style.display= 'block';
     }
+
+    /* Remove image from form */
+    function remove_img(){
+        document.getElementById("group_image").value = "";
+        document.getElementById("rm_img").style.display = "none";
+    }
+
+    /* Validating file size */
+    Filevalidation = () => { 
+        const fi = document.getElementById('group_image'); 
+        // Check if any file is selected. 
+        if (fi.files.length > 0) 
+        { 
+            const fsize = fi.files.item(0).size;
+            const file = Math.round((fsize / 1024));
+
+            // The size of the file. 
+            if (file >= 2048)
+            { 
+                alert("File is too Big, please select a file less than 2mb"); 
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+                remove_img();
+            }   
+            document.getElementById("rm_img").style.display = "block";      
+        }                
+    } 
 </script>
 </html>
 </doctype>

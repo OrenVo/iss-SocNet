@@ -53,7 +53,9 @@
         <!-- TODO searchbar -->
         <form action="{{ url_for('search') }}" id="search_bar_form" >
             <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-            <img src="{{url_for('static', filename='pictures/search.png')}}" alt="Search bar" id="search_bar_icon"/>
+            <a href="#">
+                <div class="search_icon"></div>
+            </a>
         </form>
     </div>
 
@@ -145,34 +147,36 @@
 
                 <br><h1 class="settings_title">Settings</h1><br><hr>
                 <!-- TODO group settings -->
-                <form action="#" method="POST">
-                    <hr>
-                    <label for="group_name"><b>Group name</b></label>
-                    <input name="group_name" type="text" placeholder="Enter group name" id="group_name"
-                    {% if form  %} value="{{ form['groupname'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
-                    title="ASCII characters only, no white spaces"
-                    maxlength="30" class="input_box">
+                <form action="#" method="POST" id="settings">
+                    <label for="group_name" ><h3>Group name</h3></label>
+                    <input name="group_name" type="text" placeholder="Requiered Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
 
-                    <label for="description"><b>Description</b></label>
-                    <input name="description" type="text" placeholder="Enter description" id="description"
-                    maxlength="2000" class="input_box">
-                    
+                    <label for="description"><h3>Description</h3></label>
+                    <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
+
                     <label for="group_image"><h3>Group picture</h3></label>
-                    <input id="group_image" name="group_image" type="file" 
-                    placeholder="Requiered Group pricture" accept="image/*" capture> 
-                    <span class="reset_img_form" onclick="remove_img()">Remove image</span>
+                    <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
+                    placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+                    <p id="size"></p>
+                    <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
 
-                    <label for="group_privacy"><b>Visibility for:</b></label><br>
-                    <input name="visibility" type="radio" id="visibility1" checked value="0">
+
+                    <label for="visibility"><h3>Visibility for:</h3></label>
+                    <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
                     <label for="visibility1">All users</label><br>
-                    <input name="visibility" type="radio" id="visibility2" value="1">
+
+                    <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
                     <label for="visibility2">Registered users</label><br>
-                    <input name="visibility" type="radio" id="visibility3" value="2">
+
+                    <input id="visibility3" type="radio" name="visibility" value="2" {% if form and form['visibility'] == '2' %} checked = "checked" {% endif %}>
                     <label for="visibility3">Members of this group</label><br>
 
-                    <button formaction="/delete_group/">Delete group</button>
-                    <button type="submit" class="background_color_green">Save changes</button>
+                    <br><hr>
+                    <button form="settings" type="submit" id="create_group_button">Create group</button>
+                    <button type="button" onclick="create_new_group_hide()">
+                        &#10094; Back
+                    </button>
                 </form>
             </div>
         </div>
@@ -182,7 +186,28 @@
 <script>
     function remove_img(){
         document.getElementById("group_image").value = "";
+        document.getElementById("rm_img").style.display = "none";
     }
+
+    /* Validating file size */
+    Filevalidation = () => { 
+        const fi = document.getElementById('group_image'); 
+        // Check if any file is selected. 
+        if (fi.files.length > 0) 
+        { 
+            const fsize = fi.files.item(0).size;
+            const file = Math.round((fsize / 1024));
+
+            // The size of the file. 
+            if (file >= 2048)
+            { 
+                alert("File is too Big, please select a file less than 2mb"); 
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+                remove_img();
+            }       
+            document.getElementById("rm_img").style.display = "block";  
+        }        
+    } 
 </script>
 </html>
 </doctype>

@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
     <title>Free chat</title>
 </head>
-<body id="height">
+<body>
     <!-- FLASH WAY -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -174,7 +174,7 @@
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
                     placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
                     <p id="size"></p>
-                    <span class="remove_img_form" onclick="remove_img()">Remove image</span>
+                    <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
 
 
@@ -203,7 +203,7 @@
                     <br>
 
                     <label for="thread_subject"><b>Subject</b></label>
-                    <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box" required>
+                    <input id="thread_subject" type="text" placeholder="Requiered Enter Subject" name="thread_subject" class="input_box" required>
 
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
@@ -330,6 +330,7 @@
     /* Remove image from form */
     function remove_img(){
         document.getElementById("group_image").value = "";
+        document.getElementById("rm_img").style.display = "none";
     }
 
     /* Validating file size */
@@ -347,8 +348,9 @@
                 alert("File is too Big, please select a file less than 2mb"); 
                 document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
                 remove_img();
-            }         
-        }         
+            }       
+            document.getElementById("rm_img").style.display = "block";  
+        }        
     } 
 
     // Get the modal
