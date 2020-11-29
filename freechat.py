@@ -251,8 +251,7 @@ def group(name):
     group = Group.query.filter_by(Name=name).first()
     if group is None:
         return redirect(url_for("lost"))
-    closed = group.Mode & 2
-    private = (group.Mode & 1) | closed
+    private = group.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
@@ -268,6 +267,8 @@ def group(name):
     member = db.get_membership(current_user)
 
     rights = db.getuserrights(current_user, group)
+
+    closed = group.Mode & 2
     if closed and (rights["user"] or rights["visitor"]):
         threads = None
     else:
@@ -349,12 +350,13 @@ def members(group):
     group = Group.query.filter_by(Name=group).first()
     if group is None:
         return redirect(url_for("lost"))
-    closed = group.Mode & 2
-    private = (group.Mode & 1) | closed
+    private = group.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
     rights = db.getuserrights(current_user, group)
+
+    closed = group.Mode & 2
     if closed and (rights["user"] or rights["visitor"]):
         return redirect(url_for("tresspass"))
 
@@ -459,7 +461,7 @@ def thread(group, thread):
     if thread is None:
         return redirect(url_for("lost"))
     closed = group.Mode & 2
-    private = (group.Mode & 1) | closed
+    private = group.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
