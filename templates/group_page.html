@@ -30,18 +30,18 @@
     <header>
         <!-- PROFILE -->
         <!-- If user is logged in -->
-        {% if current_user.is_authenitficated %}
+        {% if not visitor %}
             <div id="profile_container">
                 <a href="{{ url_for('profile', name=username) }}">
                     <div id="profile_container_image">
                         <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                     </div>
                     <div id="profile_container_description">
-                        {{ username }}
+                        {{ username }} <br>
                         {% if admin %}
                         Admin
                         {% elif owner %}
-                        Ownder
+                        Owner
                         {% elif moderator %}
                         Moderator
                         {% elif member %}
@@ -161,7 +161,9 @@
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box">
 
                     <label for="group_image"><h3>Group picture</h3></label>
-                    <input id="group_image" name="group_image" type="file" placeholder="Requiered Group pricture" accept="image/*" capture><br><br>
+                    <input id="group_image" name="group_image" type="file" 
+                    placeholder="Requiered Group pricture" accept="image/*" capture>
+                    <button onclick="reset($('#img_file'))">Reset image</button><br><br>
 
 
                     <label for="visibility"><h3>Visibility for:</h3></label>
@@ -283,7 +285,12 @@
 
 
 <!-- JavaScript -->
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    // Delete image from form
+    window.reset = function(e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();}
+
     /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
         document.getElementById("creating_new_group").style.display= 'block';
