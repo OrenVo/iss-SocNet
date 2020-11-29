@@ -24,8 +24,15 @@ import re
 """
 TODO List:
 All TODOs in the file
+
+if user.is_anonymous:
+    return None
+Dano link na profil ak je visitor
+
+
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
 Spracovanie flashu aj na grouppage zmena settingov a podobne
+
 DELETE GROUP button
 DELETE THREAD button
 Welcome next parameter
@@ -36,7 +43,7 @@ Input link escaping?
 # App initialization #
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
-app.app_context().push()  # TODO Nutno udělat, abych mohl pracovat s databází mimo view funkce
+app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
 login_manager = LoginManager()
@@ -84,7 +91,7 @@ def register():
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
 
-    if not re.search(r"\s", login):
+    if not re.search(r"^([\x00-\x7F])\S+$", login):
         flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
@@ -330,11 +337,6 @@ def members(group):
     admin = current_user.Mode & 2
     owner = current_user.ID == group.User_ID
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
-
-    '''
-    def get_members(self, group: Group) -> list:
-        return self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
-    '''
 
     members = db.get_members(group)
     # TODO return group_members.html || vedla mien aj gombiky na kick/ban/delete ak admin/owner/moderator
