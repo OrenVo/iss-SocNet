@@ -286,10 +286,6 @@
 
 <!-- JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-    // Delete image from form
-    window.reset = function(e) {
-    e.wrap('<form>').closest('form').get(0).reset();
-    e.unwrap();}
 
     /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
@@ -332,6 +328,11 @@
         modal.style.display = "none";
       }
     }
+
+    // Delete image from form
+    window.reset = function(e) {
+    e.wrap('<form>').closest('form').get(0).reset();
+    e.unwrap();}
 </script>
 </html>
 </doctype>
