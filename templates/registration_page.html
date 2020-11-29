@@ -25,16 +25,16 @@
              </div>
           </div>
       {% endif %}
-      {% endwith %}     
-  
+      {% endwith %}
+
 
     <!-- HEADER -->
     <div id="main_page_header">
         <!-- LOGIN -->
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="login_form">
-            <div class="container">                
-                <input name="uname" type="text" placeholder="Username" autocomplete="nickname" 
-                {% if form  %} value="{{ form['uname'] }}" {% endif %} pattern="^([\x00-\x7F])\S+$"
+            <div class="container">
+                <input name="uname" type="text" placeholder="Username" autocomplete="nickname"
+                {% if form  %} value="{{ form['uname'] }}" {% endif %} pattern="^\S([\x00-\x7F])\S*$"
                 title="ASCII characters only, no white spaces" required>
                 <input name="psw" type="password" placeholder="Password" minlength="7" autocomplete="current-password" required>
                 <button type="submit">Login</button>
@@ -121,7 +121,7 @@
       if (event.target == modal_flash) {
         modal_flash.style.display = "none";
       }
-    } 
+    }
 
 
 </script>

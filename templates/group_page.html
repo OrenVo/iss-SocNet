@@ -71,12 +71,12 @@
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
                 <a href="#">
                     <div class="search_icon"></div>
-                </a>                
+                </a>
             </form>
         </div>
 
         <!-- LOGOUT -->
-        <div class="logout_container">            
+        <div class="logout_container">
             <a href="{{ url_for('logout') }}">
                 <button>Logout</button>
             </a>
@@ -111,7 +111,7 @@
                 </a>
                 {% endfor %}
             {% endif %}
-            
+
             <!-- MODERATOR -->
             {% if gmoderator %}
                 <div class="lp_gt">Moderator</div>
@@ -166,15 +166,15 @@
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input name="group_image" type="file" placeholder="Requiered Group pricture" capture><br><br>
 
-                    
+
                     <label for="visibility"><h3>Visibility for:</h3></label>
-                    <input id="visibility1" type="radio" name="visibility" value="30">
+                    <input id="visibility1" type="radio" name="visibility" value="0">
                     <label for="visibility1">All users</label><br>
 
-                    <input id="visibility2" type="radio" name="visibility" value="60">
+                    <input id="visibility2" type="radio" name="visibility" value="1">
                     <label for="visibility2">Registered users</label><br>
 
-                    <input id="visibility3" type="radio" name="visibility" value="100">
+                    <input id="visibility3" type="radio" name="visibility" value="3">
                     <label for="visibility3">Members of this group</label><br>
 
                     <br> <hr>
@@ -201,14 +201,14 @@
             </div>
 
             <!-- GROUP HEADER -->
-            <div id="group_header">             
+            <div id="group_header">
                 <div class="rp_gi">
                     <img src="{{ group_src }}" alt="Group Image" class="img_center">
-                </div>   
+                </div>
                 <div class="rp_gn">
                     <h1>{{ groupname }}</h2>
                     <h3>Owner: {{ groupowner }}</h3>
-                </div>                
+                </div>
                 <div class="rp_gd">
                     {{ groupdescription }}
                 </div>
@@ -217,8 +217,8 @@
                     <!-- JOIN GROUP -->
                     {% if user or visitor %}
                     <a href="{{ url_for('ask_mem', group=groupname) }}">
-                        <button>&#x2b; Join group</button>       
-                    </a>                                     
+                        <button>&#x2b; Join group</button>
+                    </a>
                     {% endif %}
 
                     <!-- LEAVE GROUP -->
@@ -255,7 +255,7 @@
                         <div class="notifications"></div>
                     </a>
                     {% endif %}
-                </div>                
+                </div>
             </div>
 
             <!-- GROUP THREADS -->
