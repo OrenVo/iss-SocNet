@@ -238,6 +238,10 @@ footer{
     font-size: 12px;
     color: white;
     background-color: black;
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
 }
 
 .cursor_pointer {
@@ -449,10 +453,12 @@ footer{
     width: 100%;
 
     float: left;
+    margin-top: 2px;
+    background-color: #dad9d5;
 }
 
 .group_container:hover {
-    background-color: #dad9d5;
+    background-color: #cecece;
     color: #00c14c;
 }
 

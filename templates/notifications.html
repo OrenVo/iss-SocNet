@@ -145,14 +145,41 @@
                  
                 <br><h1>Members</h1><br><hr>
                 <!-- TODO pridat url na profil a skupinu -->
+                <!-- Reqest membership -->
                 {% for notfication in mem_notifications %}
-                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to join your group <a href="{{ url_for('') }}"><b>{{ notification.group_name }}</b></a>
-                        <br><br><button>Accept</button> <button>Reject</button>
+                    <div>
+                        User 
+                        <a href="{{ url_for('') }}">
+                            <b>{{ notification.username }}</b>
+                        </a> 
+                        wants to join your group 
+                        <a href="{{ url_for('') }}">
+                            <b>{{ notification.group_name }}</b>
+                        </a>
+                        <br><br>
+                        {% if admin or owner or moderator %}
+                        <button>Accept</button> 
+                        <button>Reject</button>
+                        {% endif %}
                     </div>
                 {% endfor %}
+
+                <!-- Request mod -->
                 {% for notification in mod_notifications %}
-                    <div>User <a href="{{ url_for('') }}"><b>{{ notification.username }}</b></a> wants to become a moderator in your group <a href="{{ url_for('') }}"><b>{{ notificaton.group_name }}</b></a>
-                        <br><br><button>Accept</button> <button>Reject</button>
+                    <div>
+                        User 
+                        <a href="{{ url_for('') }}">
+                            <b>{{ notification.username }}</b>
+                        </a> 
+                        wants to become a moderator in your group 
+                        <a href="{{ url_for('') }}">
+                            <b>{{ notificaton.group_name }}</b>
+                        </a>
+                        <br><br>
+                        {% if admin or owner or moderator %}
+                        <button>Accept</button>
+                        <button>Reject</button>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
