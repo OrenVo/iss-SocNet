@@ -8,7 +8,6 @@ import hashlib
 from configparser import ConfigParser
 import os.path
 from deprecation import deprecated
-from sqlalchemy.orm import defer, undefer
 import secrets
 from sqlalchemy.ext.automap import automap_base
 
@@ -69,6 +68,18 @@ def load_db_config(fname='db.ini', sect='mysql'):
     else:
         raise Exception(f'Cannot find {sect} section in file: {fname}')
     return db
+
+
+def get_blob_size(blob: bytes) -> float:
+    """
+    Return estimation size of blob given by blob parameter.
+    :param blob: Blob which size need to by known
+    :type blob: bytes
+    :return: size in MB
+    :rtype: float
+    """
+    import sys
+    return sys.getsizeof(blob) / 1024 / 1024
 
 
 class DB:
@@ -357,9 +368,7 @@ class DB:
             'user': None,
             'visitor': None
         }
-        if user.is_authenticated:
-            result['user'] = True
-        else:
+        if not user.is_authenticated:
             result['visitor'] = True
             return result
         if user.Mode & 2:
@@ -370,7 +379,8 @@ class DB:
             result['moderator'] = True
         elif self.db.session.query(Is_member).filter_by(User=user.ID, Group=group.ID).first():
             result['member'] = True
-
+        else:
+            result['user'] = True
         return result
 
 
