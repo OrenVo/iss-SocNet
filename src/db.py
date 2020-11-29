@@ -359,6 +359,11 @@ class DB:
         else:
             return True
 
+    def delete_group(self, group: Group):
+        self.db.session.delete(group)
+        try:
+            self.db.session.commit()
+
     def getuserrights(self, user, group) -> dict:
         result = {
             'admin': None,
