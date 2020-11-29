@@ -221,7 +221,9 @@
                 </div>
                 <div class="rp_gn">
                     <h1>{{ groupname }}</h1>
-                    <h3>Owner: {{ groupowner }}</h3>
+                    <a href="{{ url_for('profile', name=groupowner) }}">
+                        <b>Owner: {{ groupowner }}</b>
+                    </a>                    
                 </div>
                 <div class="rp_gd">
                     {{ groupdescription }}
