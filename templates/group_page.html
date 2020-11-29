@@ -205,6 +205,9 @@
                     <label for="thread_subject"><b>Subject</b></label>
                     <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box" required>
 
+                    <label for="description"><h3>Description</h3></label>
+                    <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
+
                     <br>
                     <button form="create_thread" type="submit" id="create_thread_button">Create thread</button>
                     <button type="button" onclick="create_new_thread_hide()">&#10094; Back</button>
@@ -292,6 +295,7 @@
         </div>
     </article>
 
+    <!-- Footer -->
     <footer id="footer_copy">&#169; 2020 All rights reserved. Contact: da.andrasko@gmail.com</footer>
 </body>
 
@@ -341,12 +345,10 @@
             if (file >= 2048)
             { 
                 alert("File is too Big, please select a file less than 2mb"); 
-            } else 
-            { 
                 document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+                remove_img();
             }         
-        } 
-        remove_img();
+        }         
     } 
 
     // Get the modal
