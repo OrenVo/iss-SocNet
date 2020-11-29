@@ -375,6 +375,7 @@ footer{
 #search_bar_input:hover ~ a .search_icon, 
 #search_bar_input:focus ~ a .search_icon,
 .search_icon:hover {
+    background-image: url('../pictures/search.png');
     background-image: url('../pictures/hsearch.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
