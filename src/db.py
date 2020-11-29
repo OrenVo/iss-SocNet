@@ -123,6 +123,8 @@ class DB:
         return instance
 
     def get_membership(self, user: User) -> dict:
+        if user.is_anonymous:
+            return {'gowner': None, 'gmoderator': None, 'gmember': None}
         Ownership = self.db.session.query(Group).filter_by(User_ID=user.ID).all()
         Moderator = self.db.session.query(Moderate).filter_by(User=user.ID).all()
         Member = self.db.session.query(Is_member).filter_by(User=user.ID).all()
@@ -147,30 +149,105 @@ class DB:
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
 
-    def send_message(self, user, group, thread_name, message):
-        ...  # TODO send_message
+    def send_message(self, author: User, thread: Thread, message: str):
+        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=Thread.ID_group, Content=message)
+        self.db.session.add(new_message)
+        self.db.session.commit()
 
-    def insert_to_user(self, ID: int = None, login: str = None, name: str = None, surname: str = None, description: str = None, mode: int = None, image: tuple = None, password: str = None, last_group_id: int = None):
-        if ID is None:   # user doesn't exist create new
-            ...
+    def get_members(self, group: Group) -> list: # TODO return list of users which are member of the group
+        return self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
+
+    def insert_to_group(self, id: int = None, name: str = None, mode: int = None, description: str = None, image: tuple = None, user_id: int = None):
+        """
+        Creates or update group defined by id.
+        :param id: id of group or None
+        :type id: int
+        :param name: New name for group
+        :type name: str
+        :param mode: New mode for group
+        :type mode: int
+        :param description: New description for group
+        :type description: str
+        :param image: Tuple that contains new image blob (0. index) and mimetype (1.index)
+        :type image: tuple
+        :param user_id: New owner of the group (must not be None when creating group)
+        :type user_id: int
+        :return: True or False whether update/insertion succeed or fail
+        :rtype: bool
+        :raise ValueError on bad parameters
+        """
+        ...
+
+    def insert_to_thread(self, group_id: int, thread_name: str = None, description: str = None):
+        """
+        Creates or update thread defined by group_id and thread_name
+        :param group_id: Group to which thread belongs
+        :type group_id: int
+        :param thread_name: New thread name or name of new thread (if thread name doesn't exist)
+        :type thread_name: str
+        :param description: New description for thread
+        :type description: str
+        :return:
+        :rtype:
+        """
+        ...
+
+    def insert_to_users(self, id: int = None, login: str = None, name: str = None, surname: str = None, description: str = None, mode: int = None, image: tuple = None, password: str = None, last_group_id: int = None):
+        """
+        Creates or update user defined by id. If id is None new user is created. When creating new user login and password cannot be None.
+        Parameters:
+            id (int): Users id that will be changed.
+            login (str): New login for user
+            name (str): New name for user
+            surname (str): New surname for user
+            description (str): New description for user
+            mode (int): New mode for user
+            image (tuple): Tuple of image data (0. index) and mimetype (1. index)
+            password (str): New password for user (not hashed) for hashing will be used create_password method
+            last_group_id (int): New last group visited id for user
+            :returns True or False whether update/insertion succeed or fail
+            :rtype: bool
+            :raise ValueError on bad parameter input
+        """
+        user = None
+        add = False
+        if id is None:   # user doesn't exist create new
+            if login is not None and password is not None:
+                user = User(Login=login, Password=self.create_password(password))
+            else: raise ValueError("When id is None login and password must be provided.")
+            add = True
         else:  # user should exist just update him
-            ...
-        if login:
-            ...
+            user = self.db.session.query(User).filter_by(ID=id).first()
+            if user is None:
+                return False
+        if login and id is not None:
+            user.Login = login
         if name:
-            ...
+            user.Name = name
         if surname:
-            ...
+            user.Surname = surname
         if description:
-            ...
+            user.Description = description
         if mode:
-            ...
+            user.Mode = mode
         if image:
-            ...
-        if password:
-            ...
+            user.Image = image[0]
+            user.Mimetype = image[1]
+        if password and id is not None:
+            user.Password = self.create_password(password)
         if last_group_id:
-            ...
+            user.Last_group = last_group_id
+        if add:
+            self.db.session.add(user)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+            return False
+        else:
+            return True
 
     def getuserrights(self, user, group) -> dict:
         result = {
@@ -185,9 +262,7 @@ class DB:
             result['user'] = True
         else:
             result['visitor'] = True
-            return result  # TODO visitor nema ine ako vstavane funkcie takze by to padlo #Roman
-        # user = self.db.session.query(User).filter_by(Login=username).first()
-        # group = self.db.session.query(Group).filter_by(ID=group).first()
+            return result
         if user.Mode & 2:
             result['admin'] = True
         elif user.ID == group.User_ID:
