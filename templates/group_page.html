@@ -173,7 +173,7 @@
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value="{{ form['group_image'] }}" {% endif %}
                     placeholder="Requiered Group pricture" accept="image/*" capture> 
-                    <button onclick="remove_img()">Remove image</button>
+                    <span class="remove_img_form" onclick="remove_img()">Remove image</span>
                     <br><br>
 
 
