@@ -311,7 +311,7 @@ class DB:
         add = False
         if id is None:  # user doesn't exist create new
             if login is not None and password is not None:
-                user = User(Login=login, Password=self.create_password(password), Last_group=last_group_id)
+                user = User(Login=login, Password=self.create_password(password), Last_group=1)
             else:
                 raise ValueError("When id is None login and password must be provided.")
             add = True
