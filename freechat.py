@@ -90,6 +90,7 @@ def register():
     login = request.form["login"]
     password = request.form["psw"]
     repeat = request.form["psw-repeat"]
+    # Ine hodnoty
 
     if not re.search(r"^([\x00-\x7F])\S+$", login):
         flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
@@ -101,7 +102,7 @@ def register():
         flash("Passwords do not match.")
         return render_template("registration_page.html", form=request.form)
 
-    db.insert_new_user(login, password)
+    db.insert_to_user(login, password)
     flash("Your registration was succesful. You can now login.")
     return redirect(url_for("welcome"))
 
@@ -115,6 +116,7 @@ def login():
 
     login = request.form["uname"]
     password = request.form["psw"]
+
     if not db.check_password(password, login):
         flash("Your credentials were incorrect. Please try again.")
         return redirect(url_for("welcome", form=request.form))
@@ -195,6 +197,8 @@ def user_img(name):
     private = user.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
+    if user.Image is None:
+        return redirect(url_for("lost"))
 
     file_object = io.BytesIO(user.Image)  # Creates file in memory
     return send_file(file_object, mimetype=user.Mimetype)  # Sends file to path
@@ -206,17 +210,26 @@ def profile_settings():
     return redirect(url_for("user_settings", name=current_user.Login))
 
 
-@app.route("/profile/<name>/settings/")
-@app.route("/user/<name>/settings/")
-@app.route("/users/<name>/settings/")
-@app.route("/profiles/<name>/settings/")
+@app.route("/profile/<name>/settings/", methods=["GET", "POST"])
+@app.route("/user/<name>/settings/", methods=["GET", "POST"])
+@app.route("/users/<name>/settings/", methods=["GET", "POST"])
+@app.route("/profiles/<name>/settings/", methods=["GET", "POST"])
 @login_required
 def user_settings(name):
+    user = User.query.filter_by(Login=name).first()
+    if user is None:
+        return redirect(url_for("lost"))
+
     admin = current_user.Mode & 2
-    owner = current_user.Login == name
+    owner = current_user.Login == user.Login
     if not admin and not owner:
         return redirect(url_for("tresspass"))
-    # TODO return settings_page.html || GET & POST podla formulara zistit co urobit
+    if request.method == "GET":
+        return render_template("settings_page.html", form=request.form)
+
+    # TODO co potrebuje settings_page.html                                          TODO HERE
+    # vytiahnut a spracovat formular, potom odoslat insert_to_user
+
     flash("Your changes have been applied.")
     return name + " settings page."
 
@@ -260,6 +273,7 @@ def group(name):
         threads = None
     else:
         threads = db.get_threads(group)
+        # TODO vráti objekty thredov aby Dano mohol vyplnit topic & description
 
     if current_user.is_anonymous:
         username = "Visitor"
@@ -270,8 +284,7 @@ def group(name):
             profile_pic = default_pictures_path + default_profile_picture
         else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
-
-    current_user.Last_group = group.ID
+        current_user.Last_group = group.ID
     return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
 
 
@@ -284,13 +297,15 @@ def group_img(name):
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
+    if group.Image is None:
+        return redirect(url_for("lost"))
 
     file_object = io.BytesIO(group.Image)  # Creates file in memory
     return send_file(file_object, mimetype=group.Mimetype)  # Sends file to path
 
 
-@app.route("/settings/group/<group>/")
-@app.route("/settings/groups/<group>/")
+@app.route("/settings/group/<group>/", methods=["GET", "POST"])
+@app.route("/settings/groups/<group>/", methods=["GET", "POST"])
 @login_required
 def group_settings(group):
     group = Group.query.filter_by(Name=group).first()
@@ -301,7 +316,12 @@ def group_settings(group):
     owner = current_user.ID == group.User_ID
     if not admin and not owner:
         return redirect(url_for("tresspass"))
-    # TODO return group_settings.html || GET & POST
+    if request.method == "GET":
+        return render_template("group_settings.html", form=request.form)
+
+    # TODO co potrebuje group_settings.html                                          TODO HERE
+    # vytiahnut a spracovat formular, potom odoslat insert_to_group
+
     flash("Your changes have been applied.")
     return name + " settings page."
 
@@ -319,14 +339,15 @@ def group_notifications(group):
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
     if not admin and not owner and not moderator:
         return redirect(url_for("tresspass"))
-    # TODO return group_notifications.html || GET & POST
+
+    # TODO co potrebuje group_notifications.html + tlacidla na accept/reject (u moderatora len na membership)
     return group + " notifications page."
 
 
 @app.route("/members/group/<group>/")
 @app.route("/members/groups/<group>/")
 def members(group):
-    group = Group.query.filter_by(Name=name).first()
+    group = Group.query.filter_by(Name=group).first()
     if group is None:
         return redirect(url_for("lost"))
     closed = group.Mode & 2
@@ -334,12 +355,12 @@ def members(group):
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
 
-    admin = current_user.Mode & 2
-    owner = current_user.ID == group.User_ID
-    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    rights = db.getuserrights(current_user, group)
+    if closed and (rights["user"] or rights["visitor"]):
+        return redirect(url_for("tresspass"))
 
-    members = db.get_members(group)
-    # TODO return group_members.html || vedla mien aj gombiky na kick/ban/delete ak admin/owner/moderator
+    members = db.get_members(group)  # TODO vráti loginy & ?fotky? clenov skupiny
+    # TODO co potrebuje group_members.html + tlacidla na kick(ban&delete ak admin)
     return group + " members page."
 
 
@@ -347,40 +368,86 @@ def members(group):
 @app.route("/apply/member/groups/<group>/")
 @login_required
 def ask_mem(group):
-    # TODO
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if member:
+        return redirect(url_for("lost"))
+
+    # TODO Co potrebuje request aby bol vytvoreny
 
     flash("Your request has been sent for a review.")
-    pass
+    return redirect(url_for("home"))
 
 
 @app.route("/apply/moderator/group/<group>/")
 @app.route("/apply/moderator/groups/<group>/")
 @login_required
 def ask_mod(group):
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
     member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
     if not member:
         return redirect(url_for("tresspass"))
+    owner = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if owner or moderator:
+        return redirect(url_for("lost"))
 
-    # TODO to iste co pri ask member
+    # TODO Co potrebuje request aby bol vytvoreny
+
     flash("Your request has been sent for a review.")
+    return redirect(url_for("home"))
+
+
+@app.route("/accept/<group>/<type>/<user>")
+@login_required
+def accept_req(group, type, user):
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    user = User.query.filter_by(Login=user).first()
+    if user is None:
+        return redirect(url_for("lost"))
+
+    # TODO Pridaj ho do celnov/moderatorov a ?informuj ho?
     pass
 
 
-def accept_req():
-    # TODO
-    pass
+@app.route("/reject/<group>/<type>/<user>")
+@login_required
+def reject_req(group, type, user):
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    user = User.query.filter_by(Login=user).first()
+    if user is None:
+        return redirect(url_for("lost"))
 
-
-def reject_req():
-    # TODO
+    # TODO Odstran request a ?informuj ho?
     pass
 
 
 @app.route("/leave/<group>/")
+@login_required
 def leave_group(group):
-    # TODO
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not member:
+        return redirect(url_for("lost"))
+
+    # Odstran ho s clenov skupiny pripadne moderatorov
+    current_user.Last_group = default_group.ID
+
     flash("You have left the " + group + " group.")
-    pass
+    return redirect(url_for("home"))
 
 
 @app.route("/group/<group>/<thread>/")
@@ -392,24 +459,28 @@ def thread(group, thread):
     thread = Thread.query.filter_by(Group_ID=group.ID, Name=thread).first()
     if thread is None:
         return redirect(url_for("lost"))
-    private = group.Mode & 1
+    closed = group.Mode & 2
+    private = (group.Mode & 1) | closed
     if private and current_user.is_anonymous:
         return redirect(url_for("welcome", next=request.url))
+
     # TODO co potrebuje threadpage
     return render_template("thread_page.html", groupname=group.replace("_", " "), threadname=thread)
 
 
 @app.route("/delete/group/<group>/")
 @app.route("/delete/groups/<group>/")
+@login_required
 def delete_group(group):
-    # TODO
+    # TODO Miesto tejto funkcie settings checkbox?
     pass
 
 
 @app.route("/delete/group/<group>/<thread>/")
 @app.route("/delete/groups/<group>/<thread>/")
+@login_required
 def delete_thread(group, thread):
-    # TODO
+    # TODO netusim
     pass
 
 
@@ -417,32 +488,62 @@ def delete_thread(group, thread):
 # Create
 ################################################################################
 
-@app.route("/create/group/new/", methods=["POST"])
-@app.route("/create/groups/new/", methods=["POST"])
+@app.route("/create/group/new/", methods=["GET", "POST"])
+@app.route("/create/groups/new/", methods=["GET", "POST"])
 @login_required
 def create_group():
-    # Get ma dostane na tvoriacu stranku
-    # Názov
-    # Práva na čítanie
-    # Popis (optional)
-    # Ikona (Optional)
-    # Owner (current_user)
-    # TODO
-    Name = replace_whitespace(Name)
-    pass
+    # TODO Get ma dostane na tvoriacu stranku
+    if request.method == "GET":
+        return render_template("group_creation_page.html", form=request.form)
+
+    '''
+    def check_groupname(self, groupname: str):
+        group = self.db.session.query(Group).filter_by(Name=groupname).first()
+        return group is None
+    '''
+
+    name = request.form["name"]
+    name = replace_whitespace(name)
+    if not db.check_groupname(name):
+        flash("Group is already taken. Please use different one.")
+        return render_template("group_creation_page.html", form=request.form)
+    rights = 0  # Neviem ako ich ziskam
+    description = request.form["description"]
+    image = None  # neviem ako ho vlozim
+
+    owner = current_user.ID
+    insert_to_group(name=name, mode=rights, description=description, image=image, user_id=owner)
+    return redirect(url_for("group", name=name))
 
 
-@app.route("/create/<group>/thread/new/", methods=["POST"])
-@app.route("/create/<group>/threads/new/", methods=["POST"])
+@app.route("/create/<group>/thread/new/", methods=["GET", "POST"])
+@app.route("/create/<group>/threads/new/", methods=["GET", "POST"])
 @login_required
 def create_thread(group):
-    # Get ma dostane na tvoriacu stranku
-    # Názov
-    # Popis (optional)
-    # TODO
-    flash("Invalid username. Please use only lower & upper case, numbers.")
-    Name = replace_whitespace(Name)
-    pass
+    group = Group.query.filter_by(Name=group).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    # TODO Get ma dostane na tvoriacu stranku
+    if request.method == "GET":
+        return render_template("group_creation_page.html", form=request.form)
+
+    '''
+    def check_threadname(self, threadname: str, groupname: str):
+        group = self.db.session.query(Group).filter_by(Name=groupname).first()
+        thread = self.db.session.query(Thread).filter_by(Group_ID=group.ID, Name=threadname).first()
+        return thread is None
+    '''
+
+    name = request.form["name"]
+    name = replace_whitespace(name)
+    if not db.check_threadname(name, group):
+        flash("Thread was already made. Please use it or make a new one.")
+        return render_template("thread_creation_page.html", form=request.form)
+    description = request.form["description"]
+
+    insert_to_thread(group_id=group.ID, thread_name=name, description=description)
+    return redirect(url_for("thread", group=group.Name, thread=name))
 
 
 @app.route("/group/<group>/<thread>/new/", methods=["POST"])
@@ -506,7 +607,7 @@ def ban(name):
 @app.route("/profiles/<name>/delete/")
 @login_required
 def delete_account(name):
-    # TODO pri uzivatelovi ukryt do settings formulara a ak da heslo zmazat
+    # TODO Miesto tejto funkcie settings checkbox?
     pass
 
 
