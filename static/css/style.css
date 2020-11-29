@@ -137,6 +137,7 @@ hr {
 
     float: left;
     padding: 0px 50px;
+    color: #001624;
 }
 
 #main_page_logo_picture {
@@ -150,7 +151,15 @@ hr {
 
     margin-left: 20px;
 
-    font-size: xx-large;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+#main_page_logo_picture:hover ~ #main_page_logo_name {
+    color: #009a94;
+}
+
+#main_page_logo_name:hover {
     color: #009a94;
 }
 /***********************/
@@ -196,7 +205,6 @@ hr {
 
 #main_page_visitor {
     padding: 5px;
-    padding-top: 4px;
     color: #001624;
     border: 2px solid #009a94;
 }
