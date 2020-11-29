@@ -88,7 +88,7 @@ def register():
     repeat = request.form["psw-repeat"]
     # Ine hodnoty
 
-    if not re.search(r"^\S([\x00-\x7F])\S*$", login):
+    if not re.search(r"^\w+$", login):
         flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
@@ -220,6 +220,9 @@ def user_settings(name):
     owner = current_user.Login == user.Login
     if not admin and not owner:
         return redirect(url_for("tresspass"))
+
+
+
     if request.method == "GET":
         return render_template("settings_page.html", form=request.form)
 
@@ -468,7 +471,7 @@ def thread(group, thread):
 @app.route("/delete/groups/<group>/")
 @login_required
 def delete_group(group):
-    # TODO Miesto tejto funkcie settings checkbox?
+    # TODO Miesto tejto funkcie settings
     pass
 
 
@@ -676,11 +679,10 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-'''
 @app.route("/receive_image", methods=["POST"])
 @login_required
 def receive_image():
-    file = request.files["group_image"]  # Change img to id in template that upload profile images
+    file = request.files["img"]  # Change img to id in template that upload profile images
     if file:
         blob = file.read()
         mimetype = file.mimetype
@@ -692,7 +694,6 @@ def receive_image():
     else:
         status_code = Response(status=404)
     return status_code
-'''
 
 
 def replace_whitespace(input):

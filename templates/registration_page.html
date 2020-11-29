@@ -57,7 +57,7 @@
 
             <label for="login"><b>Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box"
-            {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
+            {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^\w+$"
             title="ASCII characters only, no white spaces" required>
 
             <label for="psw"><b>Password, at least 7 characters</b></label>
