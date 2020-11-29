@@ -78,7 +78,7 @@
         <div id="left_panel">
             <!-- CREATE NEW GROUP-->
             <button id="create_new_group" onclick="create_new_group_show()">
-                <span style="font-size: 20px;">&#x2b;</span> Create New Group
+                &#x2b; Create New Group
             </button>
 
             <!-- GROUPS -->
@@ -203,7 +203,7 @@
                     <!-- JOIN GROUP -->
                     {% if user or visitor %}
                     <a href="{{ url_for('ask_mem', group=groupname) }}">
-                        <button><span style="font-size: 16px;">&#x2b; Join group</span></button>       
+                        <button>&#x2b; Join group</button>       
                     </a>                                     
                     {% endif %}
 
