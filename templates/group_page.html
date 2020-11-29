@@ -341,12 +341,10 @@
             if (file >= 2048)
             { 
                 alert("File is too Big, please select a file less than 2mb"); 
-            } else 
-            { 
                 document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+                remove_img();
             }         
-        } 
-        remove_img();
+        }         
     } 
 
     // Get the modal
