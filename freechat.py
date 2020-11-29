@@ -88,8 +88,8 @@ def register():
     repeat = request.form["psw-repeat"]
     # Ine hodnoty
 
-    if not re.search(r"^\w+$", login):
-        flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
+    if not re.search(r"^\w+$", login) or len(login) > 30:
+        flash("Invalid username. Please use only lower & upper case letters, numbers & symbols. Maximum is 30 characters.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
         flash("Username is already taken.")
@@ -495,16 +495,25 @@ def delete_thread(group, thread):
 def create_group():
     name = request.form["group_name"]
     name = replace_whitespace(name)
+    if len(name) > 30:
+        flash("Groupname is too long. Maximum is 30 characters.")
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
     if not db.check_groupname(name):
         flash("Group is already taken. Please use different one.")
-        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name))
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
     rights = int(request.form['visibility'])
     description = request.form["description"]
     if not description:
         description = None
+    elif len(description) > 2000:
+        flash("Description is too long. Maximum is 2000 characters.")
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
     image = request.files["group_image"]  # Change img to id in template that upload profile images
     if image:
         blob = image.read()
+        if get_blob_size(blob) > 2:
+            flash("Image is too big, maximum allowed size is 2MB.")
+            return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name, form=request.form))
         mimetype = image.mimetype
         image = (blob, mimetype)
     else:
@@ -513,7 +522,6 @@ def create_group():
     owner = current_user.ID
     db.insert_to_group(name=name, mode=rights, description=description, image=image, user_id=owner)
     return redirect(url_for("group", name=name))
-
 
 @app.route("/create/<group>/thread/new/", methods=["GET", "POST"])
 @app.route("/create/<group>/threads/new/", methods=["GET", "POST"])
@@ -534,7 +542,7 @@ def create_thread(group):
         return thread is None
     '''
 
-    name = request.form["name"]
+    name = request.form["thread_subject"]
     name = replace_whitespace(name)
     if not db.check_threadname(name, group):
         flash("Thread was already made. Please use it or make a new one.")
@@ -701,6 +709,18 @@ def receive_image():
 def replace_whitespace(input):
     output = re.sub(r"\s", "_", input)
     return output
+
+
+def get_blob_size(blob: bytes) -> float:
+    """
+    Return estimation size of blob given by blob parameter.
+    :param blob: Blob which size need to by known
+    :type blob: bytes
+    :return: size in MB
+    :rtype: float
+    """
+    import sys
+    return sys.getsizeof(blob) / 1024 / 1024
 
 
 if __name__ == "__main__":
