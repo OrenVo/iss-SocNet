@@ -147,13 +147,13 @@ class DB:
         gmoderator = list()
         gmember = list()
         for own in Ownership:
-            path = f'/image/group/{own.Name}/' if own.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            path = f'/image/group/{own.Name}/' if own.Image else '/static/pictures/defaults/default_group_picture.png'
             gowner.append((own, path))
         for mod in Moderator:
-            path = f'/image/group/{mod.Name}/' if mod.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            path = f'/image/group/{mod.Name}/' if mod.Image else '/static/pictures/defaults/default_group_picture.png'
             gmoderator.append((mod, path))
         for mem in Member:
-            path = f'/image/group/{mem.Name}/' if mem.Image else '/static/pictures/defaults/default_group_picture.jpg'
+            path = f'/image/group/{mem.Name}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
             gmember.append((mem, path))
         return {'gowner': gowner, 'gmoderator': gmoderator, 'gmember': gmember}
 
