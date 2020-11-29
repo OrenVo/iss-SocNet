@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 from configparser import ConfigParser
 import os.path
+from deprecation import deprecated
 from sqlalchemy.orm import defer, undefer
 import secrets
 from sqlalchemy.ext.automap import automap_base
@@ -74,6 +75,7 @@ class DB:
     def __init__(self, db):
         self.db = db
 
+    @deprecated(details='This method will be replaced by insert_to_user and insert_to group method in next versions')
     def insert_image(self, login: str, blob, mimetype=None):
         user = User.query.filter_by(Login=login).first()
         if not user:
@@ -83,6 +85,7 @@ class DB:
         self.db.session.commit()
         return user
 
+    @deprecated(details='This method will be replaced by insert_to_user method in next versions')
     def insert_new_user(self, username, password):
         psw = self.create_password(password)
         new_user = User(Login=username, Password=psw, Last_group=1)
@@ -154,15 +157,24 @@ class DB:
         self.db.session.add(new_message)
         self.db.session.commit()
 
-    def get_members(self, group: Group) -> list: # TODO return list of users which are member of the group
-        return self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
+    def get_members(self, group: Group) -> list:
+        members = self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
+        users = list()
+        for mem in members:
+            user = self.db.session.query(User).filter_by(ID=mem.User).first()
+            if user:
+                users.append(user)
+            else:
+                eprint(f'[Error] Database inconsistency error. User in is_member table with id: {mem.User} doesn\'t exist.')
+        return users
 
-    def insert_to_group(self, id: int = None, name: str = None, mode: int = None, description: str = None, image: tuple = None, user_id: int = None):
+    def insert_to_group(self, id: int = None, name: str = None, mode: int = None, description: str = None,
+                        image: tuple = None, user_id: int = None):
         """
         Creates or update group defined by id.
         :param id: id of group or None
         :type id: int
-        :param name: New name for group
+        :param name: New name for group (must not be None when creating group)
         :type name: str
         :param mode: New mode for group
         :type mode: int
@@ -176,7 +188,39 @@ class DB:
         :rtype: bool
         :raise ValueError on bad parameters
         """
-        ...
+        group = None
+        add = False
+        if id is None:  # Creating new group
+            if name is None or user_id is None:
+                raise ValueError('Missing argument name or user_id when creating new group')
+            group = Group(Name=name, User_ID=user_id)
+            add = True
+        else:
+            group = self.db.session.query(Group).filter_by(ID=id).first()
+            if group is None:
+                raise ValueError(f'Invalid group id: {id}')
+        if name and id is not None:
+            group.Name = name
+        if mode:
+            group.Mode = mode
+        if description:
+            group.Description = description
+        if image:
+            group.Image = image[0]
+            group.Mimetype = image[1]
+        if user_id and id is not None:
+            group.User_ID = user_id
+        if add:
+            self.db.session.add(group)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+            return False
+        else:
+            return True
 
     def insert_to_thread(self, group_id: int, thread_name: str = None, description: str = None):
         """
@@ -187,12 +231,36 @@ class DB:
         :type thread_name: str
         :param description: New description for thread
         :type description: str
-        :return:
-        :rtype:
+        :return: True or False whether update/insertion succeed or fail
+        :rtype: bool
+        :raise ValueError on bad parameters
         """
-        ...
+        thread = None
+        add = False
+        if thread_name is not None:
+            thread = self.db.session.query(Thread).filter_by(Group_ID=group_id, Name=thread_name).first()
+            if thread is None:
+                raise ValueError(f'Unknown parameter group_id: {group_id} of thread_name {thread_name}')
+        else:
+            thread = Thread(Group_ID=group_id, Name=thread_name)
+            add = True
+        if description:
+            thread.Description = description
+        if add:
+            self.db.session.add(thread)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+            return False
+        else:
+            return True
 
-    def insert_to_users(self, id: int = None, login: str = None, name: str = None, surname: str = None, description: str = None, mode: int = None, image: tuple = None, password: str = None, last_group_id: int = None):
+    def insert_to_users(self, id: int = None, login: str = None, name: str = None, surname: str = None,
+                        description: str = None, mode: int = None, image: tuple = None, password: str = None,
+                        last_group_id: int = None):
         """
         Creates or update user defined by id. If id is None new user is created. When creating new user login and password cannot be None.
         Parameters:
@@ -211,15 +279,16 @@ class DB:
         """
         user = None
         add = False
-        if id is None:   # user doesn't exist create new
+        if id is None:  # user doesn't exist create new
             if login is not None and password is not None:
                 user = User(Login=login, Password=self.create_password(password))
-            else: raise ValueError("When id is None login and password must be provided.")
+            else:
+                raise ValueError("When id is None login and password must be provided.")
             add = True
         else:  # user should exist just update him
             user = self.db.session.query(User).filter_by(ID=id).first()
             if user is None:
-                return False
+                raise ValueError(f'Invalid user id: {id}')
         if login and id is not None:
             user.Login = login
         if name:
