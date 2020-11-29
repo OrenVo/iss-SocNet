@@ -164,27 +164,27 @@
                 <form action="{{ url_for('create_group') }}" method="POST" enctype="multipart/form-data">
                     <h1>Create new group</h1> <hr>
 
-                    <label for="group_name" {% if form %} {{ "value=" + '"' + form['group_name'] + '"' }} {% endif %}><h3>Group name</h3></label>
+                    <label for="group_name" {% if form %} value="{{ form['group_name'] }}" {% endif %}><h3>Group name</h3></label>
                     <input name="group_name" type="text" placeholder="Requiered Enter Group Name" id="group_name" class="input_box" required>
 
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} {{ "value=" + '"' + form['description'] + '"' }} {% endif %}>
 
                     <label for="group_image"><h3>Group picture</h3></label>
-                    <input id="group_image" name="group_image" type="file" {% if form %} {{ "value=" + '"' + form['group_image'] + '"' }} {% endif %}
+                    <input id="group_image" name="group_image" type="file" {% if form %} value="{{ form['group_image'] }}" {% endif %}
                     placeholder="Requiered Group pricture" accept="image/*" capture> 
                     <button onclick="remove_img()">Remove image</button>
                     <br><br>
 
 
                     <label for="visibility"><h3>Visibility for:</h3></label>
-                    <input id="visibility1" type="radio" name="visibility" value="0" checked="checked">
+                    <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
                     <label for="visibility1">All users</label><br>
 
-                    <input id="visibility2" type="radio" name="visibility" value="1">
+                    <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
                     <label for="visibility2">Registered users</label><br>
 
-                    <input id="visibility3" type="radio" name="visibility" value="2">
+                    <input id="visibility3" type="radio" name="visibility" value="2" {% if form and form['visibility'] == '2' %} checked = "checked" {% endif %}>
                     <label for="visibility3">Members of this group</label><br>
 
                     <br><hr>
