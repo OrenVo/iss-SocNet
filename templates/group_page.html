@@ -54,13 +54,13 @@
             </div>
         <!-- If he is a visitor -->
         {% else %}
-            <div id="profile_container">                
+            <div id="profile_container">
                 <div id="profile_container_image">
                     <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
                 <div id="profile_container_description">
                     Visitor
-                </div>                
+                </div>
             </div>
         {% endif %}
 
@@ -155,20 +155,17 @@
                     <h1>Create new group</h1> <hr>
 
                     <label for="group_name"><h3>Group name</h3></label>
-                    <input name="group_name" type="text"  placeholder="Requiered Enter Group Name" id="group_name"
-                    {% if form  %} value="{{ form['groupname'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
-                    title="ASCII characters only, no white spaces"
-                    class="input_box" required>
+                    <input name="group_name" type="text" placeholder="Requiered Enter Group Name" id="group_name" class="input_box" required>
 
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box">
 
                     <label for="group_image"><h3>Group picture</h3></label>
-                    <input name="group_image" type="file" placeholder="Requiered Group pricture" accept="image/*" capture><br><br>
+                    <input id="group_image" name="group_image" type="file" placeholder="Requiered Group pricture" accept="image/*" capture><br><br>
 
 
                     <label for="visibility"><h3>Visibility for:</h3></label>
-                    <input id="visibility1" type="radio" name="visibility" value="0">
+                    <input id="visibility1" type="radio" name="visibility" value="0" checked="checked">
                     <label for="visibility1">All users</label><br>
 
                     <input id="visibility2" type="radio" name="visibility" value="1">

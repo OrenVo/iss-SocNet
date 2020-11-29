@@ -488,6 +488,8 @@ def delete_thread(group, thread):
 @app.route("/create/groups/new/", methods=["POST"])
 @login_required
 def create_group():
+    eprint("HERE ------------------------------------------------> ", request.files)
+
     name = request.form["group_name"]
     name = replace_whitespace(name)
     if not db.check_groupname(name):
