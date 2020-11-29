@@ -23,15 +23,11 @@ import re
 
 """
 TODO List:
+
+logout pri visitor
 All TODOs in the file
 
-if user.is_anonymous:
-    return None
-Dano link na profil ak je visitor
-
-
 https://stackoverflow.com/questions/50143672/passing-a-variable-from-jinja2-template-to-route-in-flask
-Spracovanie flashu aj na grouppage zmena settingov a podobne
 
 DELETE GROUP button
 DELETE THREAD button
@@ -92,7 +88,7 @@ def register():
     repeat = request.form["psw-repeat"]
     # Ine hodnoty
 
-    if not re.search(r"^([\x00-\x7F])\S+$", login):
+    if not re.search(r"^\S([\x00-\x7F])\S*$", login):
         flash("Invalid username. Please use only lower & upper case letters, numbers & symbols.")
         return render_template("registration_page.html", form=request.form)
     if not db.check_username(login):
@@ -102,7 +98,7 @@ def register():
         flash("Passwords do not match.")
         return render_template("registration_page.html", form=request.form)
 
-    db.insert_to_user(login, password)
+    db.insert_to_users(login=login, password=password)
     flash("Your registration was succesful. You can now login.")
     return redirect(url_for("welcome"))
 
@@ -414,7 +410,7 @@ def accept_req(group, type, user):
     if user is None:
         return redirect(url_for("lost"))
 
-    # TODO Pridaj ho do celnov/moderatorov a ?informuj ho?
+    # TODO Pridaj ho do celnov/moderatorov & odstran request
     pass
 
 
@@ -428,7 +424,7 @@ def reject_req(group, type, user):
     if user is None:
         return redirect(url_for("lost"))
 
-    # TODO Odstran request a ?informuj ho?
+    # TODO Odstran request
     pass
 
 
@@ -488,31 +484,29 @@ def delete_thread(group, thread):
 # Create
 ################################################################################
 
-@app.route("/create/group/new/", methods=["GET", "POST"])
-@app.route("/create/groups/new/", methods=["GET", "POST"])
+@app.route("/create/group/new/", methods=["POST"])
+@app.route("/create/groups/new/", methods=["POST"])
 @login_required
 def create_group():
-    # TODO Get ma dostane na tvoriacu stranku
-    if request.method == "GET":
-        return render_template("group_creation_page.html", form=request.form)
-
-    '''
-    def check_groupname(self, groupname: str):
-        group = self.db.session.query(Group).filter_by(Name=groupname).first()
-        return group is None
-    '''
-
-    name = request.form["name"]
+    name = request.form["group_name"]
     name = replace_whitespace(name)
     if not db.check_groupname(name):
         flash("Group is already taken. Please use different one.")
-        return render_template("group_creation_page.html", form=request.form)
-    rights = 0  # Neviem ako ich ziskam
+        return redirect(url_for("group", name=Group.query.filter_by(ID=current_user.Last_group).first().Name), form=request.form)
+    rights = int(request.form['visibility'])
     description = request.form["description"]
-    image = None  # neviem ako ho vlozim
+    if not description:
+        description = None
+    image = request.files["group_image"]  # Change img to id in template that upload profile images
+    if image:
+        blob = image.read()
+        mimetype = image.mimetype
+        image = (blob, mimetype)
+    else:
+        image = None
 
     owner = current_user.ID
-    insert_to_group(name=name, mode=rights, description=description, image=image, user_id=owner)
+    db.insert_to_group(name=name, mode=rights, description=description, image=image, user_id=owner)
     return redirect(url_for("group", name=name))
 
 
@@ -541,8 +535,10 @@ def create_thread(group):
         flash("Thread was already made. Please use it or make a new one.")
         return render_template("thread_creation_page.html", form=request.form)
     description = request.form["description"]
+    if not description:
+        description = None
 
-    insert_to_thread(group_id=group.ID, thread_name=name, description=description)
+    db.insert_to_thread(group_id=group.ID, thread_name=name, description=description)
     return redirect(url_for("thread", group=group.Name, thread=name))
 
 
@@ -680,10 +676,11 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+'''
 @app.route("/receive_image", methods=["POST"])
 @login_required
 def receive_image():
-    file = request.files["img"]  # Change img to id in template that upload profile images
+    file = request.files["group_image"]  # Change img to id in template that upload profile images
     if file:
         blob = file.read()
         mimetype = file.mimetype
@@ -695,6 +692,7 @@ def receive_image():
     else:
         status_code = Response(status=404)
     return status_code
+'''
 
 
 def replace_whitespace(input):
