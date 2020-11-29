@@ -161,7 +161,7 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
-                <form action="{{ url_for('create_group') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ url_for('create_group') }}" id="create_group" method="POST" enctype="multipart/form-data">
                     <h1>Create new group</h1> <hr>
 
                     <label for="group_name" ><h3>Group name</h3></label>
@@ -189,7 +189,7 @@
                     <label for="visibility3">Members of this group</label><br>
 
                     <br><hr>
-                    <button type="submit" id="create_group_button">Create group</button>
+                    <button form="create_group" type="submit" id="create_group_button">Create group</button>
                     <button type="button" onclick="create_new_group_hide()">
                         &#10094; Back
                     </button>
@@ -198,7 +198,7 @@
 
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
-                <form action="{{ url_for('create_thread', group=groupname)}}" method="POST">
+                <form action="{{ url_for('create_thread', group=groupname)}}" id="create_thread" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
@@ -206,7 +206,7 @@
                     <input id="thread_subject" type="text" placeholder="Enter subject" name="thread_subject" class="input_box" required>
 
                     <br>
-                    <button type="submit" id="create_thread_button">Create thread</button>
+                    <button form="create_thread" type="submit" id="create_thread_button">Create thread</button>
                     <button type="button" onclick="create_new_thread_hide()">&#10094; Back</button>
                 </form>
             </div>
