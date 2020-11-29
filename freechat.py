@@ -285,7 +285,13 @@ def group(name):
         else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
         db.insert_to_users(id=current_user.ID, last_group_id=group.ID)
-    return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads)
+
+    if request.args.get('form'):
+        form = request.args['form']
+    else:
+        form = None
+
+    return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads, form=form)
 
 
 @app.route("/image/group/<name>/")
@@ -535,16 +541,9 @@ def create_thread(group):
     if request.method == "GET":
         return render_template("group_creation_page.html", form=request.form)
 
-    '''
-    def check_threadname(self, threadname: str, groupname: str):
-        group = self.db.session.query(Group).filter_by(Name=groupname).first()
-        thread = self.db.session.query(Thread).filter_by(Group_ID=group.ID, Name=threadname).first()
-        return thread is None
-    '''
-
     name = request.form["thread_subject"]
     name = replace_whitespace(name)
-    if not db.check_threadname(name, group):
+    if not db.check_threadname(group, name):
         flash("Thread was already made. Please use it or make a new one.")
         return render_template("thread_creation_page.html", form=request.form)
     description = request.form["description"]
