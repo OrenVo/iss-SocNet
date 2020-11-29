@@ -5,3 +5,4 @@ Flask-SQLAlchemy>=2.4.4
 gunicorn>=20.0.4
 mysqlclient>=1.4.6
 PyMySQL>=0.10.1
+deprecation>=2.1.0
