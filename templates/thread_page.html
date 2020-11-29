@@ -10,29 +10,40 @@
     <!-- HEADER - profile + search + logo -->
     <header>
         <!-- PROFILE -->
-        <div id="profile_container">
-            <a href="{{ url_for('profile', name=username) }}">
+        <!-- If user is logged in -->
+        {% if not visitor %}
+            <div id="profile_container">
+                <a href="{{ url_for('profile', name=username) }}">
+                    <div id="profile_container_image">
+                        <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
+                    </div>
+                    <div id="profile_container_description">
+                        {{ username }} <br>
+                        {% if admin %}
+                        Admin
+                        {% elif owner %}
+                        Owner
+                        {% elif moderator %}
+                        Moderator
+                        {% elif member %}
+                        Member
+                        {% else %}
+                        User
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        <!-- If he is a visitor -->
+        {% else %}
+            <div id="profile_container">
                 <div id="profile_container_image">
                     <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                 </div>
-                <div id="profile_container_description">
-                    <h2>{{ username }}</h2>
-                    {% if admin %}
-                    <h2>Admin</h2>
-                    {% elif owner %}
-                    <h2>Ownder</h2>
-                    {% elif moderator %}
-                    <h2>Moderator</h2>
-                    {% elif member %}
-                    <h2>Member</h2>
-                    {% elif user %}
-                    <h2>User</h2>
-                    {% else %}
-                    <h2>Visitor</h2>
-                    {% endif %}
+                <div id="profile_container_visitor">
+                    <span class="visitor_title">Visitor</span>
                 </div>
-            </a>
-        </div>
+            </div>
+        {% endif %}
 
         <!-- SEARCH -->
         <div id="search_bar_box">
