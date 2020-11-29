@@ -56,12 +56,20 @@
         </form>
     </div>
 
-    <!-- LOGOUT -->
-    <div class="logout_container">            
+    <!-- LOGOUT or LOGIN for visitor -->
+    {% if not visitor %}
+    <div class="logout_container">
         <a href="{{ url_for('logout') }}">
             <button>Logout</button>
         </a>
     </div>
+    {% else %}
+    <div class="logout_container">
+        <a href="{{ url_for('login') }}">
+            <button>Login</button>
+        </a>
+    </div>
+    {% endif %}
 </header>
 
     <!-- ARTICLE - left panel[create new group, groups] + right panel [creating new group, creating new thread, threads] -->
@@ -75,30 +83,30 @@
             {% if gowner %}
                 <div class="lp_gt">Owner</div>
                 {% for group in gowner %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
                 {% endfor %}
             {% endif %}
-            
+
             <!-- MODERATOR -->
             {% if gmoderator %}
                 <div class="lp_gt">Moderator</div>
                 {% for group in gmoderator %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
@@ -109,20 +117,19 @@
             {% if gmember %}
                 <div class="lp_gt">Member</div>
                 {% for group in gmember %}
-                <a href="{{ url_for('group', name=group.Name) }}">
+                <a href="{{ url_for('group', name=group[0].Name) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <h3 class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</h3>
+                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
                         </div>
                     </div>
                 </a>
                 {% endfor %}
             {% endif %}
         </div>
-
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">

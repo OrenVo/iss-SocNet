@@ -43,12 +43,20 @@
             </form>
         </div>
 
-        <!-- LOGOUT -->
-        <div class="logout_container">            
+        <!-- LOGOUT or LOGIN for visitor -->
+        {% if not visitor %}
+        <div class="logout_container">
             <a href="{{ url_for('logout') }}">
                 <button>Logout</button>
             </a>
         </div>
+        {% else %}
+        <div class="logout_container">
+            <a href="{{ url_for('login') }}">
+                <button>Login</button>
+            </a>
+        </div>
+        {% endif %}
     </header>
 
     <!-- ARTICLE -->
