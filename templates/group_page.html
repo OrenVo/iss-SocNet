@@ -151,7 +151,7 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
-                <form action="{{ url_for('create_group') }}" method="POST">
+                <form action="{{ url_for('create_group') }}" method="POST" enctype="multipart/form-data">
                     <h1>Create new group</h1> <hr>
 
                     <label for="group_name"><h3>Group name</h3></label>
