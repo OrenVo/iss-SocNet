@@ -637,6 +637,11 @@ def thread(group_id, thread_id):
                            groupname=group.Name.replace("", " "), threadname=thread.Name,
                            description=thread.Description, posts=db.get_messages(thread, 50))
 
+@app.route("/create_message/<group_id>/<thread_id>/")
+@login_required
+def create_message(group_id, thread_id):
+    thread = Thread.query.filter_by(ID=thread_id).first()
+    db.insert_to_messages(current_user, thread, thread_id, Content=request.form['content'])
 
 @app.route("/delete/group/<group_id>/<thread_id>/")
 @app.route("/delete/groups/<group_id>/<thread_id>/")

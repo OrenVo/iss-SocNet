@@ -169,11 +169,6 @@ class DB:
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
 
-    def send_message(self, author: User, thread: Thread, message: str):
-        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=Thread.ID_group, Content=message)
-        self.db.session.add(new_message)
-        self.db.session.commit()
-
     def get_members(self, group: Group) -> list:
         members = self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
         users = list()
@@ -400,6 +395,16 @@ class DB:
             raise ValueError('Parameters not passed')
         moderate = Moderate(User=user_id, Group=group_id)
         self.db.session.add(moderate)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+
+    def insert_to_messages(self, author: User, thread: Thread, message: str):
+        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=Thread.ID_group, Content=message)
+        self.db.session.add(new_message)
         try:
             self.db.session.commit()
         except Exception as e:
