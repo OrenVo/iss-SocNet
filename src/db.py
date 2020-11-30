@@ -108,16 +108,18 @@ class DB:
         else:
             return None
 
-    def check_password(self, password: str, username: str) -> bool:
-        user = self.db.session.query(User).filter_by(Login=username).first()
+    def check_password(self, password: str, id: int) -> bool:
+        user = self.db.session.query(User).filter_by(ID=id).first()
         if user is None:
             return False
         p_s = user.Password.split('$')
         hash_alg = hashlib.sha256((p_s[1] + password).encode())
         return p_s[0] == hash_alg.hexdigest()
 
-    def change_password(self, login: str, new_psw: str) -> None:
-        user = self.db.session.query(User).filter_by(Login=login)
+    def change_password(self, id: int, new_psw: str) -> None:
+        user = self.db.session.query(User).filter_by(ID=id).first()
+        if user is None:
+            raise ValueError(f'Unknown user with id: {id}')
         new_hash = self.create_password(new_psw)
         user.Password = new_hash
         self.db.session.commit()
@@ -140,8 +142,13 @@ class DB:
         thread = self.db.session.query(Thread).filter_by(Group_ID=group.ID, Name=threadname).first()
         return thread is None
 
-    def get_user(self, username):
-        instance = self.db.session.query(User).filter_by(Login=username).first()
+    def get_user(self, username: str = None, id: int = None):
+        if username is None and id is None:
+            raise ValueError("Parameters not given")
+        if username:
+            instance = self.db.session.query(User).filter_by(Login=username).first()
+        else:
+            instance = self.db.session.query(User).filter_by(ID=id).first()
         return instance
 
     def get_membership(self, user: User) -> dict:
@@ -167,6 +174,19 @@ class DB:
             path = f'/image/group/{mem.Name}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
             gmember.append((mem, path))
         return {'gowner': gowner, 'gmoderator': gmoderator, 'gmember': gmember}
+
+    def search_user_group(self, search_word: str) -> dict:
+        retval = {
+            'users': list(),
+            'groups': list()
+        }
+        users = self.db.session.query(User).filter(User.Login.contains(search_word)).all()
+        groups = self.db.session.query(Group).filter(Group.Name.contains(search_word)).all()
+        if users:
+            retval['users'] = users
+        if groups:
+            retval['groups'] = users
+        return retval
 
     def get_threads(self, group: Group) -> list:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
@@ -206,7 +226,7 @@ class DB:
             if user:
                 users.append(user)
             else:
-                eprint(f'[Error] Database inconsistency error. User in is_member table with id: {applicant.User} doesn\'t exist.')
+                eprint(f'[Error] Database inconsistency error. User in Applications table with id: {applicant.User} doesn\'t exist.')
         return users
 
     def insert_to_group(self, id: int = None, name: str = None, mode: int = None, description: str = None,
@@ -261,9 +281,9 @@ class DB:
             self.db.session.flush()
             return False
         else:
-            return True
+            return group.ID
 
-    def insert_to_thread(self, group_id: int, thread_name: str = None, description: str = None) -> bool:
+    def insert_to_thread(self, group_id: int, thread_id: int = None, thread_name: str = None, description: str = None) -> bool:
         """
         Creates or update thread defined by group_id and thread_name
         :param group_id: Group to which thread belongs
@@ -279,14 +299,17 @@ class DB:
         group = self.db.session.query(Group).filter_by(ID=group_id).first()
         if group is None:
             raise ValueError(f'Unknown parameter group_id: {group_id}')
-        if thread_name is None:
-            raise ValueError(f'Unknown parameter thread_name: {thread_name}')
+
         add = False
-        if thread_name is not None:
-            thread = self.db.session.query(Thread).filter_by(Group_ID=group_id, Name=thread_name).first()
+        if thread_id is None:
+            if thread_name is None:
+                raise ValueError("Unknown thread name when inserting")
+            thread = Thread(Group_ID=group_id, Name=thread_name)
+            add = True
+        else:
+            thread = self.db.session.query(Thread).filter_by(Group_ID=group_id, ID=thread_id).first()
             if thread is None:
-                thread = Thread(Group_ID=group_id, Name=thread_name)
-                add = True
+                raise ValueError(f"Unknown thread with id {thread_id} and Group_ID {group_id}")
 
         if description:
             thread.Description = description
@@ -300,7 +323,7 @@ class DB:
             self.db.session.flush()
             return False
         else:
-            return True
+            return thread.ID
 
     def insert_to_users(self, id: int = None, login: str = None, name: str = None, surname: str = None,
                         description: str = None, mode: int = None, image: tuple = None, password: str = None,
@@ -360,7 +383,27 @@ class DB:
             self.db.session.flush()
             return False
         else:
-            return True
+            return user.ID
+
+    def insert_to_applications(self, user_id: int, group_id: int, membership: bool = True) -> bool:
+        if user_id is None or group_id is None:
+            raise ValueError(f'User_id or group_id are not defined')
+        add = False
+        application = self.db.session.query(Applications).filter_by(User=user_id, Group=group_id)
+        if application is None:
+            application = Applications(User=user_id, Group=group_id)
+        application.Membership = membership
+        if add:
+            self.db.session.add(application)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+            return False
+        else:
+            return application.ID
 
     def delete_from_db(self, obj):
         self.db.session.delete(obj)
@@ -371,11 +414,12 @@ class DB:
             self.db.session.rollback()
             self.db.session.flush()
 
-    def get_messages(self, thread: Thread, limit: int = 200) -> list:  # TODO learn how to sort it
-        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Thread_name, ID_group=thread.ID_group).limit(limit)
+    def get_messages(self, thread: Thread, limit: int = 200) -> list:
+        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Thread_name, ID_group=thread.ID_group).order_by(Messages.ID).limit(limit)
         if not retval:
             retval = list()
         return retval
+
     def getuserrights(self, user, group) -> dict:
         result = {
             'admin': None,
