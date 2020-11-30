@@ -125,7 +125,7 @@ def login():
     password = request.form.get("psw", None)
 
     if not db.check_password(password, login):
-        flash("Your credentials were incorrect. Please try again.")
+        flash("Your credentials were incorrect. Please try again. " + login + " " + password)
         return render_template("main_page.html", form=request.form)
 
     user = User.query.filter_by(Login=login).first()
@@ -153,7 +153,7 @@ def guest():
 @app.route("/home/")
 @login_required
 def home():
-    return redirect(url_for("group", group=current_user.Last_group))
+    return redirect(url_for("group", group_id=current_user.Last_group))
 
 
 @app.route("/profile/<user_id>/")
@@ -290,7 +290,7 @@ def delete_account(user_id):
     if not admin and not owner:
         return redirect(url_for("tresspass"))
 
-    # TODO vymaz ucet
+    db.delete_from_db(user)
     if admin:
         flash("Account has been deleted.")
         return redirect(url_for("home"))
@@ -353,9 +353,11 @@ def group(group_id):
         return redirect(url_for("lost"))
 
     if current_user.is_anonymous:
+        user_id = None
         username = "Visitor"
         profile_pic = default_pictures_path + default_profile_picture
     else:
+        user_id = current_user.ID
         username = current_user.Login
         if current_user.Image is not None:
             profile_pic = "/profile_picture/" + current_user.ID
@@ -375,7 +377,7 @@ def group(group_id):
     form = request.args.get('form')
     if form:
         form = json.loads(form)
-    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=image, groupowner_id=group_owner.ID, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, username=username, img_src=profile_pic, **member, **rights, form=form)
+    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=image, groupowner_id=group_owner.ID, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, user_id=user_id, username=username, img_src=profile_pic, **member, **rights, form=form)
 
 
 @app.route("/group_picture/<group_id>/")
@@ -457,7 +459,7 @@ def accept_application(application_id):
         return redirect(url_for("lost"))
     group = Group.query.filter_by(ID=application.Group).first()
     if group is None:
-        # TODO vymaz ziadost
+        db.delete_from_db(application)
         return redirect(url_for("home"))
 
     # User rights
@@ -474,7 +476,7 @@ def accept_application(application_id):
 
     user = User.query.filter_by(ID=application.User).first()
     if user is None:
-        # TODO vymaz ziadost
+        db.delete_from_db(application)
         return redirect(url_for("group_notifications", group_id=application.Group))
 
     if application.Membership and not Is_member.query.filter_by(User=user.ID, Group=group.ID).first():
@@ -484,7 +486,7 @@ def accept_application(application_id):
         # TODO pridaj do moderatorov
         pass
 
-    # TODO vymaz ziadost
+    db.delete_from_db(application)
     return redirect(url_for("group_notifications", group_id=application.Group))
 
 
@@ -496,7 +498,7 @@ def reject_application(application_id):
         return redirect(url_for("lost"))
     group = Group.query.filter_by(ID=application.Group).first()
     if group is None:
-        # TODO vymaz ziadost
+        db.delete_from_db(application)
         return redirect(url_for("home"))
 
     # User rights
@@ -511,7 +513,7 @@ def reject_application(application_id):
     if not owner or not moderator:
         return redirect(url_for("tresspass"))
 
-    # TODO vymaz ziadost
+    db.delete_from_db(application)
     return redirect(url_for("group_notifications", group_id=application.Group))
 
 
