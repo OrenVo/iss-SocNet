@@ -381,7 +381,7 @@ def group(group_id):
 
 
 @app.route("/group_picture/<group_id>/")
-def group_img(name):
+def group_img(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
