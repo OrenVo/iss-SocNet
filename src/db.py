@@ -202,7 +202,7 @@ class DB:
         for applicant in applicants:
             user = self.db.session.query(User).filter_by(ID=applicant.User).first()
             if user:
-                users.append(user)
+                users.append((user, ))
             else:
                 eprint(f'[Error] Database inconsistency error. User in Applications table with id: {applicant.User} doesn\'t exist.')
         return users
