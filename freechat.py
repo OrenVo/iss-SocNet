@@ -85,7 +85,7 @@ def register():
     name        = request.form.get("name", None)
     surname     = request.form.get("surname", None)
     description = request.form.get("description", None)
-    image       = request.form.get("profile_image", None)
+    image       = request.files["profile_image"]
     visibility  = int(request.form.get("visibility", 0))
 
     # Optional values check
@@ -125,7 +125,7 @@ def login():
     password = request.form.get("psw", None)
 
     if not db.check_password(password, login):
-        flash("Your credentials were incorrect. Please try again. " + login + " " + password)
+        flash("Your credentials were incorrect. Please try again.")
         return render_template("main_page.html", form=request.form)
 
     user = User.query.filter_by(Login=login).first()
@@ -176,7 +176,7 @@ def profile(user_id):
         owner = False
 
     if user.Image is not None:
-        image = "/profile_picture/" + user.ID
+        image = "/profile_picture/" + str(user.ID)
     else:
         image = default_pictures_path + default_profile_picture
 
@@ -222,7 +222,7 @@ def user_settings(user_id):
 
     # Current password
     current_password = request.form.get("current_password", None)
-    if not admin or not db.check_password(current_password, user.Login):
+    if not admin and not db.check_password(current_password, user.Login):
         flash("Your password were incorrect. Changes were not applied.")
         return redirect(url_for("profile", user_id=user.ID, form=json.dumps(request.form)))
 
@@ -233,7 +233,7 @@ def user_settings(user_id):
     name        = request.form.get("fname", None)
     surname     = request.form.get("lname", None)
     description = request.form.get("description", None)
-    image       = request.form.get("profile_image", None)
+    image       = request.files["profile_image"]
     visibility  = int(request.form.get("visibility", None))
 
     # Values check
@@ -308,7 +308,7 @@ def delete_account(user_id):
 def create_group():
     name        = request.form.get("group_name", None)
     description = request.form.get("description", None)
-    image       = request.form.get("group_image", None)
+    image       = request.files["group_image"]
     visibility  = int(request.form.get("visibility", None))
     owner       = current_user.ID
 
@@ -345,7 +345,7 @@ def group(group_id):
         return redirect(url_for("welcome", next=request.url))
 
     if group.Image is not None:
-        image = "/group_picture/" + group.ID
+        image = "/group_picture/" + str(group.ID)
     else:
         image = default_pictures_path + default_group_picture
     group_owner = User.query.filter_by(ID=group.User_ID).first()
@@ -360,7 +360,7 @@ def group(group_id):
         user_id = current_user.ID
         username = current_user.Login
         if current_user.Image is not None:
-            profile_pic = "/profile_picture/" + current_user.ID
+            profile_pic = "/profile_picture/" + str(current_user.ID)
         else:
             profile_pic = default_pictures_path + default_profile_picture
         db.insert_to_users(id=current_user.ID, last_group_id=group.ID)
