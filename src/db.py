@@ -86,30 +86,8 @@ class DB:
     def __init__(self, db):
         self.db = db
 
-    @deprecated(details='This method will be replaced by insert_to_user and insert_to group method in next versions')
-    def insert_image(self, login: str, blob, mimetype=None):
-        user = User.query.filter_by(Login=login).first()
-        if not user:
-            return None
-        user.Image = blob
-        user.Mimetype = mimetype
-        self.db.session.commit()
-        return user
-
-    @deprecated(details='This method will be replaced by insert_to_user method in next versions')
-    def insert_new_user(self, username, password):
-        psw = self.create_password(password)
-        new_user = User(Login=username, Password=psw, Last_group=1)
-        instance = self.db.session.query(User).filter_by(Login=username).first()
-        if instance is None:
-            self.db.session.add(new_user)
-            self.db.session.commit()
-            return new_user
-        else:
-            return None
-
-    def check_password(self, password: str, id: int) -> bool:
-        user = self.db.session.query(User).filter_by(ID=id).first()
+    def check_password(self, password: str, login: str) -> bool:
+        user = self.db.session.query(User).filter_by(Login=login).first()
         if user is None:
             return False
         p_s = user.Password.split('$')
