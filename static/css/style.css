@@ -70,6 +70,11 @@ input {
     height: 40px;
 }
 
+input:required {
+    background: url('../pictures/required.png') no-repeat 95% 50% rgb(165, 165, 165);
+    background-size: 25px;
+}
+
 /* Code from https://www.digitalocean.com/community/tutorials/css-styling-form-input-validity */
 input:required:focus:valid {
     background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;
@@ -244,6 +249,12 @@ footer{
     bottom: 0;
 }
 
+.just_for_footer {
+    width: 100%;
+    height: 20px;
+    float: left;
+}
+
 .cursor_pointer {
     cursor: pointer;
 }
@@ -338,6 +349,16 @@ footer{
     text-align: center;
 }
 
+#profile_container_visitor {
+    height: 100%;
+    width: 60%;
+
+    float: left;
+    padding: 25px 0px;
+
+    text-align: center;
+}
+
 #home_page_notifications {
     height: 100%;
     width: 20%;
@@ -387,6 +408,7 @@ footer{
     float: left;
     margin-left: 2px;
 
+    background-image: url('../pictures/hsearch.png');
     background-image: url('../pictures/search.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -460,9 +482,7 @@ footer{
 
 .group_container:hover {
     background-color: #cecece;
-    color: #00c14c;
 }
-
 
 .left_panel_group_picture_container {
     height: 100%;
@@ -806,7 +826,7 @@ footer{
     width: 30%;
 
     float: left;
-    padding: 25px 0px;
+    padding: 22px 0px;
     text-align: center;
 
     font-weight: bold;
@@ -988,9 +1008,6 @@ footer{
     }
 
     /* Home page */
-    #profile_container_description {
-        display: none;
-    }
     #profile_container_image {
         width: 20%;
     }

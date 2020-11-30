@@ -56,7 +56,13 @@
         <div id="info_container">
             <h1>Username: {{ username }}</h1><br>
             <p><b>Name:</b> {{ name }}</p>
-            <p><b>Surname</b> {{ surname }}</p>
+            <p><b>Surname:</b> {{ surname }}</p>
+            <p><b>Visibility:</b></p>
+            {% if visibility == 0 %}
+            Public
+            {% else %}
+            Private
+            {% endif %}
             <p><b>Description:</b>
             </p> {{ description }} </p>
             <br>
@@ -68,7 +74,7 @@
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="{{ url_for('user_settings', name=username) }}" method="POST">
+        <form action="{{ url_for('user_settings', user_id=user_id) }}" method="POST">
             <h1>Settings</h1><hr><br>
 
             <label for="login"><b>Change Login</b></label>
@@ -88,21 +94,19 @@
             <label for="password2"><b>Repeat Password</b></label>
             <input name="password2" type="password" placeholder="Repeat Password" autocomplete="new-password" class="input_box">
 
-            <label for="group_image"><b>Profile Picture</b></label>
-            <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
-            placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+            <label for="profile_image"><b>Profile Picture</b></label>
+            <input id="profile_image" name="profile_image" type="file" {% if form %} value={{ form['profile_image'] }} {% endif %}
+            placeholder="Profile pricture" accept="image/*" onchange="Filevalidation()" capture> 
             <p id="size"></p>
             <span id="rm_img" class="remove_img_form" onclick="remove_img()">Remove image</span>
             <br><br>
 
-            <br>
-            <label for="group_privacy"><b>Visibility for:</b></label><br>
-            <input name="visibility" type="radio" id="visibility1" checked value="30">
-            <label for="visibility1">All users</label><br>
-            <input name="visibility" type="radio" id="visibility2" value="60">
-            <label for="visibility2">Registered users</label><br>
-            <input name="visibility" type="radio" id="visibility3" value="100">
-            <label for="visibility3">Members of your groups</label><br><br>    
+            <label for="visibility"><h3>Visibility for:</h3></label>
+            <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
+            <label for="visibility1">Public: All users</label><br>
+
+            <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
+            <label for="visibility2">Private: Registered users</label><br>                      
             
             <label for="description"><b>Description</b></label>
             <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
@@ -112,7 +116,9 @@
             <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
 
             {% if admin or owner %}
-            <button formaction="{{ url_for('delete_account', name=username) }}">Delete profile</button>
+            <a href="{{ url_for('delete_account', user_id=user_id) }}">
+                <span>Delete profile</span>
+            </a>
             <button type="submit">Save changes</button>
             <button type="button" onclick="show_profile_info()">&#10094; Back</button>
             {% endif %}
