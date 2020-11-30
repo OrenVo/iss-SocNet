@@ -246,21 +246,21 @@
 
                     <!-- LEAVE GROUP -->
                     {% if moderator or member %}
-                    <a href="{ url_for('leave_group', group_id=group_id) }}">
+                    <a href="{{ url_for('leave_group', group_id=group_id) }}">
                         <button>Leave group</button>
                     </a>
                     {% endif %}
 
                     <!-- REQUEST MOD -->
                     {% if member %}
-                    <a href="{ url_for('ask_mod', group_id=group_id) }}">
+                    <a href="{{ url_for('ask_mod', group_id=group_id) }}">
                         <button>Request mod</button>
                     </a>
                     {% endif %}
 
                     <!-- SEE MEMBERS -->
                     {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
-                    <a href="{ url_for('members', group_id=group_id) }}">
+                    <a href="{{ url_for('members', group_id=group_id) }}">
                         <button>Members</button>
                     </a>
                     {% endif %}
@@ -274,7 +274,7 @@
 
                     <!-- SETTINGS -->
                     {% if admin or owner %}
-                    <a href="{ url_for('group_settings', group_id=group_id) }}">
+                    <a href="{{ url_for('group_settings', group_id=group_id) }}">
                         <button>Settings</button>
                     </a>
                     {% endif %}
