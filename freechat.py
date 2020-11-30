@@ -144,7 +144,7 @@ def login():
 def guest():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    return redirect(url_for("group", group=default_group_ID))
+    return redirect(url_for("group", group_id=default_group_ID))
 
 
 ################################################################################
@@ -375,7 +375,7 @@ def group(group_id):
     form = request.args.get('form')
     if form:
         form = json.loads(form)
-    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=group_pic, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, username=username, img_src=profile_pic, **member, **rights, form=form)
+    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=image, groupowner_id=group_owner.ID, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, username=username, img_src=profile_pic, **member, **rights, form=form)
 
 
 @app.route("/group_picture/<group_id>/")
@@ -532,6 +532,12 @@ def delete_group(group_id):
 ################################################################################
 # Threads
 ################################################################################
+@app.route("/create/group/<group_id>/")
+def create_thread(group_id, thread_id):
+    # TODO
+    pass
+
+
 @app.route("/group/<group_id>/<thread_id>")
 @app.route("/groups/<group_id>/<thread_id>")
 def thread(group, thread):

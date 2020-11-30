@@ -117,7 +117,7 @@
 
             {% if admin or owner %}
             <a href="{{ url_for('delete_account', user_id=user_id) }}">
-                <span>Delete profile</span>
+                <span class="del_g_p">Delete profile</span>
             </a>
             <button type="submit">Save changes</button>
             <button type="button" onclick="show_profile_info()">&#10094; Back</button>
