@@ -13,7 +13,7 @@
         <!-- If user is logged in -->
         {% if not visitor %}
             <div id="profile_container">
-                <a href="{{ url_for('profile', name=user_id) }}">
+                <a href="{{ url_for('profile', user_id=user_id) }}">
                     <div id="profile_container_image">
                         <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                     </div>
@@ -86,7 +86,7 @@
                 <div class="post">
                     <!-- Post header -->
                     <div class="post_header">
-                        <a href="{{ url_for('profile', name=post.usern_id) }}">
+                        <a href="{{ url_for('profile', user_id=post.user_id) }}">
                             <h3>{{ post.Username post.Time}}</h3>
                         </a>
                     </div>
@@ -120,7 +120,7 @@
             {% endfor %}
             {% endif %}
             <!-- TODO vytvorit pridanie postu -->
-            <form action="{{ url_for('send_message'), threadname=threadname}}" method="POST">
+            <form action="{{ url_for('send_message'), threadname=thread_id}}" method="POST">
                 <input type="text">
                 <input type="button" value="Post">
             </form>

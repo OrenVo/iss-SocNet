@@ -34,7 +34,7 @@
         <!-- If user is logged in -->
         {% if not visitor %}
             <div id="profile_container">
-                <a href="{{ url_for('profile', name=user_id) }}">
+                <a href="{{ url_for('profile', user_id=user_id) }}">
                     <div id="profile_container_image">
                         <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                     </div>
@@ -109,7 +109,7 @@
             {% if gowner %}
                 <div class="lp_gt">Owner</div>
                 {% for group in gowner %}
-                <a href="{{ url_for('group', name=group[0].ID) }}">
+                <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
@@ -126,7 +126,7 @@
             {% if gmoderator %}
                 <div class="lp_gt">Moderator</div>
                 {% for group in gmoderator %}
-                <a href="{{ url_for('group', name=group[0].ID) }}">
+                <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
@@ -143,7 +143,7 @@
             {% if gmember %}
                 <div class="lp_gt">Member</div>
                 {% for group in gmember %}
-                <a href="{{ url_for('group', name=group[0].ID) }}">
+                <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">
                         <div class="left_panel_group_picture_container">
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
@@ -198,7 +198,7 @@
 
             <!-- CREATING NEW THREAD -->
             <div id="creating_new_thread">
-                <form action="{{ url_for('create_thread', group=group_id)}}" id="create_thread" method="POST">
+                <form action="{{ url_for('create_thread', group_id=group_id)}}" id="create_thread" method="POST">
                     <h2>Create new thread</h2>
                     <br>
 
@@ -221,7 +221,7 @@
                 </div>
                 <div class="rp_gn">
                     <h1>{{ groupname }}</h1>
-                    <a href="{{ url_for('profile', name=groupowner_id) }}">
+                    <a href="{{ url_for('profile', groupowner_id=groupowner_id) }}">
                         <b>Owner: {{ groupowner }}</b>
                     </a>                    
                 </div>
@@ -232,42 +232,42 @@
                 <div class="rp_gb">
                     <!-- JOIN GROUP -->
                     {% if user %}
-                    <a href="{{ url_for('ask_mem', group=group_id) }}">
+                    <a href="{{ url_for('ask_mem', group_id=group_id) }}">
                         <button>&#x2b; Join group</button>
                     </a>
                     {% endif %}
 
                     <!-- LEAVE GROUP -->
                     {% if moderator or member %}
-                    <a href="{ url_for('leave_group', group=group_id) }}">
+                    <a href="{ url_for('leave_group', group_id=group_id) }}">
                         <button>Leave group</button>
                     </a>
                     {% endif %}
 
                     <!-- REQUEST MOD -->
                     {% if member %}
-                    <a href="{ url_for('ask_mod', group=group_id) }}">
+                    <a href="{ url_for('ask_mod', group_id=group_id) }}">
                         <button>Request mod</button>
                     </a>
                     {% endif %}
 
                     <!-- SEE MEMBERS -->
                     {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
-                    <a href="{ url_for('members', group=group_id) }}">
+                    <a href="{ url_for('members', group_id=group_id) }}">
                         <button>Members</button>
                     </a>
                     {% endif %}
 
                     <!-- NOTIFICATIONS -->
                     {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
-                    <a href="{{ url_for('group_notifications', group=group_id) }}">
+                    <a href="{{ url_for('group_notifications', group_id=group_id) }}">
                         <button>Notifications</button>
                     </a>
                     {% endif %}
 
                     <!-- SETTINGS -->
                     {% if admin or owner %}
-                    <a href="{ url_for('group_settings', group=group_id) }}">
+                    <a href="{ url_for('group_settings', group_id=group_id) }}">
                         <button>Settings</button>
                     </a>
                     {% endif %}                    
@@ -285,7 +285,7 @@
 
                 {% if threads %}
                   {% for thread in threads %}
-                  <a href="{{ url_for('thread', group=groupname, thread=thread.Subject) }}">
+                  <a href="{{ url_for('thread', group_id=group_id, thread=thread.Subject) }}">
                       <div class="thread_container">
                           <h3>{{ thread.Subject }}</h3>
                           <p>{{ thread.Description}}</p>
