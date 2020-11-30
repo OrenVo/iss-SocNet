@@ -223,7 +223,7 @@ def user_settings(user_id):
     # Current password
     current_password = request.form.get("current_password", None)
     if not admin and not db.check_password(current_password, user.Login):
-        flash("Your password were incorrect. Changes were not applied.")
+        flash("Your password was incorrect. Changes were not applied.")
         return redirect(url_for("profile", user_id=user.ID, form=json.dumps(request.form)))
 
     # Changed values
@@ -290,12 +290,13 @@ def delete_account(user_id):
     if not admin and not owner:
         return redirect(url_for("tresspass"))
 
-    db.delete_from_db(user)
     if admin:
+        db.delete_from_db(user)
         flash("Account has been deleted.")
         return redirect(url_for("home"))
     else:
-        logout_user()  # TODO necessary?
+        logout_user()
+        db.delete_from_db(user)
         flash("Your account has been deleted.")
         return redirect(url_for("welcome"))
 
@@ -381,7 +382,7 @@ def group(group_id):
 
 
 @app.route("/group_picture/<group_id>/")
-def group_img(group_id):
+def group_img(name):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -394,11 +395,18 @@ def group_img(group_id):
     return send_file(io.BytesIO(group.Image), mimetype=group.Mimetype)  # Creates file in memory, then sends file to path
 
 
-@app.route("/group_settings/<group_id>/", methods=["POST"])
+@app.route("/group_settings/<group_id>/")
 @login_required
 def group_settings(group_id):
-    # TODO NOW
-    pass
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    owner     = current_user.ID == group.User_ID
+    if not owner:
+        return redirect(url_for("lost"))
+
+
 
 
 @app.route("/group_notifications/<group_id>/", methods=["POST"])
@@ -411,7 +419,7 @@ def group_notifications(group_id):
 @app.route("/group_members/<group_id>/", methods=["POST"])
 @login_required
 def members(group_id):
-    # TODO NOW
+    # TODO NOW aj owner a moderatory
     pass
 
 
@@ -422,8 +430,10 @@ def ask_mem(group_id):
     if group is None:
         return redirect(url_for("lost"))
 
-    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
-    if member:
+    owner     = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    member    = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if owner or moderator or member:
         return redirect(url_for("lost"))
 
     db.insert_to_applications(current_user.ID, group.ID, True)
@@ -440,10 +450,6 @@ def ask_mod(group_id):
 
     member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
     if not member:
-        return redirect(url_for("lost"))
-    owner = current_user.ID == group.User_ID
-    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
-    if owner or moderator:
         return redirect(url_for("lost"))
 
     db.insert_to_applications(current_user.ID, group.ID, False)
@@ -479,12 +485,12 @@ def accept_application(application_id):
         db.delete_from_db(application)
         return redirect(url_for("group_notifications", group_id=application.Group))
 
-    if application.Membership and not Is_member.query.filter_by(User=user.ID, Group=group.ID).first():
-        # TODO pridaj do clenov
-        pass
+    membership = Is_member.query.filter_by(User=user.ID, Group=group.ID).first()
+    if application.Membership and not membership:
+        db.insert_to_membership(user.ID, group.ID)
     elif not application.Membership and not Moderate.query.filter_by(User=user.ID, Group=group.ID).first():
-        # TODO pridaj do moderatorov
-        pass
+        db.insert_to_moderate(user.ID, group.ID)
+        db.delete_from_db(membership)
 
     db.delete_from_db(application)
     return redirect(url_for("group_notifications", group_id=application.Group))
@@ -534,8 +540,8 @@ def delete_group(group_id):
 ################################################################################
 # Threads
 ################################################################################
-@app.route("/create/group/<group_id>/")
-def create_thread(group_id, thread_id):
+@app.route("/create/thread/<group_id>/")
+def create_thread(group_id):
     # TODO
     pass
 
@@ -558,21 +564,11 @@ def delete_thread(group_id, thread_id):
 ################################################################################
 # Other
 ################################################################################
-# TODO WE don"t know if it works
-@app.route("/search/", methods=["GET"])
+@app.route("/search/", methods=["POST"])
 def search():
-    return render_template("search.html")
-
-
-# TODO WE don"t know if it works
-@app.route("/search_result/")
-def search_for():
-    query = request.args.get("search")
-    result = namedtuple("result", ["val", "btn"])
-    vals = [("Article1", 60), ("Article2", 50), ("Article 3", 40)]
-    # below is a very simple search algorithm to filter vals based on user input:
-    html = render_template("results.html", results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
-    return jsonify({"results": html})
+    result = db.search_user_group(request.form.get("search", None))
+    return json.dumps(result)
+    return render_template("search.html", **result)  # TODO co co s vysledkami
 
 
 @app.route("/egg/")
