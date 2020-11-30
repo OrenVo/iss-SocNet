@@ -81,7 +81,7 @@ def register():
         return render_template("registration_page.html", form=request.form)
 
     '''
-    # Optional values  # TODO
+    # Optional values
     name        = request.form.get("name", None)
     surname     = request.form.get("surname", None)
     description = request.form.get("description", None)
@@ -109,7 +109,7 @@ def register():
     db.insert_to_users(login=login, password=password, name=name, surname=surname, description=description, image=image, mode=visibility)
     '''
 
-    db.insert_to_users(login=login, password=password, visibility=0)
+    db.insert_to_users(login=login, password=password)
     flash("Your registration was succesful. You can now login.")
     return redirect(url_for("welcome"))
 
@@ -181,7 +181,11 @@ def profile(user_id):
         image = default_pictures_path + default_profile_picture
 
     member = db.get_membership(user)
-    return render_template("profile_page.html", user_id=user.ID, username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=image, visibility=private, admin=admin, owner=owner, **member)
+
+    form = request.args.get('form')
+    if form:
+        form = json.loads(form)
+    return render_template("profile_page.html", user_id=user.ID, username=user.Login, name=user.Name, surname=user.Surname, description=user.Description, img_src=image, visibility=private, admin=admin, owner=owner, **member, form=form)
 
 
 @app.route("/profile_picture/")
@@ -271,9 +275,65 @@ def logout():
     return redirect(url_for("welcome"))
 
 
+@app.route("/delete/profile/<user_id>/")
+@app.route("/delete/user/<user_id>/")
+@app.route("/delete/users/<user_id>/")
+@app.route("/delete/profiles/<user_id>/")
+@login_required
+def delete_account(user_id):
+    user = User.query.filter_by(ID=user_id).first()
+    if user is None:
+        return redirect(url_for("lost"))
+
+    admin = current_user.Mode & 2
+    owner = current_user.ID == user.ID
+    if not admin and not owner:
+        return redirect(url_for("tresspass"))
+
+    # TODO vymaz ucet
+    if admin:
+        flash("Account has been deleted.")
+        return redirect(url_for("home"))
+    else:
+        logout_user()  # TODO necessary?
+        flash("Your account has been deleted.")
+        return redirect(url_for("welcome"))
+
+
 ################################################################################
 # Groups
 ################################################################################
+@app.route("/create/group/", methods=["POST"])
+@login_required
+def create_group():
+    name        = request.form.get("group_name", None)
+    description = request.form.get("description", None)
+    image       = request.form.get("group_image", None)
+    visibility  = int(request.form.get("visibility", None))
+    owner       = current_user.ID
+
+    # Values check
+    if len(name) > 30:
+        flash("Group name is too long. Maximum is 30 characters.")
+        return redirect(url_for("group", group_id=current_user.Last_group, form=json.dumps(request.form)))
+    if not db.check_groupname(name):
+        flash("Group name is already taken. Please use different name.")
+        return redirect(url_for("group", group_id=current_user.Last_group, form=json.dumps(request.form)))
+    if description and len(description) > 2000:
+        flash("Group description is too long. Maximum is 2000 characters.")
+        return redirect(url_for("group", group_id=current_user.Last_group, form=json.dumps(request.form)))
+    if image:
+        blob = image.read()
+        if sys.getsizeof(blob) > (2 * 1024 * 1024):
+            flash("Group image is too big. Maximum allowed size is 2MB.")
+            return redirect(url_for("group", group_id=current_user.Last_group, form=json.dumps(request.form)))
+        mimetype = image.mimetype
+        image = (blob, mimetype)
+
+    id = db.insert_to_group(name=name, description=description, image=image, mode=visibility, user_id=owner)
+    return redirect(url_for("group", group_id=id))
+
+
 @app.route("/group/<group_id>/")
 @app.route("/groups/<group_id>/")
 def group(group_id):
@@ -315,16 +375,243 @@ def group(group_id):
     form = request.args.get('form')
     if form:
         form = json.loads(form)
-
-    return render_template("group_page.html", username=username, img_src=profile_pic, **member, **rights, groupname=group.Name.replace("_", " "), groupdescription=group.Description, group_src=group_pic, groupowner=group_owner.Login, private=private, closed=closed, threads=threads, form=form)
-    return render_template("group_page.html", )
+    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=group_pic, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, username=username, img_src=profile_pic, **member, **rights, form=form)
 
 
+@app.route("/group_picture/<group_id>/")
+def group_img(name):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    private = group.Mode & 1
+    if private and current_user.is_anonymous:
+        return redirect(url_for("welcome", next=request.url))
+
+    if group.Image is None:
+        return redirect(url_for("lost"))
+    return send_file(io.BytesIO(group.Image), mimetype=group.Mimetype)  # Creates file in memory, then sends file to path
 
 
+@app.route("/group_settings/<group_id>/", methods=["POST"])
+@login_required
+def group_settings(group_id):
+    # TODO NOW
+    pass
 
 
+@app.route("/group_notifications/<group_id>/", methods=["POST"])
+@login_required
+def group_notifications(group_id):
+    # TODO NOW
+    pass
 
+
+@app.route("/group_members/<group_id>/", methods=["POST"])
+@login_required
+def members(group_id):
+    # TODO NOW
+    pass
+
+
+@app.route("/apply/member/<group_id>/")
+@login_required
+def ask_mem(group_id):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if member:
+        return redirect(url_for("lost"))
+
+    db.insert_to_applications(current_user.ID, group.ID, True)
+    flash("Your request has been sent for a review.")
+    return redirect(url_for("home"))
+
+
+@app.route("/apply/moderator/<group_id>/")
+@login_required
+def ask_mod(group_id):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    member = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not member:
+        return redirect(url_for("lost"))
+    owner = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if owner or moderator:
+        return redirect(url_for("lost"))
+
+    db.insert_to_applications(current_user.ID, group.ID, False)
+    flash("Your request has been sent for a review.")
+    return redirect(url_for("home"))
+
+
+@app.route("/accept/<application_id>")
+@login_required
+def accept_application(application_id):
+    application = Applications.query.filter_by(ID=application_id).first()
+    if application is None:
+        return redirect(url_for("lost"))
+    group = Group.query.filter_by(ID=application.Group).first()
+    if group is None:
+        # TODO vymaz ziadost
+        return redirect(url_for("home"))
+
+    # User rights
+    admin     = current_user.Mode & 2
+    owner     = current_user.ID == group.User_ID or admin
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+
+    # Moderator request
+    if not owner and not application.Membership:
+        return redirect(url_for("tresspass"))
+    # Membership request
+    if not owner or not moderator:
+        return redirect(url_for("tresspass"))
+
+    user = User.query.filter_by(ID=application.User).first()
+    if user is None:
+        # TODO vymaz ziadost
+        return redirect(url_for("group_notifications", group_id=application.Group))
+
+    if application.Membership and not Is_member.query.filter_by(User=user.ID, Group=group.ID).first():
+        # TODO pridaj do clenov
+        pass
+    elif not application.Membership and not Moderate.query.filter_by(User=user.ID, Group=group.ID).first():
+        # TODO pridaj do moderatorov
+        pass
+
+    # TODO vymaz ziadost
+    return redirect(url_for("group_notifications", group_id=application.Group))
+
+
+@app.route("/reject/<application_id>")
+@login_required
+def reject_application(application_id):
+    application = Applications.query.filter_by(ID=application_id).first()
+    if application is None:
+        return redirect(url_for("lost"))
+    group = Group.query.filter_by(ID=application.Group).first()
+    if group is None:
+        # TODO vymaz ziadost
+        return redirect(url_for("home"))
+
+    # User rights
+    admin     = current_user.Mode & 2
+    owner     = current_user.ID == group.User_ID or admin
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+
+    # Moderator request
+    if not owner and not application.Membership:
+        return redirect(url_for("tresspass"))
+    # Membership request
+    if not owner or not moderator:
+        return redirect(url_for("tresspass"))
+
+    # TODO vymaz ziadost
+    return redirect(url_for("group_notifications", group_id=application.Group))
+
+
+@app.route("/leave/<group_id>/")
+@login_required
+def leave_group(group_id):
+    redirect(url_for("kick", group_id=group_id, user_id=current_user.ID))
+
+
+@app.route("/delete/group/<group_id>/")
+@app.route("/delete/groups/<group_id>/")
+@login_required
+def delete_group(group_id):
+    # TODO iba owner alebo admin
+    pass
+
+
+################################################################################
+# Threads
+################################################################################
+@app.route("/group/<group_id>/<thread_id>")
+@app.route("/groups/<group_id>/<thread_id>")
+def thread(group, thread):
+    # TODO
+    pass
+
+
+@app.route("/delete/group/<group_id>/<thread_id>/")
+@app.route("/delete/groups/<group_id>/<thread_id>/")
+@login_required
+def delete_thread(group_id, thread_id):
+    # TODO admin, owner, moderator, majtel vlakna?
+    pass
+
+
+################################################################################
+# Other
+################################################################################
+# TODO WE don"t know if it works
+@app.route("/search/", methods=["GET"])
+def search():
+    return render_template("search.html")
+
+
+# TODO WE don"t know if it works
+@app.route("/search_result/")
+def search_for():
+    query = request.args.get("search")
+    result = namedtuple("result", ["val", "btn"])
+    vals = [("Article1", 60), ("Article2", 50), ("Article 3", 40)]
+    # below is a very simple search algorithm to filter vals based on user input:
+    html = render_template("results.html", results=[result(a, b) for a, b in vals if query.lower() in a.lower()])
+    return jsonify({"results": html})
+
+
+@app.route("/egg/")
+@app.route("/easter/")
+@app.route("/easteregg/")
+@app.route("/easter_egg/")
+def egg():
+    return render_template("egg_page.html")
+
+
+@app.route("/tresspass/")
+def tresspass():
+    return render_template("tresspassing_page.html")
+
+
+@app.route("/lost/")
+def lost():
+    return render_template("lost_page.html")
+
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def default_lost(path):
+    return render_template("lost_page.html")
+
+
+################################################################################
+# Supporting functions
+################################################################################
+@app.before_request
+def enforce_https():
+    if request.headers.get("X-Forwarded-Proto") == "http":
+        url = request.url.replace("http://", "https://", 1)
+        code = 301
+        return redirect(url, code=code)
+
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+    app.permanent_session_lifetime = timedelta(hours=1)
+    session.modified = True
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 if __name__ == "__main__":
