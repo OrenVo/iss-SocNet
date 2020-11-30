@@ -78,9 +78,9 @@ CREATE TABLE IF NOT EXISTS Is_member(   -- Vazba <uživatel je členem skupinu>
 CREATE INDEX Is_member_user_index ON iis_soc_net.Is_member (User);
 
 CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o členství/ práva moderátora>
+    ID      INT NOT NULL UNIQUE AUTO_INCREMENT,
     User          INT NOT NULL,
     `Group`       INT NOT NULL,
-    Date_time     TIMESTAMP,
     Membership    BOOL DEFAULT TRUE,
     CONSTRAINT PK_application PRIMARY KEY (User, `Group`,Membership),
     CONSTRAINT FK_user_application FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o člen
 );
 
 CREATE TABLE IF NOT EXISTS Thread (
+    ID      INT NOT NULL UNIQUE AUTO_INCREMENT,
     Name               VARCHAR(30) NOT NULL,
     Description        VARCHAR(2000),
 
