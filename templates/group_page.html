@@ -175,7 +175,7 @@
                     <!-- image -->
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
-                    placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+                    placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture>
                     <p id="size"></p>
                     <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
@@ -230,7 +230,7 @@
                     <h1>{{ groupname }}</h1>
                     <a href="{{ url_for('profile', user_id=groupowner_id) }}">
                         <b>Owner: {{ group_owner }}</b>
-                    </a>                    
+                    </a>
                 </div>
                 <div class="rp_gd">
                     {{ groupdescription }}
@@ -277,7 +277,7 @@
                     <a href="{ url_for('group_settings', group_id=group_id) }}">
                         <button>Settings</button>
                     </a>
-                    {% endif %}                    
+                    {% endif %}
                 </div>
             </div>
 
@@ -292,9 +292,9 @@
 
                 {% if threads %}
                   {% for thread in threads %}
-                  <a href="{{ url_for('thread', group_id=group_id, thread=thread.Subject) }}">
+                  <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
                       <div class="thread_container">
-                          <h3>{{ thread.Subject }}</h3>
+                          <h3>{{ thread.Name }}</h3>
                           <p>{{ thread.Description}}</p>
                       </div>
                   </a>
@@ -344,24 +344,24 @@
     }
 
     /* Validating file size */
-    Filevalidation = () => { 
-        const fi = document.getElementById('group_image'); 
-        // Check if any file is selected. 
-        if (fi.files.length > 0) 
-        { 
+    Filevalidation = () => {
+        const fi = document.getElementById('group_image');
+        // Check if any file is selected.
+        if (fi.files.length > 0)
+        {
             const fsize = fi.files.item(0).size;
             const file = Math.round((fsize / 1024));
 
-            // The size of the file. 
+            // The size of the file.
             if (file >= 2048)
-            { 
-                alert("File is too Big, please select a file less than 2mb"); 
-                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+            {
+                alert("File is too Big, please select a file less than 2mb");
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB';
                 remove_img();
-            }       
-            document.getElementById("rm_img").style.display = "block";  
-        }        
-    } 
+            }
+            document.getElementById("rm_img").style.display = "block";
+        }
+    }
 
     // Get the modal
     var modal = document.getElementById("myFlashModal");
