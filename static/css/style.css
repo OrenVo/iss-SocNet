@@ -71,7 +71,7 @@ input {
 }
 
 input:required {
-    background: url('../pictures/required.png') no-repeat 95% 50% rgb(165, 165, 165);
+    background: url('../pictures/required.png') no-repeat 95% 50%;
     background-size: 25px;
 }
 
