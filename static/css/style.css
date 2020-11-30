@@ -627,9 +627,10 @@ footer{
 /* Creating new group */
 #creating_new_group {
     height: auto;
-    width: 100%;
+    width: 60%;
 
     float: right;
+    margin-right: 20%;
     padding: 5px;
     text-align: center;
 

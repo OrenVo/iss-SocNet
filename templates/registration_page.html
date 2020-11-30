@@ -34,7 +34,7 @@
         <form action="{{ url_for('login') }}" method="POST" autocomplete="on" id="login_form">
             <div class="container">
                 <input name="uname" type="text" placeholder="Username" class="main_page_resize" 
-                {% if form  %} value="{{ form['uname'] }}" {% endif %} pattern="^([\x00-\x7F])\S+$"
+                {% if form  %} value="{{ form['uname'] }}" {% endif %} pattern="^\w+$"
                 title="ASCII characters only, no white spaces" required>
                 <input name="psw" type="password" placeholder="Password" minlength="7" class="main_page_resize" required>
                 <button type="submit" class="main_page_resize">Login</button>

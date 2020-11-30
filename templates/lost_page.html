@@ -48,7 +48,7 @@
 
         <div class="middle">
             <span>You got lost...</span><br><br>
-            <img src="{{ url_for('static', filename='pictures/lost.png') }}" alt="Lost"/><br><br>
+            <img src="{{ url_for('static', filename='pictures/lost.png') }}" alt="Lost" class="middle_img"/><br><br>
             <span>Let us take you back <a href="/welcome/"><b>home</b></a> OR...</span><br><br>
             <canvas id="gc" width="400" height="400"></canvas>
         </div>         
@@ -63,8 +63,9 @@
         }
         
         px=py=10;        
-        gs=tc=20;        
-        ax=ay=15;        
+        gs=20;
+        tc=20;    
+        ax=ay=5;        
         xv=yv=0;        
         trail=[];        
         tail = 5;
