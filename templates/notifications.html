@@ -46,7 +46,7 @@
       }
     }
     </script>
-    
+
 <!-- HEADER - profile + search + logo -->
 <header>
     <!-- PROFILE -->
@@ -192,7 +192,7 @@
                             <b>{{ notification.username }}</b>
                         </a> 
                         wants to join your group 
-                        <a href="{{ url_for('group' group_id=notification.group_id) }}">
+                        <a href="{{ url_for('group', group_id=notification.group_id) }}">
                             <b>{{ notification.group_name }}</b>
                         </a>
                         <br><br>

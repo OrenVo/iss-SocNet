@@ -191,7 +191,7 @@
                         <th><h2>Login</h2></th>
                         <th></th>
                     </tr>
-                    {% for member in members %}
+                    {% for member in moderators %}
                     <tr>
                         <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
                         <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
@@ -199,6 +199,10 @@
                         <td><button>Remove</button></td>
                         {% endif %}
                     </tr>
+                    {% endfor %}
+
+                    {% for member in members %}
+                    
                     {% endfor %}
                 </table>
             </div>          
