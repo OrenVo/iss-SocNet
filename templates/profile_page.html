@@ -94,16 +94,19 @@
         <!-- PROFILE INFO CONTAINER -->
         <div id="info_container">
             <h1>Username: {{ username }}</h1><br>
-            <p><b>Name:</b> {{ name }}</p>
-            <p><b>Surname:</b> {{ surname }}</p>
+            <p><b>Name:</b> {{ name }}</p><br>
+            <p><b>Surname:</b> {{ surname }}</p><br>
             <p><b>Visibility:</b></p>
             {% if visibility == 0 %}
             Public
             {% else %}
             Private
             {% endif %}
+            <br> <br>
             <p><b>Description:</b>
-            </p> {{ description }} </p>
+            <div class="description">
+                <p> {{ description }} </p>
+            </div>            
             <br>
             {% if admin or owner %}
             <button type="button" onclick="show_settings()">Settings</button>
@@ -113,29 +116,36 @@
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="{{ url_for('user_settings', user_id=user_id) }}" method="POST" enctype="multipart/form-data" id="settings">
+        <form action="{{ url_for('user_settings', user_id=user_id) }}" autocomplete="off" method="POST" enctype="multipart/form-data" id="settings">
             <h1>Settings</h1><hr><br>
 
+            <!-- login -->
             <label for="login"><b>Change Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box"
             {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
             title="ASCII characters only, no white spaces" maxlength="30">
 
-            <label for="fname"><b>Change First Name</b></label>
-            <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box" maxlength="20">
-
-            <label for="lname"><b>Change Last Name</b></label>
-            <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box" maxlength="20">
-
-            <label for="description"><b>Description</b></label>
-            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
-
+            <!-- password1 -->
             <label for="password1"><b>Change Password</b></label>
             <input name="password1" type="password" placeholder="Enter Password" autocomplete="new-password" class="input_box">
 
+            <!-- password2 -->
             <label for="password2"><b>Repeat Password</b></label>
             <input name="password2" type="password" placeholder="Repeat Password" autocomplete="new-password" class="input_box">
 
+            <!-- first name -->
+            <label for="fname"><b>Change First Name</b></label>
+            <input name="fname" id ="fname" type="text" placeholder="Enter First Name" class="input_box" maxlength="20">
+
+            <!-- last name -->
+            <label for="lname"><b>Change Last Name</b></label>
+            <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box" maxlength="20">
+
+            <!-- description -->
+            <label for="description"><b>Description</b></label>
+            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
+
+            <!-- profile image -->
             <label for="profile_image"><b>Profile Picture</b></label>
             <input id="profile_image" name="profile_image" type="file" {% if form %} value={{ form['profile_image'] }} {% endif %}
             placeholder="Profile pricture" accept="image/*" onchange="Filevalidation()" capture>
@@ -143,21 +153,24 @@
             <span id="rm_img" class="remove_img_form" onclick="remove_img()">Remove image</span>
             <br><br>
 
+            <!-- visibility -->
             <label for="visibility"><h3>Visibility for:</h3></label>
             <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
             <label for="visibility1">Public: All users</label><br>
-
             <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
             <label for="visibility2">Private: Registered users</label><br><br>
 
+            <!-- current password -->
             <label for="current_password"><b> Enter Current Password</b></label>
             <input name="current_password" type="password" placeholder=" Enter Current Password" class="input_box" required>
 
             {% if admin or owner %}
+            <!-- delete profile -->
             <a href="{{ url_for('delete_account', user_id=user_id) }}">
                 <button class="del_g_p">Delete profile</button>
             </a>
 
+            <!-- save and back-->
             <button form="settings" type="submit">Save changes</button>
             <button type="button" onclick="show_profile_info()">&#10094; Back</button>
             {% endif %}

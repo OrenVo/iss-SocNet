@@ -164,12 +164,15 @@
                 <form action="{{ url_for('create_group') }}" id="create_group" method="POST" enctype="multipart/form-data">
                     <h1>Create new group</h1> <hr>
 
+                    <!-- group name -->
                     <label for="group_name" ><h3>Group name</h3></label>
                     <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
 
+                    <!-- description -->
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
 
+                    <!-- image -->
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
                     placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
@@ -177,7 +180,7 @@
                     <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
 
-
+                    <!-- visibility -->
                     <label for="visibility"><h3>Visibility for:</h3></label>
                     <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
                     <label for="visibility1">All users</label><br>
@@ -189,6 +192,7 @@
                     <label for="visibility3">Members of this group</label><br>
 
                     <br><hr>
+                    <!-- create and back -->
                     <button form="create_group" type="submit" id="create_group_button">Create group</button>
                     <button type="button" onclick="create_new_group_hide()">
                         &#10094; Back
@@ -202,13 +206,16 @@
                     <h2>Create new thread</h2>
                     <br>
 
+                    <!-- subject -->
                     <label for="thread_subject"><b>Subject</b></label>
                     <input id="thread_subject" type="text" placeholder="Enter Subject" name="thread_subject" class="input_box" required>
 
+                    <!-- description -->
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
 
                     <br>
+                    <!-- create and back -->
                     <button form="create_thread" type="submit" id="create_thread_button">Create thread</button>
                     <button type="button" onclick="create_new_thread_hide()">&#10094; Back</button>
                 </form>

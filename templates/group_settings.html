@@ -187,12 +187,17 @@
                 <br><h1 class="settings_title">Settings</h1><br><hr>
                 <!-- TODO group settings -->
                 <form action="#" method="POST" id="settings">
+                    <h1>Settings</h1>
+
+                    <!-- group name -->
                     <label for="group_name" ><h3>Group name</h3></label>
                     <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
 
+                    <!-- description -->
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
 
+                    <!-- image -->
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
                     placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
@@ -200,7 +205,7 @@
                     <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
 
-
+                    <!-- visibility -->
                     <label for="visibility"><h3>Visibility for:</h3></label>
                     <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
                     <label for="visibility1">All users</label><br>
@@ -211,12 +216,14 @@
                     <input id="visibility3" type="radio" name="visibility" value="2" {% if form and form['visibility'] == '2' %} checked = "checked" {% endif %}>
                     <label for="visibility3">Members of this group</label><br>
 
+                    <!-- delete button -->
                     <a href="{{ url_for('delete_group', group_id=group_id) }}">
-                        <span class="del_g_p">Delete group</span>
+                        <button class="del_g_p">Delete group</button>
                     </a>
 
                     <br><hr>
-                    <button form="settings" type="submit" id="create_group_button">Create group</button>
+                    <!-- save and back -->
+                    <button form="settings" type="submit" id="create_group_button">Save changes</button>
                     <button type="button" onclick="create_new_group_hide()">
                         &#10094; Back
                     </button>

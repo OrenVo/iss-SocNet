@@ -866,6 +866,18 @@ footer{
 
 /**** ---Classes--- ****/
 
+.description {
+    height: 200px;
+    width: 50%;
+
+    margin-top: 5px;
+    margin-left: 25%;
+
+    overflow-y: scroll;
+    border: 1px solid #001624;
+    background-color: rgb(245, 245, 245);
+}
+
 .del_g_p {
     cursor: pointer;
     font-weight: bold;

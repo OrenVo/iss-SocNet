@@ -55,18 +55,22 @@
             <h1 class="text_center">Registration</h1>
             <hr>
 
+            <!-- login -->
             <label for="login"><b>Login</b></label>
             <input name="login" type="text" placeholder="Enter Login" class="input_box"
             {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^\w+$"
             title="ASCII characters only, no white spaces" required>
 
+            <!-- password1 -->
             <label for="psw"><b>Password, at least 7 characters</b></label>
             <input name="psw" type="password" placeholder="Enter Password" minlength="7" autocomplete="new-password" class="input_box" required>
 
+            <!-- password2 -->
             <label for="psw-repeat"><b>Repeat Password</b></label>
             <input name="psw-repeat" type="password" placeholder="Repeat Password" minlength="7" autocomplete="new-password" class="input_box" required>
             <hr>
 
+            <!-- register button -->
             <p>By creating an account you agree to our <a href="#" id="myBtn" class="text_underline">Terms & Privacy</a>.</p>
             <button type="submit" id="register_button">Register</button>
         </form>
