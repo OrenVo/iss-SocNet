@@ -385,7 +385,7 @@ def group(group_id):
 
 
 @app.route("/group_picture/<group_id>/")
-def group_img(name):
+def group_img(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -440,8 +440,10 @@ def group_settings(group_id):
     flash("Your changes have been applied.")
     return redirect(url_for("group", group_id=id))
 
+    # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
 
-@app.route("/group_notifications/<group_id>/", methods=["POST"])
+
+@app.route("/group_notifications/<group_id>/")
 @login_required
 def group_notifications(group_id):
     group = Group.query.filter_by(ID=group_id).first()
@@ -451,18 +453,21 @@ def group_notifications(group_id):
     admin     = current_user.Mode & 2
     owner     = current_user.ID == group.User_ID
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
-    if not owner or not admin or not moderator:
+    if not admin and not owner and not moderator:
         return redirect(url_for("tresspass"))
 
     notifications = db.get_applicants(group)
     return render_template("notifications.html", group_id=group.ID, notifications=notifications,
                            admin=admin, owner=owner, moderator=moderator, form=request.form)
 
+                        # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
+    # get applicants miesto toho | name ziadatela, id ziadosti, uroven ziadosti
 
-@app.route("/group_members/<group_id>/", methods=["POST"])
+@app.route("/group_members/<group_id>/")
 def members(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
+        eprint("TELL ME WHYYYYYYYYY")
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
@@ -480,6 +485,8 @@ def members(group_id):
     members = db.get_members(group)
 
     return render_template("group_members.html", group_id=group.ID, group_owner=group_owner, moderators=moderators, members=members, **rights)
+
+    # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
 
 
 @app.route("/apply/member/<group_id>/")
@@ -636,7 +643,7 @@ def thread(group_id, thread_id):
 
     return render_template("thread_page.html", group_id=group.ID, thread_id=thread.ID,
                            username=username, img_src=profile_pic, **rights,
-                           groupname=group.Name.replace("", " "), threadname=thread.Name,
+                           groupname=group.Name, threadname=thread.Name,
                            description=thread.Description, posts=db.get_messages(thread, 50))
 
 @app.route("/create_message/<group_id>/<thread_id>/")
@@ -674,8 +681,8 @@ def delete_thread(group_id, thread_id):
 @app.route("/search/", methods=["POST"])
 def search():
     result = db.search_user_group(request.form.get("search", None))
-    return json.dumps(result)
-    return render_template("search.html", **result)  # TODO co co s vysledkami
+    # return json.dumps(result)
+    return render_template("search.html", **result)
 
 
 @app.route("/egg/")

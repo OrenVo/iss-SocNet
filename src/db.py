@@ -170,7 +170,7 @@ class DB:
         return self.db.session.query(Thread).filter_by(Group_ID=group.ID).all()
 
     def get_members(self, group: Group) -> list:
-        members = self.db.session.query(Is_member).filter_by(Group_ID=group.ID).all()
+        members = self.db.session.query(Is_member).filter_by(Group=group.ID).all()
         users = list()
         for mem in members:
             user = self.db.session.query(User).filter_by(ID=mem.User).first()
@@ -181,7 +181,7 @@ class DB:
         return users
 
     def get_moderators(self, group: Group) -> list:
-        moderators = self.db.session.query(Moderate).filter_by(Group_ID=group.ID).all()
+        moderators = self.db.session.query(Moderate).filter_by(Group=group.ID).all()
         users = list()
         for mod in moderators:
             user = self.db.session.query(User).filter_by(ID=mod.User).first()
@@ -192,7 +192,7 @@ class DB:
         return users
 
     def get_applicants(self, group: Group) -> list:
-        applicants = self.db.session.query(Applications).filter_by(Group_ID=group.ID).all()
+        applicants = self.db.session.query(Applications).filter_by(Group=group.ID).all()
         users = list()
         for applicant in applicants:
             user = self.db.session.query(User).filter_by(ID=applicant.User).first()
