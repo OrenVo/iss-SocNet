@@ -48,7 +48,7 @@
       }
     }
     </script>
-    
+
 <!-- HEADER - profile + search + logo -->
 <header>
     <!-- PROFILE -->
@@ -188,14 +188,14 @@
                 <!-- TODO group settings -->
                 <form action="#" method="POST" id="settings">
                     <label for="group_name" ><h3>Group name</h3></label>
-                    <input name="group_name" type="text" placeholder="Requiered Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
+                    <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
 
                     <label for="description"><h3>Description</h3></label>
                     <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
 
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
-                    placeholder="Requiered Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+                    placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
                     <p id="size"></p>
                     <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>

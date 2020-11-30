@@ -150,8 +150,8 @@
             <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
             <label for="visibility2">Private: Registered users</label><br><br>
 
-            <label for="current_password"><b>Requiered Enter Current Password</b></label>
-            <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
+            <label for="current_password"><b> Enter Current Password</b></label>
+            <input name="current_password" type="password" placeholder=" Enter Current Password" class="input_box" required>
 
             {% if admin or owner %}
             <a href="{{ url_for('delete_account', user_id=user_id) }}">
@@ -178,29 +178,29 @@
 
     /* Remove image from form */
     function remove_img(){
-        document.getElementById("group_image").value = "";
+        document.getElementById("profile_image").value = "";
         document.getElementById("rm_img").style.display = "none";
     }
 
     /* Validating file size */
-    Filevalidation = () => {
-        const fi = document.getElementById('group_image');
-        // Check if any file is selected.
-        if (fi.files.length > 0)
-        {
+    Filevalidation = () => { 
+        const fi = document.getElementById('profile_image'); 
+        // Check if any file is selected. 
+        if (fi.files.length > 0) 
+        { 
             const fsize = fi.files.item(0).size;
             const file = Math.round((fsize / 1024));
 
-            // The size of the file.
+            // The size of the file. 
             if (file >= 2048)
-            {
-                alert("File is too Big, please select a file less than 2mb");
-                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB';
+            { 
+                alert("File is too Big, please select a file less than 2mb"); 
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
                 remove_img();
-            }
-            document.getElementById("rm_img").style.display = "block";
-        }
-    }
+            }       
+            document.getElementById("rm_img").style.display = "block";  
+        }        
+    } 
 </script>
 </html>
 </doctype>

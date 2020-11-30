@@ -68,15 +68,11 @@ input {
     border: none;
     font-weight: bold;
     height: 40px;
+    background-color: #e5e7e6;
 }
 
 input:required {
     background: url('../pictures/required.png') no-repeat 95% 50%;
-    background-size: 25px;
-}
-
-input:valid {
-    background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;
     background-size: 25px;
 }
 
@@ -90,7 +86,6 @@ input:focus:invalid {
     background: url("https://assets.digitalocean.com/labs/icons/exclamation-triangle-fill.svg") no-repeat 95% 50% lightsalmon;
     background-size: 25px;
 }
-
 
 button, input[type=button] { /* Set a style for all buttons */
     height: 40px;
