@@ -600,6 +600,7 @@ def delete_group(group_id):
 # Threads
 ################################################################################
 @app.route("/create/thread/<group_id>/")
+@login_required
 def create_thread(group_id):
     # TODO
     pass
@@ -633,7 +634,8 @@ def thread(group_id, thread_id):
         else:
             profile_pic = "/profiles/" + current_user.Login + "/profile_image"
 
-    return render_template("thread_page.html", username=username, img_src=profile_pic, **rights,
+    return render_template("thread_page.html", group_id=group.ID, thread_id=thread.ID,
+                           username=username, img_src=profile_pic, **rights,
                            groupname=group.Name.replace("", " "), threadname=thread.Name,
                            description=thread.Description, posts=db.get_messages(thread, 50))
 
@@ -642,8 +644,23 @@ def thread(group_id, thread_id):
 @app.route("/delete/groups/<group_id>/<thread_id>/")
 @login_required
 def delete_thread(group_id, thread_id):
-    # TODO admin, owner, moderator, majtel vlakna?
-    pass
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+
+    # User rights
+    admin     = current_user.Mode & 2
+    owner     = current_user.ID == group.User_ID or admin
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not owner or not admin or not moderator:
+        return redirect(url_for("tresspass"))
+
+    db.delete_from_db(thread)
+    flash("Thread was deleted succesfully")
+    return redirect(url_for("group", group_id=group.ID))
 
 
 ################################################################################
