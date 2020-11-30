@@ -75,6 +75,11 @@ input:required {
     background-size: 25px;
 }
 
+input:valid {
+    background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;
+    background-size: 25px;
+}
+
 /* Code from https://www.digitalocean.com/community/tutorials/css-styling-form-input-validity */
 input:required:focus:valid {
     background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;

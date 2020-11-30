@@ -34,12 +34,12 @@
 
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-    
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
       modal.style.display = "none";
     }
-    
+
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
       if (event.target == modal) {
@@ -127,6 +127,9 @@
             <label for="lname"><b>Change Last Name</b></label>
             <input type="text" name="lname" id="lname" placeholder="Enter Last Name" class="input_box" maxlength="20">
 
+            <label for="description"><b>Description</b></label>
+            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
+
             <label for="password1"><b>Change Password</b></label>
             <input name="password1" type="password" placeholder="Enter Password" autocomplete="new-password" class="input_box">
 
@@ -145,11 +148,7 @@
             <label for="visibility1">Public: All users</label><br>
 
             <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
-            <label for="visibility2">Private: Registered users</label><br>                      
-            
-            <label for="description"><b>Description</b></label>
-            <input type="text" name="description" id="description" placeholder="Enter Description" class="input_box" maxlength="2000">
-            <br>
+            <label for="visibility2">Private: Registered users</label><br><br>
 
             <label for="current_password"><b>Requiered Enter Current Password</b></label>
             <input name="current_password" type="password" placeholder=" Requiered, enter current password" class="input_box" required>
