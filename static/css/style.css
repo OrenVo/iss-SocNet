@@ -875,6 +875,7 @@ footer{
     margin-left: 25%;
 
     overflow-y: scroll;
+    text-align: left;
     border: 1px solid #001624;
     background-color: rgb(245, 245, 245);
 }

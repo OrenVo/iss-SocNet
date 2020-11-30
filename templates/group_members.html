@@ -191,6 +191,14 @@
                         <th><h2>Login</h2></th>
                         <th></th>
                     </tr>
+                    <tr>
+                        <td><img src="{{ img_src }}" alt="Profile picture"></td>
+                        <td>username</td>
+                        {% if admin %}
+                        <td><button>Remove</button></td>
+                        {% endif %}
+                    </tr>
+                    {% if moderators %}
                     {% for member in moderators %}
                     <tr>
                         <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
@@ -200,10 +208,19 @@
                         {% endif %}
                     </tr>
                     {% endfor %}
+                    {% endif %}
 
+                    {% if members %}
                     {% for member in members %}
-
+                    <tr>
+                        <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
+                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
+                        {% if admin or owner or moderator %}
+                        <td><button>Remove</button></td>
+                        {% endif %}
+                    </tr>
                     {% endfor %}
+                    {% endif %}
                 </table>
             </div>          
         </div>

@@ -165,16 +165,17 @@
             <input name="current_password" type="password" placeholder=" Enter Current Password" class="input_box" required>
 
             {% if admin or owner %}
-            <!-- delete profile -->
-            <a href="{{ url_for('delete_account', user_id=user_id) }}">
-                <button class="del_g_p">Delete profile</button>
-            </a>
-
             <!-- save and back-->
             <button form="settings" type="submit">Save changes</button>
             <button type="button" onclick="show_profile_info()">&#10094; Back</button>
             {% endif %}
         </form>
+        {% if admin or owner %}
+            <!-- delete profile -->
+            <a href="{{ url_for('delete_account', user_id=user_id) }}">
+                <button class="del_g_p">Delete profile</button>
+            </a>
+        {% endif %}
     </div>
 </body>
 
