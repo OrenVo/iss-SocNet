@@ -26,7 +26,7 @@
         </div>
     {% endif %}
     {% endwith %}
-    
+
     <!-- JavaScript -->
     <script>
         // Get the modal
@@ -113,12 +113,12 @@
 
     <!-- PROFILE SETTINGS -->
     <div id="settings_container">
-        <form action="{{ url_for('user_settings', user_id=user_id) }}" method="POST" id="settings">
+        <form action="{{ url_for('user_settings', user_id=user_id) }}" method="POST" enctype="multipart/form-data" id="settings">
             <h1>Settings</h1><hr><br>
 
             <label for="login"><b>Change Login</b></label>
-            <input name="login" type="text" placeholder="Enter Login" class="input_box" 
-            {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$" 
+            <input name="login" type="text" placeholder="Enter Login" class="input_box"
+            {% if form  %} value="{{ form['login'] }}"{% endif %} pattern="^([\x00-\x7F])\S+$"
             title="ASCII characters only, no white spaces" maxlength="30">
 
             <label for="fname"><b>Change First Name</b></label>
@@ -138,7 +138,7 @@
 
             <label for="profile_image"><b>Profile Picture</b></label>
             <input id="profile_image" name="profile_image" type="file" {% if form %} value={{ form['profile_image'] }} {% endif %}
-            placeholder="Profile pricture" accept="image/*" onchange="Filevalidation()" capture> 
+            placeholder="Profile pricture" accept="image/*" onchange="Filevalidation()" capture>
             <p id="size"></p>
             <span id="rm_img" class="remove_img_form" onclick="remove_img()">Remove image</span>
             <br><br>
@@ -183,24 +183,24 @@
     }
 
     /* Validating file size */
-    Filevalidation = () => { 
-        const fi = document.getElementById('group_image'); 
-        // Check if any file is selected. 
-        if (fi.files.length > 0) 
-        { 
+    Filevalidation = () => {
+        const fi = document.getElementById('group_image');
+        // Check if any file is selected.
+        if (fi.files.length > 0)
+        {
             const fsize = fi.files.item(0).size;
             const file = Math.round((fsize / 1024));
 
-            // The size of the file. 
+            // The size of the file.
             if (file >= 2048)
-            { 
-                alert("File is too Big, please select a file less than 2mb"); 
-                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+            {
+                alert("File is too Big, please select a file less than 2mb");
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB';
                 remove_img();
-            }   
-            document.getElementById("rm_img").style.display = "block";      
-        }                
-    } 
+            }
+            document.getElementById("rm_img").style.display = "block";
+        }
+    }
 </script>
 </html>
 </doctype>
