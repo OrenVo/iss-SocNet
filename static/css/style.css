@@ -70,6 +70,11 @@ input {
     height: 40px;
 }
 
+input:required {
+    background: url('../pictures/required.png') no-repeat 95% 50% rgb(165, 165, 165);
+    background-size: 25px;
+}
+
 /* Code from https://www.digitalocean.com/community/tutorials/css-styling-form-input-validity */
 input:required:focus:valid {
     background: url("https://assets.digitalocean.com/labs/icons/hand-thumbs-up.svg") no-repeat 95% 50% lightgreen;
