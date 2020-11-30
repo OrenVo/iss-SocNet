@@ -172,6 +172,10 @@
                     <input id="visibility3" type="radio" name="visibility" value="2" {% if form and form['visibility'] == '2' %} checked = "checked" {% endif %}>
                     <label for="visibility3">Members of this group</label><br>
 
+                    <a href="{{ url_for('delete_group', group_id=group_id) }}">
+                        <span class="del_g_p">Delete group</span>
+                    </a>
+
                     <br><hr>
                     <button form="settings" type="submit" id="create_group_button">Create group</button>
                     <button type="button" onclick="create_new_group_hide()">

@@ -866,6 +866,16 @@ footer{
 
 /**** ---Classes--- ****/
 
+.del_g_p {
+    cursor: pointer;
+    font-weight: bold;
+    color: #001624;
+}
+
+.del_g_p:hover {
+    color: #00c14c;
+}
+
 #rm_img {
     display: none;
 }
