@@ -383,6 +383,30 @@ class DB:
         else:
             return application.ID
 
+    def insert_to_membership(self, user_id: int, group_id: int):
+        if user_id is None or group_id is None:
+            raise ValueError('Parameters not passed')
+        is_member = Is_member(User=user_id, Group=group_id)
+        self.db.session.add(is_member)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+
+    def insert_to_moderate(self, user_id: int, group_id: int):
+        if user_id is None or group_id is None:
+            raise ValueError('Parameters not passed')
+        moderate = Moderate(User=user_id, Group=group_id)
+        self.db.session.add(moderate)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+
     def delete_from_db(self, obj):
         self.db.session.delete(obj)
         try:
