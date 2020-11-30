@@ -403,6 +403,7 @@ footer{
     float: left;
     margin-left: 2px;
 
+    background-image: url('../pictures/hsearch.png');
     background-image: url('../pictures/search.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
