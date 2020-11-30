@@ -176,15 +176,16 @@
             <!-- Notifications -->
             <div class="group_rc">            
                 <!-- Go back -->
-                <a href="#">
+                <a href="{{ url_for('group', group_id=group_id) }}">
                     <button>
                         &#10094; Back
                     </button>
                 </a>
                  
-                <br><h1>Members</h1><br><hr>
+                <br><h1>Notifications</h1><br><hr>
                 <!-- TODO pridat url na profil a skupinu -->
                 <!-- Reqest membership -->
+                {% if mem_notifications %}
                 {% for notfication in mem_notifications %}
                     <div>
                         User 
@@ -202,8 +203,10 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+                {% endif %}
 
                 <!-- Request mod -->
+                {% if mod_notifications %}
                 {% for notification in mod_notifications %}
                     <div>
                         User 
@@ -221,6 +224,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
         </div>
     </article>

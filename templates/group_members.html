@@ -177,7 +177,7 @@
             <!-- MEMBERS -->
             <div class="group_rc">
                 <!-- Go back -->
-                <a href="{{ url_for('group, group_id=group_id') }}">
+                <a href="{{ url_for('group', group_id=group_id) }}">
                     <button>
                         &#10094; Back
                     </button>
@@ -202,7 +202,7 @@
                     {% endfor %}
 
                     {% for member in members %}
-                    
+
                     {% endfor %}
                 </table>
             </div>          
