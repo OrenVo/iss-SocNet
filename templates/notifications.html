@@ -180,11 +180,11 @@
                         {% endif %}
                         <br><br>
                         {% if owner or (moderator and notification[1]) %}
-                        <a href="{{ url_for('accept_application', application_id=notification[2].ID)}}">
+                        <a href="{{ url_for('accept_application', application_id=notification[2])}}">
                             <button>Accept</button>
                         </a>
 
-                        <a href="{{ url_for('reject_application', application_id=notification[2].ID) }}">
+                        <a href="{{ url_for('reject_application', application_id=notification[2]) }}">
                             <button>Reject</button>
                         </a>
                         {% endif %}

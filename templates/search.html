@@ -116,6 +116,10 @@
                     </a>                    
                 {% endfor %}
             {% endif %}
+
+            {% if not users and not groups %}
+            <p>No results found</p>
+            {% endif %}
         </div>
     </article>
 </body>
