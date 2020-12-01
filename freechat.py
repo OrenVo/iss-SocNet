@@ -820,7 +820,7 @@ def create_message(group_id, thread_id):
 
 @app.route("/get_messages/<group_id>/<thread_id>/", methods=["GET"])
 def get_messages(group_id, thread_id):
-    return db.messages_to_json(db.get_messages(Thread.query.filter_by(ID=thread_id), 200))
+    return db.messages_to_json(db.get_messages(Thread.query.filter_by(ID=thread_id).first(), 200))
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")

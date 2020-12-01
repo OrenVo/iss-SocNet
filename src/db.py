@@ -496,12 +496,12 @@ class DB:
                 'ID': message.ID,
                 'Content': message.Content,
                 'Rank': message.Rank,
-                'Date_time': message.Date_time,
+                'Date_time': str(message.Date_time),
                 'User_ID': message.User_ID,
                 'Thread_name': message.Thread_name,
                 'ID_group': message.ID_group
             })
-        return json.dumps(messages)
+        return json.dumps(result)
 
     def getuserrights(self, user, group) -> dict:
         result = {
