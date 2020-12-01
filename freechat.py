@@ -927,7 +927,7 @@ def search():
 
     eprint(request.form.get("search", None))
     results = db.search_user_group(request.form.get("search", None))
-    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=True)
+    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=visitor)
 
 
 @app.route("/egg/")
