@@ -106,7 +106,10 @@
 
             <!-- OWNER -->
             {% if gowner %}
-                <div class="lp_gt">Owner</div>
+            <div class="div_for_titles">
+                <h2>Owner</h2>
+            </div>
+                
                 {% for group in gowner %}
                 <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">
@@ -123,7 +126,10 @@
 
             <!-- MODERATOR -->
             {% if gmoderator %}
-                <div class="lp_gt">Moderator</div>
+            <div class="div_for_titles">
+                <h2>Moderator</h2>
+            </div>
+    
                 {% for group in gmoderator %}
                 <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">
@@ -140,7 +146,10 @@
 
             <!-- MEMBER -->
             {% if gmember %}
-                <div class="lp_gt">Member</div>
+            <div class="div_cor_titles">
+                <h2>Member</h2>
+            </div>
+
                 {% for group in gmember %}
                 <a href="{{ url_for('group', group_id=group[0].ID) }}">
                     <div class="group_container">

@@ -950,7 +950,6 @@ footer{
 
     float: left;
     margin-left: 25%;
-    padding: 10px;
 
     text-align: center;
 }
@@ -990,7 +989,17 @@ footer{
 
 /**** ---Classes--- ****/
 
+.div_for_titles {
+    width: 100%;
+    padding: 5px;
+    float: left;
+    text-align: center;
+}
 
+.margin_top_bottom {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
 .del_button {
     background-color: #ba1818;

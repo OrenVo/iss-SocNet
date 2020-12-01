@@ -80,11 +80,23 @@
     </header>
 
     <article>
+        <!-- Go back -->
+        <div class="for_back_button">
+            <a href="{{ url_for('group', group_id=group_id) }}">
+                <button class="float_left">
+                    &#10094; Back
+                </button>
+            </a>
+        </div>
+        
         <!-- Search results -->
         <div class="search">
             <!-- Users -->
             {% if users %}
-                <h2>Users</h2>
+                <div class="div_for_titles">
+                    <h2>Users</h2>
+                </div>
+                
                 {% for user in users %}
                     <a href="{{ url_for('profile', user_id=user[0].ID) }}">
                         <div class="search_result">
@@ -93,7 +105,7 @@
                             </div>
 
                             <div class="search_result_part search_result_part_text">
-                                {{ user[0].Login }}
+                                <h3>{{ user[0].Login }}</h3>
                             </div>
                         </div>
                     </a>
@@ -102,7 +114,10 @@
 
             <!-- Groups -->
             {% if groups %}
-                    <h2>Groups</h2>
+                <div class="div_for_titles">
+                    <h2 class="margin_top_bottom">Groups</h2>
+                </div>
+
                 {% for group in groups %}
                     <a href="{{ url_for('group', group_id=group[0].ID) }}">
                         <div class="search_result">
@@ -110,7 +125,7 @@
                                 <img src="{{ group[1] }}" alt="Group image" class="search_picture">
                             </div>
                             <div class="search_result_part search_result_part_text">
-                                {{ group[0].Name }}
+                                <h3>{{ group[0].Name }}</h3>
                             </div>
                         </div>
                     </a>                    
