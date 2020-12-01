@@ -517,6 +517,11 @@ def members(group_id):
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
+    if group_owner.Image is not None:
+        owner_src = "/profile_picture/" + str(group_owner.ID)
+    else:
+        owner_src = default_pictures_path + default_profile_picture
+
     moderators = db.get_moderators(group)
     members = db.get_members(group)
 
@@ -533,8 +538,9 @@ def members(group_id):
             profile_pic = default_pictures_path + default_profile_picture
 
     member = db.get_membership(current_user)
-    return render_template("group_members.html", group_id=group.ID, group_owner=group_owner, moderators=moderators, members=members,
-                           user_id=user_id, username=username, img_src=profile_pic, **member, **rights)
+    return render_template("group_members.html", group_id=group.ID, group_owner=group_owner, owner_src=owner_src,
+                           moderators=moderators, members=members, user_id=user_id, username=username,
+                           img_src=profile_pic, **member, **rights)
 
 
 @app.route("/apply/member/<group_id>/")
