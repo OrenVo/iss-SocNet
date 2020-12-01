@@ -99,7 +99,7 @@
                 {% for user in users %}
                     <a href="{{ url_for('profile', user_id=user.ID) }}">
                         <div class="search_result">
-                            { user.Login }
+                            {{ user.Login }}
                         </div>
                     </a>
                 {% endfor %}
@@ -111,7 +111,7 @@
                 {% for group in groups %}
                     <a href="{{ url_for('group', group_id=group.ID) }}">
                         <div class="search_result">
-                            { group.Name }
+                            {{ group.Name }}
                         </div>
                     </a>                    
                 {% endfor %}

@@ -163,7 +163,7 @@ class DB:
         if users:
             retval['users'] = users
         if groups:
-            retval['groups'] = users
+            retval['groups'] = groups
         return retval
 
     def get_threads(self, group: Group) -> list:

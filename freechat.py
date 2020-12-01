@@ -862,6 +862,7 @@ def decrement(group_id, thread_id, message_id):
 ################################################################################
 @app.route("/search/", methods=["POST"])
 def search():
+    eprint(request.form.get("search", None))
     results = db.search_user_group(request.form.get("search", None))
     return render_template("search.html", **results)
 
