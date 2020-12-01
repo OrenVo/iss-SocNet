@@ -175,7 +175,7 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- Settings -->            
+            <!-- Settings -->
             <div class="group_rc">
                 <!-- Go back-->
                 <a href="#">
@@ -186,12 +186,12 @@
 
                 <br><h1 class="settings_title">Settings</h1><br><hr>
                 <!-- TODO group settings -->
-                <form action="#" method="POST" id="settings">
+                <form action="{{ url_for('group_settings', group_id=group_id) }}" method="POST" id="settings" enctype="multipart/form-data">
                     <h1>Settings</h1>
 
                     <!-- group name -->
                     <label for="group_name" ><h3>Group name</h3></label>
-                    <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
+                    <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %}>
 
                     <!-- description -->
                     <label for="description"><h3>Description</h3></label>
@@ -200,7 +200,7 @@
                     <!-- image -->
                     <label for="group_image"><h3>Group picture</h3></label>
                     <input id="group_image" name="group_image" type="file" {% if form %} value={{ form['group_image'] }} {% endif %}
-                    placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture> 
+                    placeholder="Group pricture" accept="image/*" onchange="Filevalidation()" capture>
                     <p id="size"></p>
                     <span class="remove_img_form" id="rm_img" onclick="remove_img()">Remove image</span>
                     <br><br>
@@ -242,24 +242,24 @@
     }
 
     /* Validating file size */
-    Filevalidation = () => { 
-        const fi = document.getElementById('group_image'); 
-        // Check if any file is selected. 
-        if (fi.files.length > 0) 
-        { 
+    Filevalidation = () => {
+        const fi = document.getElementById('group_image');
+        // Check if any file is selected.
+        if (fi.files.length > 0)
+        {
             const fsize = fi.files.item(0).size;
             const file = Math.round((fsize / 1024));
 
-            // The size of the file. 
+            // The size of the file.
             if (file >= 2048)
-            { 
-                alert("File is too Big, please select a file less than 2mb"); 
-                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB'; 
+            {
+                alert("File is too Big, please select a file less than 2mb");
+                document.getElementById("size").innerHTML = '<b>' + file + '</b> KB';
                 remove_img();
-            }       
-            document.getElementById("rm_img").style.display = "block";  
-        }        
-    } 
+            }
+            document.getElementById("rm_img").style.display = "block";
+        }
+    }
 </script>
 </html>
 </doctype>

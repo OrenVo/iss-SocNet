@@ -14,7 +14,6 @@
 from src.db import DB, init_db  # Database
 from src.db import Applications, Group, Is_member, Messages, Moderate, Ranking, Thread, User  # Database objects
 from src.error import eprint
-from collections import namedtuple  # TODO necessary?
 from datetime import timedelta
 from flask import flash, Flask, jsonify, redirect, render_template, request, Response, send_file, send_from_directory, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user, LoginManager, UserMixin
@@ -23,9 +22,27 @@ import json
 import re
 import sys
 
+"""
+TODOs
+Search nefunguje
+Lupa nefunguje
+
+Autoupdate thread (time & after new message) - AJAX
+Older messages thread
+
+Expand login & groupname regex
+Radio buttons: https://stackoverflow.com/questions/13509883/how-to-vertically-align-a-html-radio-button-to-its-label
+Group settings current visibility
+Welcome next parameter
+Are you sure? box
+
+Requiring password on group settings
+Ban
+"""
+
 # App initialization #
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
+app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"  # TODO change security key
 app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
@@ -80,13 +97,17 @@ def register():
         flash("Passwords do not match.")
         return render_template("registration_page.html", form=request.form)
 
+    db.insert_to_users(login=login, password=password)
+    flash("Your registration was succesful. You can now login.")
+    return redirect(url_for("welcome"))
+
     '''
     # Optional values
     name        = request.form.get("name", None)
     surname     = request.form.get("surname", None)
     description = request.form.get("description", None)
     image       = request.files["profile_image"]
-    visibility  = int(request.form.get("visibility", 0))
+    visibility  = request.form.get("visibility", 0)
 
     # Optional values check
     if name and len(name) > 20:
@@ -104,14 +125,14 @@ def register():
             flash("Your image is too big. Maximum allowed size is 2MB.")
             return render_template("registration_page.html", form=request.form)
         mimetype = image.mimetype
-        image = (blob, mimetype)
+        image    = (blob, mimetype)
+    if visibility:
+        visibility = int(visibility)
 
     db.insert_to_users(login=login, password=password, name=name, surname=surname, description=description, image=image, mode=visibility)
-    '''
-
-    db.insert_to_users(login=login, password=password)
     flash("Your registration was succesful. You can now login.")
     return redirect(url_for("welcome"))
+    '''
 
 
 @app.route("/login/", methods=["GET", "POST"])
@@ -166,19 +187,20 @@ def profile(user_id):
         return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
-
-    if current_user.is_authenticated:
-        admin = current_user.Mode & 2
-        owner = current_user.ID == user.ID
-    else:
-        admin = False
-        owner = False
 
     if user.Image is not None:
         image = "/profile_picture/" + str(user.ID)
     else:
         image = default_pictures_path + default_profile_picture
+
+    admin = False
+    owner = False
+    if current_user.is_authenticated:
+        admin = current_user.Mode & 2
+        if not admin:
+            owner = current_user.ID == user.ID
 
     member = db.get_membership(user)
 
@@ -202,6 +224,7 @@ def user_img(user_id):
         return redirect(url_for("lost"))
     private = user.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
 
     if user.Image is None:
@@ -235,7 +258,7 @@ def user_settings(user_id):
     surname     = request.form.get("lname", None)
     description = request.form.get("description", None)
     image       = request.files["profile_image"]
-    visibility  = int(request.form.get("visibility", None))
+    visibility  = request.form.get("visibility", None)
 
     # Values check
     if login and (len(login) > 30 or not re.search(r"^\w+$", login)):
@@ -262,7 +285,9 @@ def user_settings(user_id):
             flash("Your image is too big. Maximum allowed size is 2MB.")
             return redirect(url_for("profile", user_id=user.ID, form=json.dumps(request.form)))
         mimetype = image.mimetype
-        image = (blob, mimetype)
+        image    = (blob, mimetype)
+    if visibility:
+        visibility = int(visibility)
 
     db.insert_to_users(id=user.ID, login=login, password=password, name=name, surname=surname, description=description, image=image, mode=visibility)
     flash("Your changes were applied.")
@@ -311,7 +336,7 @@ def create_group():
     name        = request.form.get("group_name", None)
     description = request.form.get("description", None)
     image       = request.files["group_image"]
-    visibility  = int(request.form.get("visibility", None))
+    visibility  = request.form.get("visibility", None)
     owner       = current_user.ID
 
     # Values check
@@ -330,7 +355,9 @@ def create_group():
             flash("Group image is too big. Maximum allowed size is 2MB.")
             return redirect(url_for("group", group_id=current_user.Last_group, form=json.dumps(request.form)))
         mimetype = image.mimetype
-        image = (blob, mimetype)
+        image    = (blob, mimetype)
+    if visibility:
+        visibility = int(visibility)
 
     id = db.insert_to_group(name=name, description=description, image=image, mode=visibility, user_id=owner)
     return redirect(url_for("group", group_id=id))
@@ -344,28 +371,30 @@ def group(group_id):
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
 
     if group.Image is not None:
         image = "/group_picture/" + str(group.ID)
     else:
         image = default_pictures_path + default_group_picture
+
     group_owner = User.query.filter_by(ID=group.User_ID).first()
     if group_owner is None:
         return redirect(url_for("lost"))
 
     if current_user.is_anonymous:
-        user_id = None
-        username = "Visitor"
+        user_id     = None
+        username    = "Visitor"
         profile_pic = default_pictures_path + default_profile_picture
     else:
-        user_id = current_user.ID
+        user_id  = current_user.ID
         username = current_user.Login
         if current_user.Image is not None:
             profile_pic = "/profile_picture/" + str(current_user.ID)
         else:
             profile_pic = default_pictures_path + default_profile_picture
-        db.insert_to_users(id=current_user.ID, last_group_id=group.ID)
+        db.insert_to_users(id=current_user.ID, last_group_id=group.ID)  # Updates last group for homepage
 
     member = db.get_membership(current_user)
     rights = db.getuserrights(current_user, group)
@@ -379,9 +408,10 @@ def group(group_id):
     form = request.args.get('form')
     if form:
         form = json.loads(form)
-    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description, group_src=image,
-                           groupowner_id=group_owner.ID, group_owner=group_owner.Login, private=private, closed=closed, threads=threads, user_id=user_id,
-                           username=username, img_src=profile_pic, **member, **rights, form=form)
+    return render_template("group_page.html", group_id=group.ID, groupname=group.Name, groupdescription=group.Description,
+                           group_src=image, groupowner_id=group_owner.ID, group_owner=group_owner.Login, private=private,
+                           closed=closed, threads=threads, user_id=user_id, username=username, img_src=profile_pic,
+                           **member, **rights, form=form)
 
 
 @app.route("/group_picture/<group_id>/")
@@ -391,6 +421,7 @@ def group_img(group_id):
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
 
     if group.Image is None:
@@ -398,7 +429,7 @@ def group_img(group_id):
     return send_file(io.BytesIO(group.Image), mimetype=group.Mimetype)  # Creates file in memory, then sends file to path
 
 
-@app.route("/group_settings/<group_id>/")
+@app.route("/group_settings/<group_id>/", methods=["GET", "POST"])
 @login_required
 def group_settings(group_id):
     group = Group.query.filter_by(ID=group_id).first()
@@ -406,41 +437,55 @@ def group_settings(group_id):
         return redirect(url_for("lost"))
 
     admin = current_user.Mode & 2
-    owner = current_user.ID == group.User_ID
-    if not owner or not admin:
-        return redirect(url_for("lost"))
+    owner = False
+    if not admin:
+        owner = current_user.ID == group.User_ID
+    if not admin and not owner:
+        return redirect(url_for("tresspass"))
+
+    if current_user.Image is not None:
+        profile_pic = "/profile_picture/" + str(current_user.ID)
+    else:
+        profile_pic = default_pictures_path + default_profile_picture
+
+    member = db.get_membership(current_user)
 
     if request.method == "GET":
-        return render_template("group_settings.html", group_id=group.ID, form=request.form)
+        return render_template("group_settings.html", group_id=group.ID, user_id=current_user.ID, username=current_user.Login,
+                               img_src=profile_pic, **member, admin=admin, owner=owner, form=request.form)
 
     name        = request.form.get("group_name", None)
     description = request.form.get("description", None)
     image       = request.files["group_image"]
-    mode        = int(request.form.get("visibility", None))
+    visibility  = request.form.get("visibility", None)
 
     # Values check
     if len(name) > 30:
         flash("Group name is too long. Maximum is 30 characters.")
-        return render_template("group_settings.html", group_id=group.ID, form=request.form)
+        return render_template("group_settings.html", group_id=group.ID, user_id=current_user.ID, username=current_user.Login,
+                               img_src=profile_pic, **member, admin=admin, owner=owner, form=request.form)
     if not db.check_groupname(name):
         flash("Group name is already taken. Please use different name.")
-        return render_template("group_settings.html", group_id=group.ID, form=request.form)
+        return render_template("group_settings.html", group_id=group.ID, user_id=current_user.ID, username=current_user.Login,
+                               img_src=profile_pic, **member, admin=admin, owner=owner, form=request.form)
     if description and len(description) > 2000:
         flash("Group description is too long. Maximum is 2000 characters.")
-        return render_template("group_settings.html", group_id=group.ID, form=request.form)
+        return render_template("group_settings.html", group_id=group.ID, user_id=current_user.ID, username=current_user.Login,
+                               img_src=profile_pic, **member, admin=admin, owner=owner, form=request.form)
     if image:
         blob = image.read()
         if sys.getsizeof(blob) > (2 * 1024 * 1024):
             flash("Group image is too big. Maximum allowed size is 2MB.")
-            return render_template("group_settings.html", group_id=group.ID, form=request.form)
+            return render_template("group_settings.html", group_id=group.ID, user_id=current_user.ID, username=current_user.Login,
+                                   img_src=profile_pic, **member, admin=admin, owner=owner, form=request.form)
         mimetype = image.mimetype
-        image = (blob, mimetype)
+        image    = (blob, mimetype)
+    if visibility:
+        visibility = int(visibility)
 
-    id = db.insert_to_group(name=name, description=description, image=image, mode=visibility, user_id=owner)
+    id = db.insert_to_group(id=group.ID, name=name, description=description, image=image, mode=visibility)
     flash("Your changes have been applied.")
     return redirect(url_for("group", group_id=id))
-
-    # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
 
 
 @app.route("/group_notifications/<group_id>/")
@@ -450,27 +495,34 @@ def group_notifications(group_id):
     if group is None:
         return redirect(url_for("lost"))
 
-    admin     = current_user.Mode & 2
-    owner     = current_user.ID == group.User_ID
+    admin = current_user.Mode & 2
+    owner = False
+    if not admin:
+        owner = current_user.ID == group.User_ID
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
     if not admin and not owner and not moderator:
         return redirect(url_for("tresspass"))
 
-    notifications = db.get_applicants(group)
-    return render_template("notifications.html", group_id=group.ID, notifications=notifications,
-                           admin=admin, owner=owner, moderator=moderator, form=request.form)
+    if current_user.Image is not None:
+        profile_pic = "/profile_picture/" + str(current_user.ID)
+    else:
+        profile_pic = default_pictures_path + default_profile_picture
 
-                        # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
-    # get applicants miesto toho | name ziadatela, id ziadosti, uroven ziadosti
+    member = db.get_membership(current_user)
+
+    notifications = db.get_applicants(group)  # TODO miesto notification.User, notification.ID, notification.Membership
+    return render_template("notifications.html", group_id=group.ID, notifications=notifications, user_id=current_user.ID, username=current_user.Login,
+                           img_src=profile_pic, **member, admin=admin, owner=owner, moderator=moderator, form=request.form)
+
 
 @app.route("/group_members/<group_id>/")
 def members(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
-        eprint("TELL ME WHYYYYYYYYY")
         return redirect(url_for("lost"))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
 
     rights = db.getuserrights(current_user, group)
@@ -484,9 +536,21 @@ def members(group_id):
     moderators = db.get_moderators(group)
     members = db.get_members(group)
 
-    return render_template("group_members.html", group_id=group.ID, group_owner=group_owner, moderators=moderators, members=members, **rights)
+    if current_user.is_anonymous:
+        user_id     = None
+        username    = "Visitor"
+        profile_pic = default_pictures_path + default_profile_picture
+    else:
+        user_id  = current_user.ID
+        username = current_user.Login
+        if current_user.Image is not None:
+            profile_pic = "/profile_picture/" + str(current_user.ID)
+        else:
+            profile_pic = default_pictures_path + default_profile_picture
 
-    # TODO user_id=user_id, username=username, img_src=profile_pic, **member, **rights
+    member = db.get_membership(current_user)
+    return render_template("group_members.html", group_id=group.ID, group_owner=group_owner, moderators=moderators, members=members,
+                           user_id=user_id, username=username, img_src=profile_pic, **member, **rights)
 
 
 @app.route("/apply/member/<group_id>/")
@@ -540,7 +604,7 @@ def accept_application(application_id):
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
 
     # Moderator request
-    if not owner and not application.Membership:
+    if not application.Membership and not owner:
         return redirect(url_for("tresspass"))
     # Membership request
     if not owner or not moderator:
@@ -549,17 +613,18 @@ def accept_application(application_id):
     user = User.query.filter_by(ID=application.User).first()
     if user is None:
         db.delete_from_db(application)
-        return redirect(url_for("group_notifications", group_id=application.Group))
+        return redirect(url_for("group_notifications", group_id=group.ID))
 
-    membership = Is_member.query.filter_by(User=user.ID, Group=group.ID).first()
-    if application.Membership and not membership:
+    membership    = Is_member.query.filter_by(User=user.ID, Group=group.ID).first()
+    moderatorship = Moderate.query.filter_by(User=user.ID, Group=group.ID).first()
+    if application.Membership and not membership and not moderatorship:
         db.insert_to_membership(user.ID, group.ID)
-    elif not application.Membership and not Moderate.query.filter_by(User=user.ID, Group=group.ID).first():
+    elif not application.Membership and membership and not moderatorship:
         db.insert_to_moderate(user.ID, group.ID)
         db.delete_from_db(membership)
 
     db.delete_from_db(application)
-    return redirect(url_for("group_notifications", group_id=application.Group))
+    return redirect(url_for("group_notifications", group_id=group.ID))
 
 
 @app.route("/reject/<application_id>")
@@ -579,14 +644,14 @@ def reject_application(application_id):
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
 
     # Moderator request
-    if not owner and not application.Membership:
+    if not application.Membership and not owner:
         return redirect(url_for("tresspass"))
     # Membership request
     if not owner or not moderator:
         return redirect(url_for("tresspass"))
 
     db.delete_from_db(application)
-    return redirect(url_for("group_notifications", group_id=application.Group))
+    return redirect(url_for("group_notifications", group_id=group.ID))
 
 
 @app.route("/leave/<group_id>/")
@@ -595,12 +660,62 @@ def leave_group(group_id):
     redirect(url_for("kick", group_id=group_id, user_id=current_user.ID))
 
 
+@app.route("/kick/group/<group>/<name>/")
+@app.route("/kick/groups/<group>/<name>/")
+@login_required
+def kick(group, name):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    user = User.query.filter_by(ID=user_id).first()
+    if user is None:
+        return redirect(url_for("lost"))
+
+    # Kicked user rights
+    is_member    = Is_member.query.filter_by(User=user.ID, Group=group.ID).first()
+    is_moderator = Moderate.query.filter_by(User=user.ID, Group=group.ID).first()
+    if not is_member and not is_moderator:
+        return redirect(url_for("lost"))
+
+    # Kicking user rights
+    himself   = current_user.ID == user.ID
+    admin     = current_user.Mode & 2
+    owner     = current_user.ID == group.User_ID or admin or himself
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+
+    if not owner and not moderator:
+        return redirect(url_for("tresspass"))
+    if is_moderator and not owner:
+        return redirect(url_for("tresspass"))
+
+    if is_member:
+        db.delete_from_db(is_member)
+    if is_moderator:
+        db.delete_from_db(is_moderator)
+
+    if himself:
+        flash("You have left the group " + group.Name + ".")
+    else:
+        flash("User " + user.Login + " was kicked from the group " + group.Name + ".")
+    return redirect(url_for("group", group_id=group.ID))
+
+
 @app.route("/delete/group/<group_id>/")
 @app.route("/delete/groups/<group_id>/")
 @login_required
 def delete_group(group_id):
-    # TODO iba owner alebo admin
-    pass
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    admin = current_user.Mode & 2
+    owner = current_user.ID == group.User_ID
+    if not admin and not user:
+        return redirect(url_for("tresspass"))
+
+    db.delete_from_db(group)
+    flash("You have deleted the group " + group.Name + ".")
+    return redirect(url_for("group", group_id=default_group_ID))
 
 
 ################################################################################
@@ -609,13 +724,15 @@ def delete_group(group_id):
 @app.route("/create/thread/<group_id>/")
 @login_required
 def create_thread(group_id):
-    # TODO
+    # NODO
     pass
 
 
 @app.route("/group/<group_id>/<thread_id>")
 @app.route("/groups/<group_id>/<thread_id>")
 def thread(group_id, thread_id):
+    # NODO
+
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -625,6 +742,7 @@ def thread(group_id, thread_id):
     closed = group.Mode & 2
     private = group.Mode & 1
     if private and current_user.is_anonymous:
+        flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
     rights = db.getuserrights(current_user, group)
     closed = group.Mode & 2
@@ -646,16 +764,12 @@ def thread(group_id, thread_id):
                            groupname=group.Name, threadname=thread.Name,
                            description=thread.Description, posts=db.get_messages(thread, 50))
 
-@app.route("/create_message/<group_id>/<thread_id>/")
-@login_required
-def create_message(group_id, thread_id):
-    thread = Thread.query.filter_by(ID=thread_id).first()
-    db.insert_to_messages(current_user, thread, thread_id, Content=request.form['content'])
 
-@app.route("/delete/group/<group_id>/<thread_id>/")
-@app.route("/delete/groups/<group_id>/<thread_id>/")
+@app.route("/delete/thread/<group_id>/<thread_id>/")
 @login_required
 def delete_thread(group_id, thread_id):
+    # NODO
+
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -676,13 +790,47 @@ def delete_thread(group_id, thread_id):
 
 
 ################################################################################
+# Messages
+################################################################################
+@app.route("/create_message/<group_id>/<thread_id>/", methods=["POST"])
+@login_required
+def create_message(group_id, thread_id):
+    thread = Thread.query.filter_by(ID=thread_id).first()
+    db.insert_to_messages(current_user, thread, thread_id, Content=request.form['content'])
+    # NODO
+
+
+@app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")
+@app.route("/groups/<group_id>/<thread_id>/<message_id>/delete/")
+@login_required
+def delete_message(group_id, thread_id, message_id):
+    # NODO
+    pass
+
+
+@app.route("/group/<group_id>/<thread_id>/<message_id>/inc/")
+@app.route("/groups/<group_id>/<thread_id>/<message_id>/inc/")
+@login_required
+def increment(group_id, thread_id, message_id):
+    # TODO
+    return redirect(url_for("tresspass"))
+
+
+@app.route("/group/<group_id>/<thread_id>/<message_id>/dec/")
+@app.route("/groups/<group_id>/<thread_id>/<message_id>/dec/")
+@login_required
+def decrement(group_id, thread_id, message_id):
+    # TODO
+    return redirect(url_for("tresspass"))
+
+
+################################################################################
 # Other
 ################################################################################
 @app.route("/search/", methods=["POST"])
 def search():
-    result = db.search_user_group(request.form.get("search", None))
-    # return json.dumps(result)
-    return render_template("search.html", **result)
+    results = db.search_user_group(request.form.get("search", None))
+    return render_template("search.html", **results)
 
 
 @app.route("/egg/")
