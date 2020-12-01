@@ -1,4 +1,3 @@
-<!-- TODO Remove group tlacidlo pre ownera a amdina -->
 <!doctype html>
 <html>
 <head>
@@ -183,44 +182,29 @@
                 </a>
                  
                 <br><h1>Notifications</h1><br><hr>
-                <!-- TODO pridat url na profil a skupinu -->
-                <!-- Reqest membership -->
-                {% if mem_notifications %}
-                {% for notfication in mem_notifications %}
-                    <div>
-                        User 
-                        <a href="{{ url_for('profile', user_id=notification.user_id) }}">
-                            <b>{{ notification.username }}</b>
-                        </a> 
-                        wants to join your group 
-                        <a href="{{ url_for('group', group_id=notification.group_id) }}">
-                            <b>{{ notification.group_name }}</b>
-                        </a>
-                        <br><br>
-                        {% if admin or owner or moderator %}
-                        <button>Accept</button> 
-                        <button>Reject</button>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                {% endif %}
 
                 <!-- Request mod -->
-                {% if mod_notifications %}
-                {% for notification in mod_notifications %}
-                    <div>
+                {% if notifications %}
+                {% for notification in notifications %}
+                    <div class="notification_container">
                         User 
                         <a href="{{ url_for('profile', user_id=notification.user_id) }}">
-                            <b>{{ notification.username }}</b>
-                        </a> 
-                        wants to become a moderator in your group 
-                        <a href="{{ url_for('group', group_id=notification.group_id) }}">
-                            <b>{{ notificaton.group_name }}</b>
+                            <b>{{ notification.User.Login }}</b>
                         </a>
+                        {% if notification.Membership %}
+                            wants to become a member in your group.
+                        {% else %}
+                            wants to become a moderator in your group.
+                        {% endif %}
                         <br><br>
-                        {% if admin or owner or moderator %}
-                        <button>Accept</button>
-                        <button>Reject</button>
+                        {% if owner or (moderator and notification.Membership) %}
+                        <a href="{{ url_for('accept_application', application_id=notification.ID)}}">
+                            <button>Accept</button>
+                        </a>
+
+                        <a href="{{ url_for('reject_application', application_id=notification.ID) }}">
+                            <button>Reject</button>
+                        </a>
                         {% endif %}
                     </div>
                 {% endfor %}
