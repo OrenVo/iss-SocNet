@@ -889,14 +889,18 @@ def increment(group_id, thread_id, message_id):
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/dec/")
 @login_required
 def decrement(group_id, thread_id, message_id):
+    rank_mutex.acquire()
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
+        rank_mutex.release()
         return redirect(url_for("lost"))
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
+        rank_mutex.release()
         return redirect(url_for("lost"))
     message = Messages.query.filter_by(ID_group=group.ID, Thread_name=thread.Name, ID=message_id).first()
     if message is None:
+        rank_mutex.release()
         return redirect(url_for("lost"))
 
     rank    = 0
@@ -912,6 +916,7 @@ def decrement(group_id, thread_id, message_id):
         db.delete_from_db(ranking)
 
     db.insert_to_messages(id=message.ID, ranking=message.Rank + rank, author=message.User_ID, thread=thread)
+    rank_mutex.release()
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
