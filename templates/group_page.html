@@ -266,7 +266,7 @@
 
                     <!-- LEAVE GROUP -->
                     {% if moderator or member %}
-                    <a href="{{ url_for('leave_group', group_id=group_id) }}">
+                    <a href="{{ url_for('leave_group', group_id=group_id) }}" onclick="return confirm('Are you sure you want to leave this gorup?');">
                         <button>Leave group</button>
                     </a>
                     {% endif %}
