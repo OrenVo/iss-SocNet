@@ -23,13 +23,20 @@ import re
 import sys
 
 """
-TODOs
-Search nefunguje
-Lupa nefunguje
+db.get_messages(thread, 50) nefunguje (Vojta)
+V group settingoch je delete button tiez vo formulari takze sa neda zavolat. (Dano)
+V group settingoch nefunguje back button (Dano)
+Veci čo som napísal na FB
+TODO v tomto dokumente - hlavne správy
 
-Autoupdate thread (time & after new message) - AJAX
-Older messages thread
+Search nefunguje (?)
+Lupa nefunguje (?)
 
+Autoupdate thread (time & after new message) - AJAX (?)
+Older messages thread (?)
+
+Dokumentacia
+--
 Expand login & groupname regex
 Radio buttons: https://stackoverflow.com/questions/13509883/how-to-vertically-align-a-html-radio-button-to-its-label
 Group settings current visibility
@@ -317,13 +324,13 @@ def delete_account(user_id):
         return redirect(url_for("tresspass"))
 
     if admin:
+        flash("Account " + user.Login + " has been deleted.")
         db.delete_from_db(user)
-        flash("Account has been deleted.")
         return redirect(url_for("home"))
     else:
         logout_user()
-        db.delete_from_db(user)
         flash("Your account has been deleted.")
+        db.delete_from_db(user)
         return redirect(url_for("welcome"))
 
 
@@ -710,66 +717,89 @@ def delete_group(group_id):
 
     admin = current_user.Mode & 2
     owner = current_user.ID == group.User_ID
-    if not admin and not user:
+    if not admin and not owner:
         return redirect(url_for("tresspass"))
 
-    db.delete_from_db(group)
     flash("You have deleted the group " + group.Name + ".")
+    db.delete_from_db(group)
     return redirect(url_for("group", group_id=default_group_ID))
 
 
 ################################################################################
 # Threads
 ################################################################################
-@app.route("/create/thread/<group_id>/")
+@app.route("/create/thread/<group_id>/", methods=["POST"])
 @login_required
 def create_thread(group_id):
-    # NODO
-    pass
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+
+    admin     = current_user.Mode & 2
+    owner     = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    member    = Is_member.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not admin and not owner and not moderator and not member:
+        return redirect(url_for("tresspass"))
+
+    name        = request.form.get("thread_subject", None)
+    description = request.form.get("description", None)
+
+    # Values check
+    if len(name) > 30:
+        flash("Subject is too long. Maximum is 30 characters.")
+        return redirect(url_for("group", group_id=group.ID, form=json.dumps(request.form)))
+    if not db.check_threadname(group, name):
+        flash("Subject is already taken.")
+        return redirect(url_for("group", group_id=group.ID, form=json.dumps(request.form)))
+    if description and len(description) > 2000:
+        flash("Description is too long. Maximum is 2000 characters.")
+        return redirect(url_for("group", group_id=group.ID, form=json.dumps(request.form)))
+
+    id = db.insert_to_thread(group_id=group.ID, thread_name=name, description=description)
+    return redirect(url_for("thread", group_id=group.ID, thread_id=id))
 
 
 @app.route("/group/<group_id>/<thread_id>")
 @app.route("/groups/<group_id>/<thread_id>")
 def thread(group_id, thread_id):
-    # NODO
-
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
         return redirect(url_for("lost"))
-    closed = group.Mode & 2
+    closed  = group.Mode & 2
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
         return redirect(url_for("welcome", next=request.url))
+
     rights = db.getuserrights(current_user, group)
-    closed = group.Mode & 2
     if closed and (rights["user"] or rights["visitor"]):
         return redirect(url_for("tresspass"))
-    profile_pic = default_pictures_path + default_profile_picture
+
     if current_user.is_anonymous:
-        username = "Visitor"
+        user_id     = None
+        username    = "Visitor"
         profile_pic = default_pictures_path + default_profile_picture
     else:
+        user_id  = current_user.ID
         username = current_user.Login
-        if current_user.Image is None:
-            profile_pic = default_pictures_path + default_profile_picture
+        if current_user.Image is not None:
+            profile_pic = "/profile_picture/" + str(current_user.ID)
         else:
-            profile_pic = "/profiles/" + current_user.Login + "/profile_image"
+            profile_pic = default_pictures_path + default_profile_picture
 
-    return render_template("thread_page.html", group_id=group.ID, thread_id=thread.ID,
-                           username=username, img_src=profile_pic, **rights,
-                           groupname=group.Name, threadname=thread.Name,
-                           description=thread.Description, posts=db.get_messages(thread, 50))
+    member = db.get_membership(current_user)
+    return render_template("thread_page.html", group_id=group.ID, thread_id=thread.ID, groupname=group.Name, threadname=thread.Name,
+                           description=thread.Description, posts=db.get_messages(thread, 50), user_id=user_id, username=username,
+                           img_src=profile_pic, **member, **rights)
 
 
 @app.route("/delete/thread/<group_id>/<thread_id>/")
 @login_required
 def delete_thread(group_id, thread_id):
-    # NODO
-
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -779,13 +809,13 @@ def delete_thread(group_id, thread_id):
 
     # User rights
     admin     = current_user.Mode & 2
-    owner     = current_user.ID == group.User_ID or admin
+    owner     = current_user.ID == group.User_ID
     moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
-    if not owner or not admin or not moderator:
+    if not admin and not owner and not moderator:
         return redirect(url_for("tresspass"))
 
+    flash("Thread " + thread.Name + " was succesfully deleted.")
     db.delete_from_db(thread)
-    flash("Thread was deleted succesfully")
     return redirect(url_for("group", group_id=group.ID))
 
 
@@ -797,14 +827,14 @@ def delete_thread(group_id, thread_id):
 def create_message(group_id, thread_id):
     thread = Thread.query.filter_by(ID=thread_id).first()
     db.insert_to_messages(current_user, thread, thread_id, Content=request.form['content'])
-    # NODO
+    # TODO
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/delete/")
 @login_required
 def delete_message(group_id, thread_id, message_id):
-    # NODO
+    # TODO
     pass
 
 
