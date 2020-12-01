@@ -350,7 +350,7 @@ def create_group():
 def group(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=default_group_ID))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
@@ -740,10 +740,10 @@ def create_thread(group_id):
 def thread(group_id, thread_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=default_group_ID))
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=group.ID))
     closed  = group.Mode & 2
     private = group.Mode & 1
     if private and current_user.is_anonymous:
