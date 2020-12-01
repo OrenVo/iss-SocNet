@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from src.error import eprint
+from sqlalchemy import func
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from configparser import ConfigParser
@@ -151,7 +152,7 @@ class DB:
             group = self.db.session.query(Group).filter_by(ID=mem.Group).first()
             if group:
                 members.append(group)
-            ... # get groups
+
 
         gowner = list()
         gmoderator = list()
@@ -172,8 +173,8 @@ class DB:
             'users': list(),
             'groups': list()
         }
-        users = self.db.session.query(User).filter(User.Login.contains(search_word)).all()
-        groups = self.db.session.query(Group).filter(Group.Name.contains(search_word)).all()
+        users = self.db.session.query(User).filter(func.lower(User.Login).contains(search_word.lower(), autoescape=True)).all()
+        groups = self.db.session.query(Group).filter(func.lower(Group.Name).contains(search_word.lower(), autoescape=True)).all()
         if users:
             for user in users:
                 path = f'/user_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
