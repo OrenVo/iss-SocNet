@@ -174,7 +174,7 @@
 
                     <tr>
                         <td><img src="{{ owner_src }}" alt="Profile picture" class="members_picture"></td>
-                        <td> <a href="{{ url_for('profile', user_id=user_id) }}">{{ groupowner.Login }}</a></td>
+                        <td> <a href="{{ url_for('profile', user_id=user_id) }}">{{ group_owner.Login }}</a></td>
                         {% if admin %}
                         <td><button class="del_button">Remove</button></td>
                         {% endif %}
