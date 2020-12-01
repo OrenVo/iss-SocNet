@@ -1,5 +1,4 @@
 <!-- TODO modal opytat sa ci si je isty napr odist zo skupiny -->
-<!-- TODO nacitat nove prispevky -->
 <!doctype html>
 <html>
 <head>
@@ -328,7 +327,7 @@
                             <p>{{ thread.Description}}</p>
                         </div>  
                         {% if admin or owner or moderator %}
-                        <a href="{{ url_for('delete_thread', group_id=group_id, thread_id=thread.ID) }}">
+                        <a href="{{ url_for('delete_thread', group_id=group_id, thread_id=thread.ID) }}"  onclick="return confirm('Are you sure you want to delete this thread?');">
                             <button class="del_button">Delete Thread</button>
                         </a>
                         {% endif %}
