@@ -97,7 +97,7 @@ class DB:
     def change_password(self, id: int, new_psw: str) -> None:
         user = self.db.session.query(User).filter_by(ID=id).first()
         if user is None:
-            raise ValueError(f'Unknown user with id: {id}')
+            return
         new_hash = self.create_password(new_psw)
         user.Password = new_hash
         self.db.session.commit()
@@ -122,7 +122,7 @@ class DB:
 
     def get_user(self, username: str = None, id: int = None):
         if username is None and id is None:
-            raise ValueError("Parameters not given")
+            return None
         if username:
             instance = self.db.session.query(User).filter_by(Login=username).first()
         else:
@@ -247,13 +247,15 @@ class DB:
         add = False
         if id is None:  # Creating new group
             if name is None or user_id is None:
-                raise ValueError('Missing argument name or user_id when creating new group')
+                return None
+                #raise ValueError('Missing argument name or user_id when creating new group')
             group = Group(Name=name, User_ID=user_id)
             add = True
         else:
             group = self.db.session.query(Group).filter_by(ID=id).first()
             if group is None:
-                raise ValueError(f'Invalid group id: {id}')
+                return None
+                #raise ValueError(f'Invalid group id: {id}')
         if name and id is not None:
             group.Name = name
         if mode:
@@ -292,18 +294,21 @@ class DB:
         """
         group = self.db.session.query(Group).filter_by(ID=group_id).first()
         if group is None:
-            raise ValueError(f'Unknown parameter group_id: {group_id}')
+            return False
+            #raise ValueError(f'Unknown parameter group_id: {group_id}')
 
         add = False
         if thread_id is None:
             if thread_name is None:
-                raise ValueError("Unknown thread name when inserting")
+                return False
+                #raise ValueError("Unknown thread name when inserting")
             thread = Thread(Group_ID=group_id, Name=thread_name)
             add = True
         else:
             thread = self.db.session.query(Thread).filter_by(Group_ID=group_id, ID=thread_id).first()
             if thread is None:
-                raise ValueError(f"Unknown thread with id {thread_id} and Group_ID {group_id}")
+                return False
+                #raise ValueError(f"Unknown thread with id {thread_id} and Group_ID {group_id}")
 
         if description:
             thread.Description = description
@@ -344,12 +349,14 @@ class DB:
             if login is not None and password is not None:
                 user = User(Login=login, Password=self.create_password(password), Last_group=1)
             else:
-                raise ValueError("When id is None login and password must be provided.")
+                return False
+                #raise ValueError("When id is None login and password must be provided.")
             add = True
         else:  # user should exist just update him
             user = self.db.session.query(User).filter_by(ID=id).first()
             if user is None:
-                raise ValueError(f'Invalid user id: {id}')
+                return False
+                #raise ValueError(f'Invalid user id: {id}')
         if login and id is not None:
             user.Login = login
         if name:
@@ -381,7 +388,8 @@ class DB:
 
     def insert_to_applications(self, user_id: int, group_id: int, membership: bool = True) -> bool:
         if user_id is None or group_id is None:
-            raise ValueError(f'User_id or group_id are not defined')
+            return False
+            #raise ValueError(f'User_id or group_id are not defined')
         add = False
         application = self.db.session.query(Applications).filter_by(User=user_id, Group=group_id).first()
         if application is None:
@@ -402,7 +410,8 @@ class DB:
 
     def insert_to_membership(self, user_id: int, group_id: int):
         if user_id is None or group_id is None:
-            raise ValueError('Parameters not passed')
+            return False
+            #raise ValueError('Parameters not passed')
         is_member = Is_member(User=user_id, Group=group_id)
         self.db.session.add(is_member)
         try:
@@ -414,7 +423,8 @@ class DB:
 
     def insert_to_moderate(self, user_id: int, group_id: int):
         if user_id is None or group_id is None:
-            raise ValueError('Parameters not passed')
+            return False
+            #raise ValueError('Parameters not passed')
         moderate = Moderate(User=user_id, Group=group_id)
         self.db.session.add(moderate)
         try:
@@ -429,8 +439,9 @@ class DB:
         if id:
             new_message = self.db.session.query(Messages).filter_by(ID=id).first()
             if new_message is None:
-                raise ValueError(f'Unknown message id {id}')
-        if id is None:
+                return False
+                #raise ValueError(f'Unknown message id {id}')
+        else:
             add = True
             new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=thread.Group_ID, Content=message)
         if ranking:
@@ -539,12 +550,13 @@ def init_db(app, fname='db.ini', sect='mysql'):
     db = db_config['mysql_database_db']
     port = db_config['mysql_database_port']
     user = db_config['mysql_database_user']
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{psw}@{host}:{port}/{db}'  # Dano proof version
-    # 'SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://{user}:{psw}@{host}:{port}/{db}?ssl=true'  # change driver to mysqldb and add ?ssl=true for better performance and security      Original co funguje vsetkym okrem Danovho Linuxu
-    app.config['SQLALCHEMY_ECHO'] = True  # TODO debugging info delete me for production
-    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 600
-    app.config['SQLALCHEMY_POOL_RECYCLE'] = 30
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Alternativní verze bez ssl připojení k databázy
+    #app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{psw}@{host}:{port}/{db}'  # Dano proof version
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://{user}:{psw}@{host}:{port}/{db}?ssl=true'  # change driver to mysqldb and add ?ssl=true for better performance and security      Original co funguje vsetkym okrem Danovho Linuxu
+    #app.config['SQLALCHEMY_ECHO'] = True  # TODO debugging info delete me for production
+    #app.config['SQLALCHEMY_POOL_TIMEOUT'] = 600
+    #app.config['SQLALCHEMY_POOL_RECYCLE'] = 30
+    #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     global mysql
     mysql.init_app(app)
     global Base
