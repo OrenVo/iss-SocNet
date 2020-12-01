@@ -863,7 +863,7 @@ def increment(group_id, thread_id, message_id):
         return redirect(url_for("lost"))
 
     rank    = message.Rank
-    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
+    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
         db.insert_to_ranking(message=message, user=current_user, inc=True)
     elif ranking.Inc:
@@ -892,7 +892,7 @@ def decrement(group_id, thread_id, message_id):
         return redirect(url_for("lost"))
 
     rank    = message.Rank
-    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
+    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
         db.insert_to_ranking(message=message, user=current_user, inc=False)
     elif ranking.Inc:
