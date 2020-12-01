@@ -188,21 +188,21 @@
                 {% for notification in notifications %}
                     <div class="notification_container">
                         User 
-                        <a href="{{ url_for('profile', user_id=notification.user_id) }}">
-                            <b>{{ notification.User.Login }}</b>
+                        <a href="{{ url_for('profile', user_id=notification[0].ID) }}">
+                            <b>{{ notification[0].Login }}</b>
                         </a>
-                        {% if notification.Membership %}
+                        {% if notification[1] %}
                             wants to become a member in your group.
                         {% else %}
                             wants to become a moderator in your group.
                         {% endif %}
                         <br><br>
-                        {% if owner or (moderator and notification.Membership) %}
-                        <a href="{{ url_for('accept_application', application_id=notification.ID)}}">
+                        {% if owner or (moderator and notification[1]) %}
+                        <a href="{{ url_for('accept_application', application_id=notification[2].ID)}}">
                             <button>Accept</button>
                         </a>
 
-                        <a href="{{ url_for('reject_application', application_id=notification.ID) }}">
+                        <a href="{{ url_for('reject_application', application_id=notification[2].ID) }}">
                             <button>Reject</button>
                         </a>
                         {% endif %}

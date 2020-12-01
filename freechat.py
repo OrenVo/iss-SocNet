@@ -23,7 +23,7 @@ import re
 import sys
 
 """
-db.get_messages(thread, 50) nefunguje (Vojta)
+db.get_messages(thread, 50) nefunguje (Vojta) <- solved už funguje :D 
 V group settingoch je delete button tiez vo formulari takze sa neda zavolat. (Dano)
 V group settingoch nefunguje back button (Dano)
 Veci čo som napísal na FB
@@ -63,6 +63,7 @@ default_group_ID        = 1
 default_pictures_path   = "/static/pictures/defaults/"
 default_profile_picture = "default_profile_picture.png"
 default_group_picture   = "default_group_picture.png"
+
 
 
 ################################################################################
@@ -835,8 +836,9 @@ def create_message(group_id, thread_id):
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/delete/")
 @login_required
 def delete_message(group_id, thread_id, message_id):
-    # TODO
-    pass
+    # TODO check rights
+    message = Messages.query.filter_by(ID=message_id)
+    db.delete_from_db(message)
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/inc/")
