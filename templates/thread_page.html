@@ -112,49 +112,49 @@
         </div>
 
         <!-- POSTS -->
-        <div id="thread_posts">
+        <div id="thread_posts">          
+
             {% if posts %}
             {% for post in posts %}
-                <div class="post">
-
-                    <!-- Post header -->
-                    <div class="post_header">                        
-                        <span class="post_header_text">
-                             <a href="{{ url_for('profile', user_id=post.User_ID) }}" id="post_login">
-                                 {{ db.get_user(id=post.User_ID).Login }}
-                            </a> 
-                            &nbsp; &nbsp; <span id="post_date_time">{{ post.Date_time }}</span> 
-                            {% if admin or owner or moderator or post.Mypost %} 
-                                <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}" class="a_button">
-                                    Delete post
-                                </a>
-                            {% endif %}
-                        </span>  
-                    </div>
-
-                    <!-- Post text -->
-                    <div class="post_text">                        
-                        <p id="post_content">{{ post.Content }}</p>
-                    </div>                       
-                    
-                    <!-- Post Ranking -->
-                    <div class="post_ranking" id="post_rank">
-                        <p>{{ post.Rank }}
-                        <!-- TODO tlacidla na increment decrement -->
-                         {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed)  %}
-                             <a href="  {{ url_for('increment',group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
-                                <span class="inc_trans">&#10095;</span>
-                            </a>
-                            <a href=" {{ url_for('decrement', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
-                                <span class="dec_trans">&#10095;</span>
+            <div class="post">
+                <!-- Post header -->
+                <div class="post_header">                        
+                    <span class="post_header_text">
+                         <a href="{{ url_for('profile', user_id=post.User_ID) }}" id="post_login">
+                            {{ db.get_user(id=post.User_ID).Login }}
+                        </a> 
+                        &nbsp; &nbsp; <span id="post_date_time">{{ post.Date_time }}</span> 
+                        {% if admin or owner or moderator or post.Mypost %} 
+                            <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}" class="a_button">
+                                Delete post
                             </a>
                         {% endif %}
-                        </p>
-                    </div>
+                    </span>  
                 </div>
+
+                <!-- Post text -->
+                <div class="post_text">                        
+                    <p id="post_content">{{ post.Content }}</p>
+                </div>                       
+                
+                <!-- Post Ranking -->
+                <div class="post_ranking" id="post_rank">
+                    <p> {{ post.Rank }}
+                    <!-- TODO tlacidla na increment decrement -->
+                     {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed)  %}
+                         <a href="{{ url_for('increment', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
+                            <span class="inc_trans">&#10095;</span>
+                        </a>
+                        <a href="{{ url_for('decrement', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
+                            <span class="dec_trans">&#10095;</span>
+                        </a>                        
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
             {% endfor %}
             {% endif %}
-            
+
             <div class="post_new_message">
                 <form action="{{ url_for('create_message',group_id=group_id, thread_id=thread_id)}}" method="POST">
                     <input name="content" id="content" type="text">
@@ -162,7 +162,13 @@
                     <button type="submit" value="Post">Post</button>
                 </form>
             </div>
-            
+
+             <!-- Load new posts -->
+             <div class="for_back_button float_left">
+                <a href="{{ url_for('thread', group_id=group_id, thread_id=thread_id) }}">
+                    <button>Load new posts</button>
+                </a>
+            </div>
         </div>
     </article>
 </body>
@@ -188,7 +194,7 @@ window.onclick = function(event) {
 }
 </script>
 
-<!-- AJAX - Getting latest posts from server -->
+<!-- AJAX - Getting latest posts from server 
 <script type="text/javascript"> 
 
     /***
@@ -233,9 +239,10 @@ window.onclick = function(event) {
                         // If the is any new post
                         if(pole[i].ID > last_id)
                         {
+                            alert("alert");
                             // Set new data
                             document.getElementById("post_login").innerHTML = pole[i].User_login;
-                            document.getElementById("post_date_time").innerHTML = pole[i].Date_Time;
+                            document.getElementById("post_date_time").innerHTML = pole[i].Date_time;
                             document.getElementById("post_content").innerHTML = pole[i].Content;
                             document.getElementById("post_rank").innerHTML = pole[i].Rank
 
@@ -258,8 +265,8 @@ window.onclick = function(event) {
     
     
     // Periodically calling download function OR add button Load new posts
-    setInterval(downloadData, 5000);
-</script>
+    //setInterval(downloadData, 5000);
+</script>-->
 </html>
 </doctype>
 
