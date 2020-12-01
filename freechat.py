@@ -833,7 +833,7 @@ def delete_message(group_id, thread_id, message_id):
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
         return redirect(url_for("lost"))
-    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    message = Messages.query.filter_by(ID_group=group.ID, Thread_name=thread.Name, ID=message_id).first()
     if message is None:
         return redirect(url_for("lost"))
 
