@@ -125,8 +125,8 @@
                 <div class="post">
                     <!-- Post header -->
                     <div class="post_header">
-                        <a href="{{ url_for('profile', user_id=post.user_id) }}">
-                            <h3>{{ post.Username post.Time}}</h3>
+                        <a href="{{ url_for('profile', user_id=post.User_ID) }}">
+                            <h3>{{ post.User_ID }} {{post.Date_time}}</h3> <!-- for now just user_id-->
                         </a>
                     </div>
                     <!-- Post text -->
@@ -135,7 +135,7 @@
                     </div>
                     <!-- Remove button -->
                     {% if admin or owner or moderator or post.Mypost %}
-                    <a href="{{ url_for('delete_post') }}">
+                    <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
                         <button>Delete post</button>
                     </a>                    
                     {% endif %}
@@ -143,13 +143,13 @@
                     <div class="post_ranking">
                         <p>{{ post.Rank }}
                         <!-- TODO tlacidla na increment decrement -->
-                        {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed)  %}
-                            <a href="{{ url_for('increment', postid=post.ID) }}">
+                         {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed)  %}
+                             <a href="{#  {{ url_for('increment', postid=post.ID) }}#}">
                                 <span class="inc_trans">&#10095;</span>
                             </a>
-                            <a href="{{ url_for('decrement', postid=post.ID) }}">
+                            <a href="{# {{ url_for('decrement', postid=post.ID) }}#}">
                                 <span class="dec_trans">&#10095;</span>
-                            </a>                         
+                            </a>
                         {% endif %}
                         </p>
                     </div>
@@ -160,9 +160,10 @@
             {% endif %}
             
             <!-- TODO vytvorit pridanie postu -->
-            <form action="{{ url_for('send_message',group_id=group_id, thread_id=thread_id)}}" method="POST">
-                <input id="content" type="text">
-                <input type="button" value="Post">
+            <form action="{{ url_for('create_message',group_id=group_id, thread_id=thread_id)}}" method="POST">
+                <input name="content" id="content" type="text" >
+                <!--<input type="button" value="Post">-->
+                <button type="submit" value="Post">Post</button>
             </form>
         </div>
     </article>

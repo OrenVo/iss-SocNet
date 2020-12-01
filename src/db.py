@@ -403,7 +403,7 @@ class DB:
             self.db.session.flush()
 
     def insert_to_messages(self, author: User, thread: Thread, message: str):
-        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=Thread.ID_group, Content=message)
+        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=thread.Group_ID, Content=message)
         self.db.session.add(new_message)
         try:
             self.db.session.commit()
@@ -422,7 +422,7 @@ class DB:
             self.db.session.flush()
 
     def get_messages(self, thread: Thread, limit: int = 200) -> list:
-        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Thread_name, ID_group=thread.ID_group).order_by(Messages.ID).limit(limit)
+        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID).limit(limit)
         if not retval:
             retval = list()
         return retval

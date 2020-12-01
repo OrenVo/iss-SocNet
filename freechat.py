@@ -826,8 +826,9 @@ def delete_thread(group_id, thread_id):
 @login_required
 def create_message(group_id, thread_id):
     thread = Thread.query.filter_by(ID=thread_id).first()
-    db.insert_to_messages(current_user, thread, thread_id, Content=request.form['content'])
-    # TODO
+    eprint(request.form.keys())
+    db.insert_to_messages(current_user, thread, message=request.form['content'])
+    return redirect(url_for('thread', group_id=group_id, thread_id=thread_id))
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")
