@@ -556,7 +556,7 @@ def init_db(app, fname='db.ini', sect='mysql'):
     #app.config['SQLALCHEMY_ECHO'] = True  # TODO debugging info delete me for production
     #app.config['SQLALCHEMY_POOL_TIMEOUT'] = 600
     #app.config['SQLALCHEMY_POOL_RECYCLE'] = 30
-    #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     global mysql
     mysql.init_app(app)
     global Base
