@@ -418,9 +418,38 @@ class DB:
             self.db.session.rollback()
             self.db.session.flush()
 
-    def insert_to_messages(self, author: User, thread: Thread, message: str):
-        new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=thread.Group_ID, Content=message)
-        self.db.session.add(new_message)
+    def insert_to_messages(self, author: User, thread: Thread, message: str, ranking: int = None, id: int = None):
+        add = False
+        if id:
+            new_message = self.db.session.query(Messages).filter_by(ID=id).first()
+            if new_message is None:
+                raise ValueError(f'Unknown message id {id}')
+        if id is None:
+            add = True
+            new_message = Messages(User_ID=author.ID, Thread_name=thread.Name, ID_group=thread.Group_ID, Content=message)
+        if ranking:
+            new_message.Rank = ranking
+        if message:
+            new_message.Content = message
+        if add:
+            self.db.session.add(new_message)
+        try:
+            self.db.session.commit()
+        except Exception as e:
+            eprint(str(e))
+            self.db.session.rollback()
+            self.db.session.flush()
+
+    def insert_to_ranking(self, message: Messages, user: User, inc: bool):
+        ranking = self.db.session.query(Ranking).filter_by(User=user.ID, Message=message.ID,Message_author=message.User_ID,Thread_name=message.Thread_name,ID_group=message.ID_group).first()
+        add = False
+        if ranking is None:
+            add = True
+            ranking = Ranking(User=user.ID, Message=message.ID,Message_author=message.User_ID,Thread_name=message.Thread_name,ID_group=message.ID_group)
+        if inc is not None:
+            ranking.Inc = inc
+        if add:
+            self.db.session.add(ranking)
         try:
             self.db.session.commit()
         except Exception as e:
@@ -442,18 +471,27 @@ class DB:
             if after < before:
                 ValueError(f'After ({after}) must be grater than before ({before})')
         if after is None and before is None:
-            retval = self.db.session.query(Messages).filter(Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
         elif after and before is None:
             retval = self.db.session.query(Messages).filter(Messages.ID >= after, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
         elif before and after is None:
-            retval = self.db.session.query(Messages).filter(Messages.ID <= before, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
         else:
-            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Messages.ID <= before, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
         if not retval:
             retval = list()
         else:
             retval = retval[::-1]
         return retval
+
+    @staticmethod
+    def messages_to_json(messages: list) -> list:
+        result = list()
+        for message in messages:
+            result.append({
+                '':,
+                ''
+            })
 
     def getuserrights(self, user, group) -> dict:
         result = {

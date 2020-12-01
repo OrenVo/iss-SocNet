@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS Messages (
 );
 
 CREATE TABLE IF NOT EXISTS Ranking (
+    Inc      BOOL DEFAULT NULL,
     User     INT NOT NULL,
     Message       INT NOT NULL,
     Message_author INT NOT NULL,
