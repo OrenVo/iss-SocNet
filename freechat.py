@@ -23,14 +23,6 @@ import re
 import sys
 
 """
-db.get_messages(thread, 50) nefunguje (Vojta) <- solved už funguje :D 
-V group settingoch je delete button tiez vo formulari takze sa neda zavolat. (Dano)
-V group settingoch nefunguje back button (Dano)
-Veci čo som napísal na FB
-TODO v tomto dokumente - hlavne správy
-
-Search nefunguje (?)
-Lupa nefunguje (?)
 
 Autoupdate thread (time & after new message) - AJAX (?)
 Older messages thread (?)
@@ -518,7 +510,7 @@ def group_notifications(group_id):
 
     member = db.get_membership(current_user)
 
-    notifications = db.get_applicants(group)  # TODO miesto notification.User, notification.ID, notification.Membership
+    notifications = db.get_applicants(group)
     return render_template("notifications.html", group_id=group.ID, notifications=notifications, user_id=current_user.ID, username=current_user.Login,
                            img_src=profile_pic, **member, admin=admin, owner=owner, moderator=moderator, form=request.form)
 
@@ -615,7 +607,7 @@ def accept_application(application_id):
     if not application.Membership and not owner:
         return redirect(url_for("tresspass"))
     # Membership request
-    if not owner and not moderator:
+    if not owner or not moderator:
         return redirect(url_for("tresspass"))
 
     user = User.query.filter_by(ID=application.User).first()
