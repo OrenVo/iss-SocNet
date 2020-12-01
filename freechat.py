@@ -911,9 +911,23 @@ def decrement(group_id, thread_id, message_id):
 ################################################################################
 @app.route("/search/", methods=["POST"])
 def search():
+    if current_user.is_anonymous:
+        user_id     = None
+        username    = "Visitor"
+        profile_pic = default_pictures_path + default_profile_picture
+        visitor = True
+    else:
+        user_id  = current_user.ID
+        username = current_user.Login
+        if current_user.Image is not None:
+            profile_pic = "/profile_picture/" + str(current_user.ID)
+        else:
+            profile_pic = default_pictures_path + default_profile_picture
+        visitor = False
+
     eprint(request.form.get("search", None))
     results = db.search_user_group(request.form.get("search", None))
-    return render_template("search.html", **results)
+    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=True)
 
 
 @app.route("/egg/")
