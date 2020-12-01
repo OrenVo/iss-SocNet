@@ -68,9 +68,9 @@
         <!-- SEARCH -->
         <div id="search_bar_box">
             <!-- TODO searchbar -->
-            <form action="{{ url_for('search') }}" id="search_bar_form" >
+            <form action="{{ url_for('search') }}" method="POST" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <a href="#">
+                <a href="{{ url_for('search') }}">
                     <div class="search_icon"></div>
                 </a>
             </form>
@@ -298,12 +298,16 @@
                     <h2>Threads</h2>
                 </div>                
                   {% for thread in threads %}
-                    <div class="thread_container">
-                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
+                    <div class="thread_container">                        
                             <div class="thread_header_gp">
-                                <span class="thread_title_gp">{{ thread.Name }}</span>
+                                <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}"></a>
+                                    <span class="thread_title_gp">{{ thread.Name }}</span>
+                                </a> 
+                                <a href="#">
+                                    <span class="float_right">Delete thread</span>  
+                                </a>                                
                             </div> 
-                        </a>   
+                        
                         <div class="thread_content_gp">
                             <p>{{ thread.Description}}</p>
                         </div>  
@@ -316,7 +320,7 @@
 
     <!-- Footer -->
     <div class="just_for_footer"></div>
-    <footer id="footer_copy">&#169; 2020 All rights reserved. Contact: da.andrasko@gmail.com</footer>
+    <footer id="footer_copy">&#169; 2020 All rights reserved. Contact: xandra05@stud.fit.vutbr.cz</footer>
 </body>
 
 

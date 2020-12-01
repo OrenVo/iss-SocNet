@@ -765,11 +765,6 @@ footer{
     color: #009a94;
 }
 
-.thread_header_gp:hover {
-    color: #001624;
-    background-color: #009a94;
-}
-
 .thread_title_gp {
     font-size: 20px;
     font-weight: bold;
@@ -971,6 +966,10 @@ footer{
 /***************/
 
 /**** ---Classes--- ****/
+
+.float_right {
+    float: right;
+}
 
 .for_back_button {
     width: 100%;
