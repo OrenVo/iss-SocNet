@@ -865,6 +865,7 @@ def increment(group_id, thread_id, message_id):
     rank    = message.Rank
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
+        rank = rank + 1
         db.insert_to_ranking(message=message, user=current_user, inc=True)
     elif ranking.Inc:
         rank = rank - 1
@@ -894,6 +895,7 @@ def decrement(group_id, thread_id, message_id):
     rank    = message.Rank
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
+        rank = rank - 1
         db.insert_to_ranking(message=message, user=current_user, inc=False)
     elif ranking.Inc:
         rank = rank - 1
