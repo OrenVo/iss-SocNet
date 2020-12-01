@@ -87,9 +87,9 @@
     <!-- SEARCH -->
     <div id="search_bar_box">
         <!-- TODO searchbar -->
-        <form action="{{ url_for('search') }}" id="search_bar_form" >
+        <form action="{{ url_for('search') }}" method="POST" id="search_bar_form" >
             <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-            <a href="#">
+            <a href="#" type="submit" onclick="submit_form()">
                 <div class="search_icon"></div>
             </a>
         </form>
