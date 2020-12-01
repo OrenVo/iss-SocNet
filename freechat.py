@@ -642,10 +642,10 @@ def leave_group(group_id):
     redirect(url_for("kick", group_id=group_id, user_id=current_user.ID))
 
 
-@app.route("/kick/group/<group>/<name>/")
-@app.route("/kick/groups/<group>/<name>/")
+@app.route("/kick/group/<group_id>/<user_id>/")
+@app.route("/kick/groups/<group_id>/<user_id>/")
 @login_required
-def kick(group, name):
+def kick(group_id, user_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
         return redirect(url_for("lost"))
@@ -873,7 +873,7 @@ def increment(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    insert_to_messages(id=message.ID, ranking=rank)
+    db.insert_to_messages(id=message.ID, ranking=rank)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
@@ -902,7 +902,7 @@ def decrement(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    insert_to_messages(id=message.ID, ranking=rank)
+    db.insert_to_messages(id=message.ID, ranking=rank)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
