@@ -1,15 +1,14 @@
 #!/usr/bin/python3
-from sqlalchemy import func
 
 from src.error import eprint
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-import hashlib
 from configparser import ConfigParser
-import os.path
-from deprecation import deprecated
-import secrets
 from sqlalchemy.ext.automap import automap_base
+import hashlib
+import json
+import os.path
+import secrets
 
 mysql = SQLAlchemy()
 Base = automap_base(mysql.Model)
@@ -485,13 +484,19 @@ class DB:
         return retval
 
     @staticmethod
-    def messages_to_json(messages: list) -> list:
+    def messages_to_json(messages: list) -> str:
         result = list()
         for message in messages:
             result.append({
-                '':,
-                ''
+                'ID': message.ID,
+                'Content': message.Content,
+                'Rank': message.Rank,
+                'Date_time': message.Date_time,
+                'User_ID': message.User_ID,
+                'Thread_name': message.Thread_name,
+                'ID_group': message.ID_group
             })
+        return json.dumps(messages)
 
     def getuserrights(self, user, group) -> dict:
         result = {
