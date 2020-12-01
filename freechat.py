@@ -918,6 +918,7 @@ def search():
         username    = "Visitor"
         profile_pic = default_pictures_path + default_profile_picture
         visitor = True
+        group_id = default_group_ID
     else:
         user_id  = current_user.ID
         username = current_user.Login
@@ -926,10 +927,11 @@ def search():
         else:
             profile_pic = default_pictures_path + default_profile_picture
         visitor = False
+        group_id = current_user.Last_group
 
     eprint(request.form.get("search", None))
     results = db.search_user_group(request.form.get("search", None))
-    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=visitor)
+    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=visitor, group_id=group_id)
 
 
 @app.route("/egg/")
