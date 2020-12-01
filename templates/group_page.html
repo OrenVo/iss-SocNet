@@ -286,7 +286,7 @@
                     {% endif %}
 
                     <!-- NOTIFICATIONS -->
-                    {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed) %}
+                    {% if admin or owner or moderator %}
                     <a href="{{ url_for('group_notifications', group_id=group_id) }}">
                         <button>Notifications</button>
                     </a>
