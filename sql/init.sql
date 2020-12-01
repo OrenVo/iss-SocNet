@@ -23,9 +23,9 @@ CREATE TABLE IF NOT EXISTS Users
 (
 	ID INT PRIMARY KEY AUTO_INCREMENT,
 	Login VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
-	Name VARCHAR(20),
-	Surname VARCHAR(20),
-	Description VARCHAR(2000),
+	Name VARCHAR(20) COLLATE utf8mb4_bin,
+	Surname VARCHAR(20) COLLATE utf8mb4_bin,
+	Description VARCHAR(2000) COLLATE utf8mb4_bin,
 	Mode TINYINT DEFAULT 0,
 	Password CHAR(97) NOT NULL,
 	Image MEDIUMBLOB,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `Group` (
     ID                  INT PRIMARY KEY AUTO_INCREMENT,
     Name                VARCHAR(30) NOT NULL UNIQUE COLLATE utf8mb4_bin,
     Mode                TINYINT DEFAULT 0,
-    Description         VARCHAR(2000),
+    Description         VARCHAR(2000) COLLATE utf8mb4_bin,
     Image               MEDIUMBLOB,
     Mimetype            VARCHAR(20),
     -- FK
@@ -89,8 +89,8 @@ CREATE TABLE IF NOT EXISTS Applications(     -- Vazby <uživatel žádá o člen
 
 CREATE TABLE IF NOT EXISTS Thread (
     ID      INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Name               VARCHAR(30) NOT NULL,
-    Description        VARCHAR(2000),
+    Name               VARCHAR(30) NOT NULL COLLATE utf8mb4_bin,
+    Description        VARCHAR(2000) COLLATE utf8mb4_bin,
 
     Group_ID           INT NOT NULL,   -- CK
     CONSTRAINT PK_thread PRIMARY KEY (Group_ID, Name),
@@ -99,12 +99,12 @@ CREATE TABLE IF NOT EXISTS Thread (
 
 CREATE TABLE IF NOT EXISTS Messages (
     ID             INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Content        VARCHAR(2000),
+    Content        VARCHAR(2000) COLLATE utf8mb4_bin,
     `Rank`         INT DEFAULT 0,
     Date_time      TIMESTAMP DEFAULT NOW(),
 
     User_ID        INT,  -- ck
-    Thread_name    VARCHAR(30) NOT NULL,
+    Thread_name    VARCHAR(30) NOT NULL COLLATE utf8mb4_bin,
     ID_group       INT NOT NULL,
     CONSTRAINT Pk_messages PRIMARY KEY (ID, Thread_name, ID_group),
     CONSTRAINT FK_user_messages FOREIGN KEY (User_ID) REFERENCES Users (ID) ON DELETE SET NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS Ranking (
     User     INT NOT NULL,
     Message       INT NOT NULL,
     Message_author INT NOT NULL,
-    Thread_name    VARCHAR(30) NOT NULL,
+    Thread_name    VARCHAR(30) NOT NULL COLLATE utf8mb4_bin,
     ID_group      INT NOT NULL,
     CONSTRAINT PK_ranking PRIMARY KEY (User, Message, Thread_name,ID_group),
     CONSTRAINT FK_user_ranking FOREIGN KEY (User) REFERENCES Users (ID) ON DELETE CASCADE,
