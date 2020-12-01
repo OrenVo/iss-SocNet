@@ -174,11 +174,13 @@
 
                     <!-- group name -->
                     <label for="group_name" ><h3>Group name</h3></label>
-                    <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name" class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required>
+                    <input name="group_name" type="text" placeholder="Enter Group Name" id="group_name"
+                    class="input_box" {% if form %} value="{{ form['group_name'] }}" {% endif %} required maxlength="30">
 
                     <!-- description -->
                     <label for="description"><h3>Description</h3></label>
-                    <input name="description" type="text" placeholder="Enter Description" id="description" class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %}>
+                    <input name="description" type="text" placeholder="Enter Description" id="description" 
+                    class="input_box" {% if form %} value="{{ form['description']  }}" {% endif %} maxlength="2000">
 
                     <!-- image -->
                     <label for="group_image"><h3>Group picture</h3></label>
