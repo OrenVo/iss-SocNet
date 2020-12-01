@@ -3,7 +3,7 @@
 <head>
     <meta charset = "utf-8" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css"/>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.ico') }}"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='pictures/logo.png') }}"/>
     <title>Free chat</title>
 </head>
 <body>
@@ -115,8 +115,11 @@
     <article>
         <!-- THREAD HREADER -->
         <div class="thread_header">
-            <h1>Subject</h1>
+            <h1>Subject: {{ threadname }}</h1>
             <h2>Description</h2>
+            <div class="description">
+                {{ description }}
+            </div>
         </div>
         <!-- POSTS -->
         <div id="thread_posts">
@@ -124,21 +127,24 @@
             {% for post in posts %}
                 <div class="post">
                     <!-- Post header -->
-                    <div class="post_header">
-                        <a href="{{ url_for('profile', user_id=post.User_ID) }}">
-                            <h3>{{ db.get_user(id=post.User_ID).Login }} {{post.Date_time}}</h3> <!-- písmo není vidět použít jinou barvu -->
-                        </a>
+                    <div class="post_header">                        
+                        <span class="post_header_text">
+                             <a href="{{ url_for('profile', user_id=post.User_ID) }}">
+                                 {{ db.get_user(id=post.User_ID).Login }}
+                            </a> 
+                            &nbsp; &nbsp; {{post.Date_time}}
+                            {% if admin or owner or moderator or post.Mypost %} 
+                                <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}" class="a_button">
+                                    Delete post
+                                </a>
+                            {% endif %}
+                        </span>  
                     </div>
                     <!-- Post text -->
                     <div class="post_text">                        
                         <p>{{ post.Content }}</p>
-                    </div>
-                    <!-- Remove button -->
-                    {% if admin or owner or moderator or post.Mypost %}
-                    <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
-                        <button>Delete post</button>
-                    </a>                    
-                    {% endif %}
+                    </div>                       
+                    
                     <!-- Post Ranking -->
                     <div class="post_ranking">
                         <p>{{ post.Rank }}
@@ -159,12 +165,14 @@
             {% endfor %}
             {% endif %}
             
-            <!-- TODO vytvorit pridanie postu -->
-            <form action="{{ url_for('create_message',group_id=group_id, thread_id=thread_id)}}" method="POST">
-                <input name="content" id="content" type="text" >
-                <!--<input type="button" value="Post">-->
-                <button type="submit" value="Post">Post</button>
-            </form>
+            <div class="post_new_message">
+                <form action="{{ url_for('create_message',group_id=group_id, thread_id=thread_id)}}" method="POST">
+                    <input name="content" id="content" type="text">
+                    <!--<input type="button" value="Post">-->
+                    <button type="submit" value="Post">Post</button>
+                </form>
+            </div>
+            
         </div>
     </article>
 </body>

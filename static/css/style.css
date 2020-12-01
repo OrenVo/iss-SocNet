@@ -41,6 +41,7 @@ article {
     width: 100%;
 
     float: left;
+    padding-bottom: 15px;
     box-sizing: border-box;
 }
 
@@ -58,6 +59,7 @@ header {
 a { /* Hyperlinks will have inherited color and no decoration */
     color: inherit;
     text-decoration: none;
+    font-size: inherit;
 }
 
 a:hover {
@@ -759,6 +761,8 @@ footer{
 
     float: left;
     padding: 20px;
+
+    text-align: center;
 }
 
 /* Posts */
@@ -767,27 +771,32 @@ footer{
     width: 100%;
 
     float: left;
+    margin-top: 50px;
 }
 
 .post {
     height: auto;
     width: 50%;
 
+    float: left;
     margin-top: 15px;
     margin-left: 25%;
-
-    border: 1px solid black;
 }
 
 .post_header {
     width: 100%;
 
     float: left;
-    padding: 3px 20px;
+    padding: 2px 20px;
 
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: bold;
     color: #009a94;
     background-color: #001624;    
+}
+
+.post_header_text {
+    font-size: 14px;
 }
 
 .post_text {
@@ -796,6 +805,8 @@ footer{
 
     float: left;
     padding: 20px;
+
+    background-color: white;
 }
 
 .post_ranking {
@@ -805,14 +816,40 @@ footer{
     padding: 3px 20px;
 
     font-size: 14px;
+    background-color: lightgray;
+}
+
+.post_new_message {
+    width: 50%;
+
+    float: left;
+    margin-left: 25%;
+    margin-top: 15px;
+    background-color: green;
+}
+
+.post_new_message  input {
+    width: 90%;
+}
+
+.post_new_message  button {
+    width: 10%;
+
+    float: right;
 }
 
 .inc_trans {
     transform: rotate(270deg);
+    display: inline-block;  
+
+    margin-left: 10px;
 }
 
 .dec_trans {
     transform: rotate(90deg);
+    display: inline-block;
+
+    margin-left: 12px;
 }
 
 .hr_for_posts {
@@ -895,6 +932,10 @@ footer{
 
 /**** ---Classes--- ****/
 
+.a_button {
+   float: right;
+}
+
 .radio {
     height: auto;
     width: auto;
@@ -918,7 +959,7 @@ footer{
 }
 
 .description {
-    height: 200px;
+    height: 150px;
     width: 50%;
 
     margin-top: 5px;
@@ -927,8 +968,7 @@ footer{
 
     overflow-y: scroll;
     text-align: left;
-    border: 1px solid #001624;
-    background-color: rgb(245, 245, 245);
+    background-color: white;
 }
 
 .del_g_p {
