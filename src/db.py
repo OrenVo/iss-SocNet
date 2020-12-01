@@ -498,6 +498,7 @@ class DB:
                 'Rank': message.Rank,
                 'Date_time': str(message.Date_time),
                 'User_ID': message.User_ID,
+                'User_login': User.query.filter_by(ID=message.User_ID).first().Login,
                 'Thread_name': message.Thread_name,
                 'ID_group': message.ID_group
             })
