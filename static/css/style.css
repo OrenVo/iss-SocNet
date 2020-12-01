@@ -585,8 +585,9 @@ footer{
 /* Table Members */
 .group_rc {
     height: auto;
-    width: 100%;
+    width: 50%;
 
+    margin-left: 25%;
     text-align: center;
 }
 

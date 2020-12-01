@@ -362,11 +362,13 @@
         document.getElementById("create_new_thread_button").style.display = 'block';
     }
     function create_new_thread_show(){
+        window.scrollTo(0,0);
         document.getElementById("create_new_thread_button").style.display = 'none';
         document.getElementById("creating_new_thread").style.display = 'block';
         ocument.getElementById("group_header").style.display = 'none';
         document.getElementById("group_threads").style.display ='none';
-        document.getElementById("right_panel").scrollTop();
+        
+        
     }
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
