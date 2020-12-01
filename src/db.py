@@ -475,13 +475,13 @@ class DB:
             if after < before:
                 ValueError(f'After ({after}) must be grater than before ({before})')
         if after is None and before is None:
-            retval = self.db.session.query(Messages).filter(Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit).all()
         elif after and before is None:
-            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit).all()
         elif before and after is None:
-            retval = self.db.session.query(Messages).filter(Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit).all()
         else:
-            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Messages.ID <= before, Messages.Thread_name == thread.Name, Messages.ID_group == thread.Group_ID).order_by(Messages.ID.desc()).limit(limit).all()
         if not retval:
             retval = list()
         else:
