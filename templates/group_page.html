@@ -131,7 +131,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -148,7 +148,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -294,13 +294,20 @@
                 {% endif %}
 
                 {% if threads %}
+                <div class="threads_caption">
+                    <h2>Threads</h2>
+                </div>                
                   {% for thread in threads %}
-                  <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
-                      <div class="thread_container">
-                          <h3>{{ thread.Name }}</h3>
-                          <p>{{ thread.Description}}</p>
-                      </div>
-                  </a>
+                    <div class="thread_container">
+                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
+                            <div class="thread_header_gp">
+                                <span class="thread_title_gp">{{ thread.Name }}</span>
+                            </div> 
+                        </a>   
+                        <div class="thread_content_gp">
+                            <p>{{ thread.Description}}</p>
+                        </div>  
+                    </div>
                   {% endfor %}
                 {% endif %}
             </div>

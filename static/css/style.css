@@ -41,7 +41,7 @@ article {
     width: 100%;
 
     float: left;
-    padding-bottom: 15px;
+    padding-bottom: 40px;
     box-sizing: border-box;
 }
 
@@ -604,10 +604,11 @@ footer{
 
 .table_members tr td {
     text-align: center;
+    height: 80px;
 }
 
 .members_picture {
-    height: 70px;
+    max-height: 70px;
     max-width: 70px;
 }
 /*****************/
@@ -721,6 +722,7 @@ footer{
     width: 100%;
 
     float: right;
+    text-align: center;
 }
 
 /* Create new thread */
@@ -745,13 +747,46 @@ footer{
 
 /* Thread */
 .thread_container {
-    height: 70px;
+    height: auto;
     width: 100%;
 
     float: left;
-    padding: 15px;
+    margin-top: 10px;
+}
+
+.thread_header_gp {
+    width: 100%;
+
+    float: left;
+    padding: 3px;
 
     text-align: center;
+    background-color: #001624;
+    color: #009a94;
+}
+
+.thread_header_gp:hover {
+    color: #001624;
+    background-color: #009a94;
+}
+
+.thread_title_gp {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.thread_content_gp {
+    width: 100%;
+
+    float: left;
+    padding: 10px;
+    text-align: left;
+    background-color: lightgray;
+}
+
+.threads_caption {
+    width: 100%;
+    padding: 20px;
 }
 /*********/
 
@@ -761,6 +796,7 @@ footer{
 
     float: left;
     padding: 20px;
+    position: static;
 
     text-align: center;
 }
@@ -825,11 +861,15 @@ footer{
     float: left;
     margin-left: 25%;
     margin-top: 15px;
-    background-color: green;
 }
 
 .post_new_message  input {
     width: 90%;
+    background-color: white;
+}
+
+.post_new_message input:hover {
+    background-color: rgb(228, 228, 228);
 }
 
 .post_new_message  button {
@@ -931,6 +971,12 @@ footer{
 /***************/
 
 /**** ---Classes--- ****/
+
+.for_back_button {
+    width: 100%;
+    padding: 5px;
+    float: left;
+}
 
 .a_button {
    float: right;

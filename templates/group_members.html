@@ -129,7 +129,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -146,7 +146,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -163,7 +163,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -174,15 +174,16 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- MEMBERS -->
-            <div class="group_rc">
+            <div class="for_back_button">
                 <!-- Go back -->
                 <a href="{{ url_for('group', group_id=group_id) }}">
                     <button class="float_left">
                         &#10094; Back
                     </button>
                 </a>
-                
+            </div>
+            <!-- MEMBERS -->
+            <div class="group_rc">                
                 <!-- Title + table-->
                 <br><h1>Members</h1><br><hr>
                 <table class="table_members">
@@ -192,8 +193,8 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <td><img src="{{ img_src }}" alt="Profile picture"></td>
-                        <td>username</td>
+                        <td><img src="{{ img_src }}" alt="Profile picture" class="members_picture"></td>
+                        <td> <a href="{{ url_for('profile', user_id=user_id) }}">{{ username }}</a></td>
                         {% if admin %}
                         <td><button>Remove</button></td>
                         {% endif %}
@@ -201,7 +202,7 @@
                     {% if moderators %}
                     {% for member in moderators %}
                     <tr>
-                        <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
+                        <td><div><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></div></td>
                         <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
                         {% if admin or owner or moderator %}
                         <td><button>Remove</button></td>

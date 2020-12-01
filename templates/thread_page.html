@@ -113,19 +113,30 @@
 
     <!-- ARTICLE -->
     <article>
-        <!-- THREAD HREADER -->
+        <div class="for_back_button">
+             <!-- Back -->
+             <a href="{{ url_for('group', group_id=group_id) }}">
+                <button class="float_left back_button">
+                    &#10094; Back
+                </button>
+            </a>
+        </div>
+        <!-- THREAD HREADER -->        
         <div class="thread_header">
+            <!-- Info -->
             <h1>Subject: {{ threadname }}</h1>
             <h2>Description</h2>
             <div class="description">
                 {{ description }}
             </div>
         </div>
+
         <!-- POSTS -->
         <div id="thread_posts">
             {% if posts %}
             {% for post in posts %}
                 <div class="post">
+
                     <!-- Post header -->
                     <div class="post_header">                        
                         <span class="post_header_text">
@@ -140,6 +151,7 @@
                             {% endif %}
                         </span>  
                     </div>
+
                     <!-- Post text -->
                     <div class="post_text">                        
                         <p>{{ post.Content }}</p>
@@ -159,8 +171,6 @@
                         {% endif %}
                         </p>
                     </div>
-                    <!-- hr -->
-                    <hr class="hr_for_posts">
                 </div>
             {% endfor %}
             {% endif %}

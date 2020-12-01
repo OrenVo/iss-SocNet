@@ -127,7 +127,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -144,7 +144,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -161,7 +161,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -172,15 +172,16 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- Notifications -->
-            <div class="group_rc">            
+            <div class="for_back_button">
                 <!-- Go back -->
                 <a href="{{ url_for('group', group_id=group_id) }}">
                     <button class="float_left">
                         &#10094; Back
                     </button>
                 </a>
-                 
+            </div>
+            <!-- Notifications -->
+            <div class="group_rc">                             
                 <br><h1>Notifications</h1><br><hr>
 
                 <!-- Request mod -->

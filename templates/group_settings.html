@@ -131,7 +131,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -148,7 +148,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -165,7 +165,7 @@
                             <img src="{{ group[1] }}" alt="Group icon" class="left_panel_group_picture">
                         </div>
                         <div class="left_panel_group_text">
-                            <span class="left_panel_group_title">{{ group[0].Name.replace("_", " ") }}</span>
+                            <span class="left_panel_group_title"><h3>{{ group[0].Name.replace("_", " ") }}</h3></span>
                         </div>
                     </div>
                 </a>
@@ -176,13 +176,15 @@
         <!-- RIGHT PANEL-->
         <div class="right_panel">
             <!-- Settings -->
-            <div class="group_rc">
-                <!-- Go back-->
-                <a href="#">
-                    <button>
+            <!-- Go back-->
+            <div class="for_back_button">
+                <a href="{{ url_for('group', group_id=group_id) }}">
+                    <button class="float_left">
                         &#10094; Back
                     </button>
                 </a>
+            </div> 
+            <div class="group_rc">                               
 
                 <br><h1 class="settings_title">Settings</h1><br><hr>
                 <!-- TODO group settings -->
@@ -222,12 +224,9 @@
                         <button class="del_g_p">Delete group</button>
                     </a>
 
-                    <br><hr>
+                    <br>
                     <!-- save and back -->
                     <button form="settings" type="submit" id="create_group_button">Save changes</button>
-                    <button type="button" onclick="create_new_group_hide()">
-                        &#10094; Back
-                    </button>
                 </form>
             </div>
         </div>
