@@ -989,6 +989,10 @@ footer{
 
 /**** ---Classes--- ****/
 
+.text_align_center {
+    text-align: center;
+}
+
 .div_for_titles {
     width: 100%;
     padding: 5px;

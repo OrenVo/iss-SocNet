@@ -327,9 +327,11 @@
                         <div class="thread_content_gp">
                             <p>{{ thread.Description}}</p>
                         </div>  
+                        {% if admin or owner or moderator %}
                         <a href="{{ url_for('delete_thread', group_id=group_id, thread_id=thread.ID) }}">
                             <button class="del_button">Delete Thread</button>
                         </a>
+                        {% endif %}
                     </div>
                   {% endfor %}
                 {% endif %}
