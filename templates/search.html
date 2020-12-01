@@ -88,7 +88,8 @@
                 {% for user in users %}
                     <a href="{{ url_for('profile', user_id=user.ID) }}">
                         <div class="search_result">
-                            {{ user.Login }}
+                            <img src="{{ user[1] }}" alt="Profile image">
+                            {{ user[0].Login }}
                         </div>
                     </a>
                 {% endfor %}
@@ -100,7 +101,8 @@
                 {% for group in groups %}
                     <a href="{{ url_for('group', group_id=group.ID) }}">
                         <div class="search_result">
-                            {{ group.Name }}
+                            <img src="{{ group[1] }}" alt="Group image">
+                            {{ group[0].Name }}
                         </div>
                     </a>                    
                 {% endfor %}

@@ -175,9 +175,13 @@ class DB:
         users = self.db.session.query(User).filter(User.Login.contains(search_word)).all()
         groups = self.db.session.query(Group).filter(Group.Name.contains(search_word)).all()
         if users:
-            retval['users'] = users
+            for user in users:
+                path = f'/user_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
+                retval['users'].append((user, path))
         if groups:
-            retval['groups'] = groups
+            for group in groups:
+                path = f'/user_picture/{group.ID}/' if group.Image else '/static/pictures/defaults/default_group_picture.png'
+                retval['groups'].append((group, path))
         return retval
 
     def get_threads(self, group: Group) -> list:
