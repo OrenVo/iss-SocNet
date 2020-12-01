@@ -818,6 +818,11 @@ def create_message(group_id, thread_id):
     '''
 
 
+@app.route("/get_messages/<group_id>/<thread_id>/", methods=["GET"])
+def get_messages(group_id, thread_id):
+    return db.messages_to_json(db.get_messages(Thread.query.filter_by(ID=thread_id), 200))
+
+
 @app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/delete/")
 @login_required
@@ -874,21 +879,20 @@ def decrement(group_id, thread_id, message_id):
     if message is None:
         return redirect(url_for("lost"))
 
-    # TODO
     rank    = message.Rank
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
-    if ranking and ranking.Value == -1:
+    if ranking and not ranking.Inc:
         rank = rank + 1
         db.delete_from_db(ranking)
-    elif ranking and ranking.Value == 1:
+    elif ranking and ranking.Inc:
         rank = rank - 1
         db.delete_from_db(ranking)
     else:
-        db.insert_to_ranking(current_user, message)  # Dokonci
+        db.insert_to_ranking(message=message, user=current_user, ínc=False)  # Dokonci
         rank = rank - 1
 
-    message.Rank = rank  # Oprav
-    return message.Rank
+    insert_to_messages(id=message.ID, ranking=rank)
+    return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
 ################################################################################
