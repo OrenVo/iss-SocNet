@@ -735,8 +735,8 @@ def create_thread(group_id):
     return redirect(url_for("thread", group_id=group.ID, thread_id=id))
 
 
-@app.route("/group/<group_id>/<thread_id>")
-@app.route("/groups/<group_id>/<thread_id>")
+@app.route("/group/<group_id>/<thread_id>/")
+@app.route("/groups/<group_id>/<thread_id>/")
 def thread(group_id, thread_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
@@ -858,7 +858,7 @@ def increment(group_id, thread_id, message_id):
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
         return redirect(url_for("lost"))
-    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    message = Messages.query.filter_by(ID_group=group.ID, Thread_name=thread.Name, ID=message_id).first()
     if message is None:
         return redirect(url_for("lost"))
 
@@ -873,7 +873,7 @@ def increment(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    db.insert_to_messages(id=message.ID, ranking=rank)
+    db.insert_to_messages(id=message.ID, ranking=rank, author=message.User_ID, thread=thread)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
@@ -887,7 +887,7 @@ def decrement(group_id, thread_id, message_id):
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
         return redirect(url_for("lost"))
-    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    message = Messages.query.filter_by(ID_group=group.ID, Thread_name=thread.Name, ID=message_id).first()
     if message is None:
         return redirect(url_for("lost"))
 
@@ -902,7 +902,7 @@ def decrement(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    db.insert_to_messages(id=message.ID, ranking=rank)
+    db.insert_to_messages(id=message.ID, ranking=rank, author=message.User_ID, thread=thread)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 

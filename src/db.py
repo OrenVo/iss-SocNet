@@ -422,7 +422,7 @@ class DB:
             self.db.session.rollback()
             self.db.session.flush()
 
-    def insert_to_messages(self, author: User, thread: Thread, message: str, ranking: int = None, id: int = None):
+    def insert_to_messages(self, author: User, thread: Thread, message: str = None, ranking: int = None, id: int = None):
         add = False
         if id:
             new_message = self.db.session.query(Messages).filter_by(ID=id).first()
