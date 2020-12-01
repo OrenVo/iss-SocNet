@@ -171,20 +171,22 @@
                         <th><h2>Login</h2></th>
                         <th></th>
                     </tr>
+
                     <tr>
                         <td><img src="{{ img_src }}" alt="Profile picture" class="members_picture"></td>
                         <td> <a href="{{ url_for('profile', user_id=user_id) }}">{{ username }}</a></td>
                         {% if admin %}
-                        <td><button>Remove</button></td>
+                        <td><button class="del_button">Remove</button></td>
                         {% endif %}
                     </tr>
+
                     {% if moderators %}
                     {% for member in moderators %}
                     <tr>
                         <td><div><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></div></td>
-                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
+                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.Login }}</a></td>
                         {% if admin or owner or moderator %}
-                        <td><button class="del_button">Remove</button></td>
+                        <td><a href="{{ url_for('kick', group_id=group_id, user_id=member.ID) }}"><button class="del_button">Remove</button></a></td>
                         {% endif %}
                     </tr>
                     {% endfor %}
@@ -194,9 +196,9 @@
                     {% for member in members %}
                     <tr>
                         <td><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
+                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.Login }}</a></td>
                         {% if admin or owner or moderator %}
-                        <td><button>Remove</button></td>
+                        <td><a href="{{ url_for('kick', group_id=group_id, user_id=member.ID) }}"><button class="del_button">Remove</button></a></td>
                         {% endif %}
                     </tr>
                     {% endfor %}
