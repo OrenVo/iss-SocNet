@@ -125,7 +125,7 @@
                         </a> 
                         &nbsp; &nbsp; {{ post.Date_time }}
                         {% if admin or owner or moderator or (current_user.is_authenticated and current_user.ID == post.User_ID) %} 
-                            <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}" class="a_button">
+                            <a href="{{ url_for('delete_message', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}" onclick="return confirm('Are you sure you want to delete this post?');" class="a_button">
                                 Delete post
                             </a>
                         {% endif %}
