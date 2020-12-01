@@ -175,21 +175,27 @@
 
         <!-- RIGHT PANEL-->
         <div class="right_panel">
-            <!-- Settings -->
-            <!-- Go back-->
+            
+            <!-- Go back & delete group -->
             <div class="for_back_button">
+                <!-- back -->
                 <a href="{{ url_for('group', group_id=group_id) }}">
                     <button class="float_left">
                         &#10094; Back
                     </button>
                 </a>
+                <!-- delete button -->
+                <a href="{{ url_for('delete_group', group_id=group_id) }}">
+                    <button class="del_g_p">Delete group</button>
+                </a>
             </div> 
-            <div class="group_rc">                               
+
+            <!-- Settings -->
+            <div class="group_rc">
 
                 <br><h1 class="settings_title">Settings</h1><br><hr>
                 <!-- TODO group settings -->
                 <form action="{{ url_for('group_settings', group_id=group_id) }}" method="POST" id="settings" enctype="multipart/form-data">
-                    <h1>Settings</h1>
 
                     <!-- group name -->
                     <label for="group_name" ><h3>Group name</h3></label>
@@ -219,11 +225,6 @@
                     <input id="visibility3" class="radio" type="radio" name="visibility" value="2" {% if form and form['visibility'] == '2' %} checked = "checked" {% endif %}>
                     <label for="visibility3" class="radio">Members of this group</label><br>
 
-                    <!-- delete button -->
-                    <a href="{{ url_for('delete_group', group_id=group_id) }}">
-                        <button class="del_g_p">Delete group</button>
-                    </a>
-
                     <br>
                     <!-- save and back -->
                     <button form="settings" type="submit" id="create_group_button">Save changes</button>
@@ -234,7 +235,7 @@
 </body>
 
 <!-- JavaScript -->
-<script>
+<script type="text/javascript">
     function remove_img(){
         document.getElementById("group_image").value = "";
         document.getElementById("rm_img").style.display = "none";

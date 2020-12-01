@@ -160,6 +160,15 @@
         <div class="right_panel">
             <!-- CREATING NEW GROUP -->
             <div id="creating_new_group">
+
+                <!-- Back -->
+                <div class="for_back_button">
+                    <button type="button" onclick="create_new_group_hide()" class="float_left">
+                        &#10094; Back
+                    </button>
+                </div>
+
+                <!-- Creating new group -->
                 <form action="{{ url_for('create_group') }}" id="create_group" method="POST" enctype="multipart/form-data">
                     <h1>Create new group</h1> <hr>
 
@@ -192,11 +201,8 @@
                     <label for="visibility3" class="radio">Members of this group</label><br>
 
                     <br><br>
-                    <!-- create and back -->
+                    <!-- create -->
                     <button form="create_group" type="submit" id="create_group_button">Create group</button>
-                    <button type="button" onclick="create_new_group_hide()">
-                        &#10094; Back
-                    </button>
                 </form>
             </div>
 
@@ -239,6 +245,7 @@
                     </div>                    
                 </div>
 
+                {% if group_id != 1 %}
                 <div class="rp_gb">
                     <!-- JOIN GROUP -->
                     {% if user %}
@@ -283,6 +290,7 @@
                     {% endif %}
                 </div>
             </div>
+            {% endif %}
 
             <!-- GROUP THREADS -->
             <div id="group_threads">
@@ -299,9 +307,9 @@
                 </div>                
                   {% for thread in threads %}
                     <div class="thread_container">  
-                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
+                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">                      
                             <div class="thread_header_gp">                                
-                                    <span class="thread_title_gp">{{ thread.Name }}</span>                                                              
+                                <span class="thread_title_gp">{{ thread.Name }}</span>                                                              
                             </div>
                         </a>  
                         
@@ -309,7 +317,7 @@
                             <p>{{ thread.Description}}</p>
                         </div>  
                         <a href="#">
-                            <button>Delete Thread</button>
+                            <button class="del_button">Delete Thread</button>
                         </a>
                     </div>
                   {% endfor %}
@@ -325,7 +333,7 @@
 
 
 <!-- JavaScript -->
-<script>
+<script type="text/javascript">
 
     /* Showing and closing windows on click - create new group and thread */
     function create_new_group_show(){
@@ -345,6 +353,7 @@
         document.getElementById("creating_new_thread").style.display = 'block';
         ocument.getElementById("group_header").style.display = 'none';
         document.getElementById("group_threads").style.display ='none';
+        document.getElementById("right_panel").scrollTop();
     }
     function create_new_thread_hide(){
         document.getElementById("create_new_thread_button").style.display = 'block';
@@ -397,7 +406,6 @@
       }
     }
 
-    
     // Search when clicked on icon 
     function submit_form(){
         document.getElementById("search_bar_form").submit();
