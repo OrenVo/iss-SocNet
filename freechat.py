@@ -25,7 +25,7 @@ import threading
 
 # App initialization #
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"  # TODO change security key
+app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
 app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
@@ -172,7 +172,7 @@ def profile(user_id):
     private = user.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     if user.Image is not None:
         image = "/profile_picture/" + str(user.ID)
@@ -209,7 +209,7 @@ def user_img(user_id):
     private = user.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     if user.Image is None:
         return redirect(url_for("lost"))
@@ -356,7 +356,7 @@ def group(group_id):
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     if group.Image is not None:
         image = "/group_picture/" + str(group.ID)
@@ -406,7 +406,7 @@ def group_img(group_id):
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     if group.Image is None:
         return redirect(url_for("lost"))
@@ -507,7 +507,7 @@ def members(group_id):
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     rights = db.getuserrights(current_user, group)
     closed = group.Mode & 2
@@ -756,7 +756,7 @@ def thread(group_id, thread_id):
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
-        return redirect(url_for("welcome", next=request.url))
+        return redirect(url_for("welcome"))
 
     rights = db.getuserrights(current_user, group)
     if closed and (rights["user"] or rights["visitor"]):
