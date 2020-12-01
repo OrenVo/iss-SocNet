@@ -142,10 +142,10 @@
                         <p>{{ post.Rank }}
                         <!-- TODO tlacidla na increment decrement -->
                          {% if (admin or owner or moderator or member) or (user and private) or (not private and not closed)  %}
-                             <a href="{#  {{ url_for('increment', postid=post.ID) }}#}">
+                             <a href="  {{ url_for('increment',group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
                                 <span class="inc_trans">&#10095;</span>
                             </a>
-                            <a href="{# {{ url_for('decrement', postid=post.ID) }}#}">
+                            <a href=" {{ url_for('decrement', group_id=group_id, thread_id=thread_id, message_id=post.ID) }}">
                                 <span class="dec_trans">&#10095;</span>
                             </a>
                         {% endif %}
@@ -231,10 +231,10 @@ window.onclick = function(event) {
                     for(var i in pole)
                     {
                         // If the is any new post
-                        if(pole[i].id > last_id)
+                        if(pole[i].ID > last_id)
                         {
                             // Set new data
-                            document.getElementById("post_login").innerHTML = pole[i].User.Login;
+                            document.getElementById("post_login").innerHTML = pole[i].User_login;
                             document.getElementById("post_date_time").innerHTML = pole[i].Date_Time;
                             document.getElementById("post_content").innerHTML = pole[i].Content;
                             document.getElementById("post_rank").innerHTML = pole[i].Rank
