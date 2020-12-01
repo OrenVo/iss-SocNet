@@ -589,7 +589,7 @@ def accept_application(application_id):
     if not application.Membership and not owner:
         return redirect(url_for("tresspass"))
     # Membership request
-    if not owner or not moderator:
+    if not owner and not moderator:
         return redirect(url_for("tresspass"))
 
     user = User.query.filter_by(ID=application.User).first()
@@ -629,7 +629,7 @@ def reject_application(application_id):
     if not application.Membership and not owner:
         return redirect(url_for("tresspass"))
     # Membership request
-    if not owner or not moderator:
+    if not owner and not moderator:
         return redirect(url_for("tresspass"))
 
     db.delete_from_db(application)
