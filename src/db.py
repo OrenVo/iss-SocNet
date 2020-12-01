@@ -161,10 +161,10 @@ class DB:
             path = f'/group_picture/{own.ID}/' if own.Image else '/static/pictures/defaults/default_group_picture.png'
             gowner.append((own, path))
         for mod in moderators:
-            path = f'/group_picture/{mod.Group}/' if mod.Image else '/static/pictures/defaults/default_group_picture.png'
+            path = f'/group_picture/{mod.ID}/' if mod.Image else '/static/pictures/defaults/default_group_picture.png'
             gmoderator.append((mod, path))
         for mem in members:
-            path = f'/group_picture/{mem.Group}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
+            path = f'/group_picture/{mem.ID}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
             gmember.append((mem, path))
         return {'gowner': gowner, 'gmoderator': gmoderator, 'gmember': gmember}
 
