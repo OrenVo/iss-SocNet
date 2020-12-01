@@ -437,10 +437,22 @@ class DB:
             self.db.session.rollback()
             self.db.session.flush()
 
-    def get_messages(self, thread: Thread, limit: int = 200) -> list:
-        retval = self.db.session.query(Messages).filter_by(Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID).limit(limit)
+    def get_messages(self, thread: Thread, limit: int = 200, after: int = None, before: int = None) -> list:
+        if after and before:
+            if after < before:
+                ValueError(f'After ({after}) must be grater than before ({before})')
+        if after is None and before is None:
+            retval = self.db.session.query(Messages).filter(Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+        elif after and before is None:
+            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+        elif before and after is None:
+            retval = self.db.session.query(Messages).filter(Messages.ID <= before, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
+        else:
+            retval = self.db.session.query(Messages).filter(Messages.ID >= after, Messages.ID <= before, Thread_name=thread.Name, ID_group=thread.Group_ID).order_by(Messages.ID.desc()).limit(limit)
         if not retval:
             retval = list()
+        else:
+            retval = retval[::-1]
         return retval
 
     def getuserrights(self, user, group) -> dict:
