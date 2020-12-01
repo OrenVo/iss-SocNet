@@ -154,11 +154,13 @@
             <br><br>
 
             <!-- visibility -->
-            <label for="visibility"><h3>Visibility for:</h3></label>
-            <input id="visibility1" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
-            <label for="visibility1">Public: All users</label><br>
-            <input id="visibility2" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
-            <label for="visibility2">Private: Registered users</label><br><br>
+            <label for="visibility"><h3>Visibility for:</h3></label><br>
+
+            <input id="visibility1"  class="radio" type="radio" name="visibility" value="0" {% if not form %} checked="checked" {% elif form['visibility'] == "0" %} checked="checked" {% endif %}>
+            <label for="visibility1" class="radio">Public: All users</label><br>
+           
+            <input id="visibility2"  class="radio" type="radio" name="visibility" value="1" {% if form and form['visibility'] == '1' %} checked = "checked" {% endif %}>
+            <label for="visibility2" class="radio">Private: Registered users</label><br><br>
 
             <!-- current password -->
             <label for="current_password"><b> Enter Current Password</b></label>
@@ -170,7 +172,7 @@
             <button type="button" onclick="show_profile_info()">&#10094; Back</button>
             {% endif %}
         </form>
-        
+
         {% if admin or owner %}
             <!-- delete profile -->
             <a href="{{ url_for('delete_account', user_id=user_id) }}">

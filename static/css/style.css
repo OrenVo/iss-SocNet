@@ -19,7 +19,7 @@ body {
 }
 
 h1, h2, h3 {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-weight: bold;
     color: #001624;
 }
@@ -622,6 +622,7 @@ footer{
     width: 70%;
 
     float: left;
+    padding: 5px;
 }
 
 /* Creating new group */
@@ -893,6 +894,20 @@ footer{
 /***************/
 
 /**** ---Classes--- ****/
+
+.radio {
+    height: auto;
+    width: auto;
+}
+
+.rb_input {
+    background-color: red;
+    line-height: 20px;
+}
+
+.float_left {
+    float: left;
+}
 
 .notification_container {
     width: 50%;
