@@ -795,7 +795,7 @@ def thread(group_id, thread_id):
     member = db.get_membership(current_user)
     return render_template("thread_page.html", group_id=group.ID, thread_id=thread.ID, groupname=group.Name, threadname=thread.Name,
                            description=thread.Description, posts=db.get_messages(thread, 50), user_id=user_id, username=username,
-                           img_src=profile_pic, **member, **rights)
+                           img_src=profile_pic, db=db, **member, **rights)
 
 
 @app.route("/delete/thread/<group_id>/<thread_id>/")

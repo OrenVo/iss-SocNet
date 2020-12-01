@@ -126,7 +126,7 @@
                     <!-- Post header -->
                     <div class="post_header">
                         <a href="{{ url_for('profile', user_id=post.User_ID) }}">
-                            <h3>{{ post.User_ID }} {{post.Date_time}}</h3> <!-- for now just user_id-->
+                            <h3>{{ db.get_user(id=post.User_ID).Login }} {{post.Date_time}}</h3> <!-- písmo není vidět použít jinou barvu -->
                         </a>
                     </div>
                     <!-- Post text -->
