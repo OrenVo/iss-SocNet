@@ -70,7 +70,7 @@
             <!-- TODO searchbar -->
             <form action="{{ url_for('search') }}" method="POST" id="search_bar_form" >
                 <input type="text" placeholder="Search.." name="search" id="search_bar_input">
-                <a href="{{ url_for('search') }}">
+                <a href="#" type="submit" onclick="submit_form()">
                     <div class="search_icon"></div>
                 </a>
             </form>
@@ -298,19 +298,19 @@
                     <h2>Threads</h2>
                 </div>                
                   {% for thread in threads %}
-                    <div class="thread_container">                        
-                            <div class="thread_header_gp">
-                                <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}"></a>
-                                    <span class="thread_title_gp">{{ thread.Name }}</span>
-                                </a> 
-                                <a href="#">
-                                    <span class="float_right">Delete thread</span>  
-                                </a>                                
-                            </div> 
+                    <div class="thread_container">  
+                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}"></a>                      
+                            <div class="thread_header_gp">                                
+                                    <span class="thread_title_gp">{{ thread.Name }}</span>                                                              
+                            </div>
+                        </a>  
                         
                         <div class="thread_content_gp">
                             <p>{{ thread.Description}}</p>
                         </div>  
+                        <a href="#">
+                            <button>Delete Thread</button>
+                        </a>
                     </div>
                   {% endfor %}
                 {% endif %}
@@ -396,6 +396,13 @@
         modal.style.display = "none";
       }
     }
+
+    
+    // Search when clicked on icon 
+    function submit_form(){
+        document.getElementById("search_bar_form").submit();
+    }
+
 </script>
 </html>
 </doctype>
