@@ -362,8 +362,9 @@ class DB:
         if user_id is None or group_id is None:
             raise ValueError(f'User_id or group_id are not defined')
         add = False
-        application = self.db.session.query(Applications).filter_by(User=user_id, Group=group_id)
+        application = self.db.session.query(Applications).filter_by(User=user_id, Group=group_id).first()
         if application is None:
+            add = True
             application = Applications(User=user_id, Group=group_id)
         application.Membership = membership
         if add:
