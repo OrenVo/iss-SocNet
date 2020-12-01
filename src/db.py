@@ -177,11 +177,11 @@ class DB:
         groups = self.db.session.query(Group).filter(func.lower(Group.Name).contains(search_word.lower(), autoescape=True)).all()
         if users:
             for user in users:
-                path = f'/user_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
+                path = f'/profile_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
                 retval['users'].append((user, path))
         if groups:
             for group in groups:
-                path = f'/user_picture/{group.ID}/' if group.Image else '/static/pictures/defaults/default_group_picture.png'
+                path = f'/group_picture/{group.ID}/' if group.Image else '/static/pictures/defaults/default_group_picture.png'
                 retval['groups'].append((group, path))
         return retval
 
