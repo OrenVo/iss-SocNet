@@ -299,7 +299,7 @@
                 </div>                
                   {% for thread in threads %}
                     <div class="thread_container">  
-                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}"></a>                      
+                        <a href="{{ url_for('thread', group_id=group_id, thread_id=thread.ID) }}">
                             <div class="thread_header_gp">                                
                                     <span class="thread_title_gp">{{ thread.Name }}</span>                                                              
                             </div>

@@ -135,21 +135,36 @@ class DB:
         Ownership = self.db.session.query(Group).filter_by(User_ID=user.ID).all()
         Moderator = self.db.session.query(Moderate).filter_by(User=user.ID).all()
         Member = self.db.session.query(Is_member).filter_by(User=user.ID).all()
+
         for mem in Member:
             moderator = [x for x in Moderator if x.Group == mem.Group]
             if moderator:
                 Member.delete(mem)
+
+        moderators = list()
+        for mod in Moderator:
+            group = self.db.session.query(Group).filter_by(ID=mod.Group).first()
+            if group:
+                moderators.append(group)
+
+        members = list()
+        for mem in Member:
+            group = self.db.session.query(Group).filter_by(ID=mem.Group).first()
+            if group:
+                members.append(group)
+            ... # get groups
+
         gowner = list()
         gmoderator = list()
         gmember = list()
         for own in Ownership:
             path = f'/group_picture/{own.ID}/' if own.Image else '/static/pictures/defaults/default_group_picture.png'
             gowner.append((own, path))
-        for mod in Moderator:
-            path = f'/group_picture/{mod.ID}/' if mod.Image else '/static/pictures/defaults/default_group_picture.png'
+        for mod in moderators:
+            path = f'/group_picture/{mod.Group}/' if mod.Image else '/static/pictures/defaults/default_group_picture.png'
             gmoderator.append((mod, path))
-        for mem in Member:
-            path = f'/group_picture/{mem.ID}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
+        for mem in members:
+            path = f'/group_picture/{mem.Group}/' if mem.Image else '/static/pictures/defaults/default_group_picture.png'
             gmember.append((mem, path))
         return {'gowner': gowner, 'gmoderator': gmoderator, 'gmember': gmember}
 
