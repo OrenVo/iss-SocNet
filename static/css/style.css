@@ -609,7 +609,7 @@ footer{
 
 .members_picture {
     max-height: 70px;
-    max-width: 70px;
+    max-width: 140px;
 }
 /*****************/
 
@@ -950,22 +950,41 @@ footer{
 
     float: left;
     margin-left: 25%;
+    padding: 10px;
+
+    text-align: center;
 }
 
 .search_result {
+    height: 70px;
     width: 100%;
 
     float: left;
     margin-top: 5px;
-    padding: 16px 20px;
 
-    text-align: center;
-    font-size: 18px;
-    background-color: rgb(245, 245, 245);
+    font-size: 20px;
+    background-color: white;
 }
 
 .search_result:hover {
     background-color: rgb(235, 235, 235);
+}
+
+.search_result_part {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.search_result_part_text {
+    padding-top: 25px;
+}
+
+.search_picture {
+    height: 60px;
+    max-width: 120px;
+
+    margin-top: 5px;
 }
 /***************/
 

@@ -86,10 +86,15 @@
             {% if users %}
                 <h2>Users</h2>
                 {% for user in users %}
-                    <a href="{{ url_for('profile', user_id=user.ID) }}">
+                    <a href="{{ url_for('profile', user_id=user[0].ID) }}">
                         <div class="search_result">
-                            <img src="{{ user[1] }}" alt="Profile image">
-                            {{ user[0].Login }}
+                            <div class="search_result_part">
+                                <img src="{{ user[1] }}" alt="Profile image" class="search_picture">
+                            </div>
+
+                            <div class="search_result_part search_result_part_text">
+                                {{ user[0].Login }}
+                            </div>
                         </div>
                     </a>
                 {% endfor %}
@@ -99,10 +104,14 @@
             {% if groups %}
                     <h2>Groups</h2>
                 {% for group in groups %}
-                    <a href="{{ url_for('group', group_id=group.ID) }}">
+                    <a href="{{ url_for('group', group_id=group[0].ID) }}">
                         <div class="search_result">
-                            <img src="{{ group[1] }}" alt="Group image">
-                            {{ group[0].Name }}
+                            <div class="search_result_part">
+                                <img src="{{ group[1] }}" alt="Group image" class="search_picture">
+                            </div>
+                            <div class="search_result_part search_result_part_text">
+                                {{ group[0].Name }}
+                            </div>
                         </div>
                     </a>                    
                 {% endfor %}
