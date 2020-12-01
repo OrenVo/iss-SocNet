@@ -22,23 +22,6 @@ import json
 import re
 import sys
 
-"""
-
-Autoupdate thread (time & after new message) - AJAX (?)
-Older messages thread (?)
-
-Dokumentacia
---
-Expand login & groupname regex
-Radio buttons: https://stackoverflow.com/questions/13509883/how-to-vertically-align-a-html-radio-button-to-its-label
-Group settings current visibility
-Welcome next parameter
-Are you sure? box
-
-Requiring password on group settings
-Ban
-"""
-
 # App initialization #
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"  # TODO change security key
@@ -55,7 +38,6 @@ default_group_ID        = 1
 default_pictures_path   = "/static/pictures/defaults/"
 default_profile_picture = "default_profile_picture.png"
 default_group_picture   = "default_group_picture.png"
-
 
 
 ################################################################################
@@ -818,35 +800,95 @@ def delete_thread(group_id, thread_id):
 @app.route("/create_message/<group_id>/<thread_id>/", methods=["POST"])
 @login_required
 def create_message(group_id, thread_id):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+
+    db.insert_to_messages(current_user, thread, message=request.form.get("content", None))
+    return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
+
+    ''' TODO previous version
     thread = Thread.query.filter_by(ID=thread_id).first()
     eprint(request.form.keys())
     db.insert_to_messages(current_user, thread, message=request.form['content'])
     return redirect(url_for('thread', group_id=group_id, thread_id=thread_id))
+    '''
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/delete/")
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/delete/")
 @login_required
 def delete_message(group_id, thread_id, message_id):
-    # TODO check rights
-    message = Messages.query.filter_by(ID=message_id)
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    if message is None:
+        return redirect(url_for("lost"))
+
+    admin     = current_user.Mode & 2
+    author    = current_user.ID == message.User_ID
+    owner     = current_user.ID == group.User_ID
+    moderator = Moderate.query.filter_by(User=current_user.ID, Group=group.ID).first()
+    if not admin and not author and not owner and not moderator:
+        return redirect(url_for("tresspass"))
+
     db.delete_from_db(message)
+    return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/inc/")
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/inc/")
 @login_required
 def increment(group_id, thread_id, message_id):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    if message is None:
+        return redirect(url_for("lost"))
+
     # TODO
-    return redirect(url_for("tresspass"))
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/dec/")
 @app.route("/groups/<group_id>/<thread_id>/<message_id>/dec/")
 @login_required
 def decrement(group_id, thread_id, message_id):
+    group = Group.query.filter_by(ID=group_id).first()
+    if group is None:
+        return redirect(url_for("lost"))
+    thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
+    if thread is None:
+        return redirect(url_for("lost"))
+    message = Messages.query.filter_by(Group_ID=group.ID, Thread_name=thread.Name, ID=message_id).first()
+    if message is None:
+        return redirect(url_for("lost"))
+
     # TODO
-    return redirect(url_for("tresspass"))
+    rank    = message.Rank
+    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
+    if ranking and ranking.Value == -1:
+        rank = rank + 1
+        db.delete_from_db(ranking)
+    elif ranking and ranking.Value == 1:
+        rank = rank - 1
+        db.delete_from_db(ranking)
+    else:
+        db.insert_to_ranking(current_user, message)  # Dokonci
+        rank = rank - 1
+
+    message.Rank = rank  # Oprav
+    return message.Rank
 
 
 ################################################################################
