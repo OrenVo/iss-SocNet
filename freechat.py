@@ -350,7 +350,7 @@ def create_group():
 def group(group_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=default_group_ID))
     private = group.Mode & 1
     if private and current_user.is_anonymous:
         flash("You will need to log in to gain access to this page.")
@@ -740,10 +740,10 @@ def create_thread(group_id):
 def thread(group_id, thread_id):
     group = Group.query.filter_by(ID=group_id).first()
     if group is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=default_group_ID))
     thread = Thread.query.filter_by(Group_ID=group.ID, ID=thread_id).first()
     if thread is None:
-        return redirect(url_for("lost"))
+        return redirect(url_for("group", group_id=group.ID))
     closed  = group.Mode & 2
     private = group.Mode & 1
     if private and current_user.is_anonymous:
@@ -911,9 +911,23 @@ def decrement(group_id, thread_id, message_id):
 ################################################################################
 @app.route("/search/", methods=["POST"])
 def search():
+    if current_user.is_anonymous:
+        user_id     = None
+        username    = "Visitor"
+        profile_pic = default_pictures_path + default_profile_picture
+        visitor = True
+    else:
+        user_id  = current_user.ID
+        username = current_user.Login
+        if current_user.Image is not None:
+            profile_pic = "/profile_picture/" + str(current_user.ID)
+        else:
+            profile_pic = default_pictures_path + default_profile_picture
+        visitor = False
+
     eprint(request.form.get("search", None))
     results = db.search_user_group(request.form.get("search", None))
-    return render_template("search.html", **results)
+    return render_template("search.html", **results, user_id=user_id, username=username, img_src=profile_pic, visitor=visitor)
 
 
 @app.route("/egg/")
