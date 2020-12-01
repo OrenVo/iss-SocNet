@@ -647,7 +647,7 @@ def reject_application(application_id):
 @app.route("/leave/<group_id>/")
 @login_required
 def leave_group(group_id):
-    redirect(url_for("kick", group_id=group_id, user_id=current_user.ID))
+    return redirect(url_for("kick", group_id=group_id, user_id=current_user.ID))
 
 
 @app.route("/kick/group/<group_id>/<user_id>/")
