@@ -25,7 +25,7 @@ import threading
 
 # App initialization #
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "a4abb8b8384bcf305ecdf1c61156cee1"
+app.config["SECRET_KEY"] = "c7d6ee3e38c6ce4c50aedeedcf622b9f"
 app.app_context().push()  # Nutno udělat, abych mohl pracovat s databází mimo view funkce
 database = init_db(app)
 db = DB(database)
