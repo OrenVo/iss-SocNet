@@ -36,18 +36,7 @@
                         <img src="{{ img_src }}" alt="Profile picture" id="profile_picture_center"/>
                     </div>
                     <div id="profile_container_description">
-                        {{ username }} <br>
-                        {% if admin %}
-                        Admin
-                        {% elif owner %}
-                        Owner
-                        {% elif moderator %}
-                        Moderator
-                        {% elif member %}
-                        Member
-                        {% else %}
-                        User
-                        {% endif %}
+                        {{ username }} 
                     </div>
                 </a>
             </div>

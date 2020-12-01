@@ -765,6 +765,10 @@ footer{
     color: #009a94;
 }
 
+.thread_header_gp:hover {
+    color: #00c14c;
+}
+
 .thread_title_gp {
     font-size: 20px;
     font-weight: bold;
@@ -967,6 +971,16 @@ footer{
 
 /**** ---Classes--- ****/
 
+
+
+.del_button {
+    background-color: #ba1818;
+}
+
+.del_button:hover {
+    background-color: #ff1c1c;
+}
+
 .float_right {
     float: right;
 }
@@ -987,7 +1001,6 @@ footer{
 }
 
 .rb_input {
-    background-color: red;
     line-height: 20px;
 }
 
@@ -1014,16 +1027,6 @@ footer{
     overflow-y: scroll;
     text-align: left;
     background-color: white;
-}
-
-.del_g_p {
-    cursor: pointer;
-    font-weight: bold;
-    color: #001624;
-}
-
-.del_g_p:hover {
-    color: #00c14c;
 }
 
 #rm_img {

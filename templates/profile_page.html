@@ -104,7 +104,7 @@
             <!-- delete profile -->
             {% if (admin or owner) and (user_id != 1) %}
             <a href="{{ url_for('delete_account', user_id=user_id) }}">
-                <button class="del_g_p">Delete profile</button>
+                <button class="del_button float_right">Delete profile</button>
             </a>
             {% endif %}
         </div>

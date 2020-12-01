@@ -218,7 +218,7 @@ window.onclick = function(event) {
         try{
             var request = createXmlHttpRequestObject(); // Creating object
             var last_id = -1; // Variable to check last post
-            request.open(GET, "{{ url_for('get_messages', group_id=group_id, thread_id=thread_id) }}", true); // Inicializing request
+            request.open("GET", "{{ url_for('get_messages', group_id=group_id, thread_id=thread_id) }}", true); // Inicializing request
     
             request.onreadystatechange = function() // anonymous function (a function without a name).
             {

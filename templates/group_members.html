@@ -184,7 +184,7 @@
                         <td><div><img src="{{ member.img_src }}" alt="Profile picture" class="members_picture"></div></td>
                         <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member.username }}</a></td>
                         {% if admin or owner or moderator %}
-                        <td><button>Remove</button></td>
+                        <td><button class="del_button">Remove</button></td>
                         {% endif %}
                     </tr>
                     {% endfor %}
