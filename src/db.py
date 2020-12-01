@@ -194,7 +194,8 @@ class DB:
         for mem in members:
             user = self.db.session.query(User).filter_by(ID=mem.User).first()
             if user:
-                users.append(user)
+                path = f'/profile_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
+                users.append((user, path))
             else:
                 eprint(f'[Error] Database inconsistency error. User in is_member table with id: {mem.User} doesn\'t exist.')
         return users
@@ -205,7 +206,8 @@ class DB:
         for mod in moderators:
             user = self.db.session.query(User).filter_by(ID=mod.User).first()
             if user:
-                users.append(user)
+                path = f'/profile_picture/{user.ID}/' if user.Image else '/static/pictures/defaults/default_profile_picture.png'
+                users.append((user, path))
             else:
                 eprint(f'[Error] Database inconsistency error. User in moderate table with id: {mod.User} doesn\'t exist.')
         return users
