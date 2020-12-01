@@ -862,7 +862,19 @@ def increment(group_id, thread_id, message_id):
     if message is None:
         return redirect(url_for("lost"))
 
-    # TODO
+    rank    = message.Rank
+    ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
+    if not ranking:
+        db.insert_to_ranking(message=message, user=current_user, inc=True)
+    elif ranking.Inc:
+        rank = rank - 1
+        db.delete_from_db(ranking)
+    else:
+        rank = rank + 1
+        db.delete_from_db(ranking)
+
+    insert_to_messages(id=message.ID, ranking=rank)
+    return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
 @app.route("/group/<group_id>/<thread_id>/<message_id>/dec/")
@@ -881,15 +893,14 @@ def decrement(group_id, thread_id, message_id):
 
     rank    = message.Rank
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name. ID_group=group.ID).first()
-    if ranking and not ranking.Inc:
-        rank = rank + 1
-        db.delete_from_db(ranking)
-    elif ranking and ranking.Inc:
+    if not ranking:
+        db.insert_to_ranking(message=message, user=current_user, inc=False)
+    elif ranking.Inc:
         rank = rank - 1
         db.delete_from_db(ranking)
     else:
-        db.insert_to_ranking(message=message, user=current_user, ínc=False)  # Dokonci
-        rank = rank - 1
+        rank = rank + 1
+        db.delete_from_db(ranking)
 
     insert_to_messages(id=message.ID, ranking=rank)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
