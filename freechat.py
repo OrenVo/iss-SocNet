@@ -862,7 +862,7 @@ def increment(group_id, thread_id, message_id):
     if message is None:
         return redirect(url_for("lost"))
 
-    rank    = message.Rank
+    rank    = 0
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
         rank = rank + 1
@@ -874,7 +874,7 @@ def increment(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    db.insert_to_messages(id=message.ID, ranking=rank, author=message.User_ID, thread=thread)
+    db.insert_to_messages(id=message.ID, ranking=message.Rank + rank, author=message.User_ID, thread=thread)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
@@ -892,7 +892,7 @@ def decrement(group_id, thread_id, message_id):
     if message is None:
         return redirect(url_for("lost"))
 
-    rank    = message.Rank
+    rank    = 0
     ranking = Ranking.query.filter_by(User=current_user.ID, Message=message.ID, Thread_name=thread.Name, ID_group=group.ID).first()
     if not ranking:
         rank = rank - 1
@@ -904,7 +904,7 @@ def decrement(group_id, thread_id, message_id):
         rank = rank + 1
         db.delete_from_db(ranking)
 
-    db.insert_to_messages(id=message.ID, ranking=rank, author=message.User_ID, thread=thread)
+    db.insert_to_messages(id=message.ID, ranking=message.Rank + rank, author=message.User_ID, thread=thread)
     return redirect(url_for('thread', group_id=group.ID, thread_id=thread.ID))
 
 
