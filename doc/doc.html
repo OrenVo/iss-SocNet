@@ -55,19 +55,48 @@
 
 <h3>Databáze</h3>
 
-Zde vložte grafické schéma relační databáze (tabulek v databázi). TODO
+<img src="ERD.jpg" alt="ERD">
 
 <h2>Instalace</h2>
 
 Stručně popište:
 <ul>
-<li>postup instalace na server,</li>
-<li>softwarové požadavky (verze PHP apod.),</li>
-<li>jak rozbalit, konfigurovat, inicializovat databázi, ... TODO</li>
+    <li>postup instalace na server:
+        <ol>
+            <li>pip install -r requirements.txt</li>
+            <li>FLASK_APP=freechat.py flask run # For debugging</li>
+            <li>gunicorn -b :$PORT freechat:app # For production ($PORT určuje na který port se má aplikace navázat)</li>
+        </ol>
+    </li>
+    <li>softwarové požadavky :
+        <ul>
+            <li>python 3.7.8 (minimální testovaná verze)</li>
+            <li>python 3.8.6 (nejvyšší testovaná verze)</li>
+            <li>balíčky uvedené v requirements.txt</li>
+            <li>Při chybě instalace mysqlclient balíčku postupujte dle <a href="https://pypi.org/project/mysqlclient/">návodu na oficiální stránce</a></li>
+        </ul>
+    </li>
+    <li>jak rozbalit, konfigurovat, inicializovat databázi:
+        <ul>
+            <li>Tato aplikace používá mysql jako databázový server</li>
+            <li>Inicializační skript se nachází v <i>sql/init.sql</i> který je nutno spusti na serveru databáze</li>
+            <li>Konfigurace připojení k databázy se nachází v souboru db.ini všechny uvedené údaje jsou povinné</li>
+            <li>Pro připojení je nutné mít na serveru zapnuté ssl a nebo v souboru src/db.py ve funkci init_db z hodnoty app.config['SQLALCHEMY_DATABASE_URI'] odstraňte ?ssl=true</li>
+        </ul>
+    </li>
 </ul>
 
 <h2>Známé problémy</h2>
-<p>TODO Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
+<p>
+    Načtení nových zpráv probíhá jen při kliknutí na tlačítko load new posts, nebo obnovení stránky. Z časových důvodů jsme nestihli implementovat javascript funkci, která by periodicky přidávala nové zprávy (AJAX).
+</p>
+<p>
+    Zobrazuje se jen posleních 200 zpráv ve vláknu. Z časových důvodů jsme nestihli implementovat načítání starších zpráv.
+</p>
+
+<h2>V případě problému při testování:</h2>
+<p>Obnovte databázový server pomocí skriptu sql/init.sql. Informace pro připojení jsou v souboru db.ini</p>
+<p>Při chybě internal server error zkuste akci provést znovu vícekrát.</p>
 
 </body>
 </html>

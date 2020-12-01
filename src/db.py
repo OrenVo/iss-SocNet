@@ -539,8 +539,7 @@ def init_db(app, fname='db.ini', sect='mysql'):
     db = db_config['mysql_database_db']
     port = db_config['mysql_database_port']
     user = db_config['mysql_database_user']
-    app.config[
-        'SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{psw}@{host}:{port}/{db}'  # Dano proof version
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{user}:{psw}@{host}:{port}/{db}'  # Dano proof version
     # 'SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqldb://{user}:{psw}@{host}:{port}/{db}?ssl=true'  # change driver to mysqldb and add ?ssl=true for better performance and security      Original co funguje vsetkym okrem Danovho Linuxu
     app.config['SQLALCHEMY_ECHO'] = True  # TODO debugging info delete me for production
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = 600
