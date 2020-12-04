@@ -184,7 +184,7 @@
                     {% for member in moderators %}
                     <tr>
                         <td><img src="{{ member[1] }}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member[0].Login }}</a></td>
+                        <td><a href="{{ url_for('profile', user_id=member[0].ID) }}">{{ member[0].Login }}</a></td>
                         {% if admin or owner or moderator %}
                         <td><a href="{{ url_for('kick', group_id=group_id, user_id=member[0].ID) }}"><button class="del_button">Remove</button></a></td>
                         {% endif %}
@@ -196,7 +196,7 @@
                     {% for member in members %}
                     <tr>
                         <td><img src="{{ member[1] }}" alt="Profile picture" class="members_picture"></td>
-                        <td><a href="{{ url_for('profile', user_id=member.user_id) }}">{{ member[0].Login }}</a></td>
+                        <td><a href="{{ url_for('profile', user_id=member[0].ID) }}">{{ member[0].Login }}</a></td>
                         {% if admin or owner or moderator %}
                         <td><a href="{{ url_for('kick', group_id=group_id, user_id=member[0].ID) }}"><button class="del_button">Remove</button></a></td>
                         {% endif %}
